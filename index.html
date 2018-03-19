@@ -1,0 +1,156 @@
+<html>
+	<head>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.min.js"></script>
+		<script type="text/javascript" src="svg.pan-zoom.js"></script>
+		<script type="text/javascript" src="screen.js"></script>
+	</head>
+	<body>
+		<div>
+			<div id="drawing">
+
+			</div>
+		</div>
+		<script type="text/javascript">
+
+			//黑色背景
+			var draw = SVG('drawing').size('100%', '100%');
+			draw.rect('100%', '100%').fill("#000");
+
+			var symbol
+
+			var cabinetNum = 1;
+			var capacityNum = 2;
+			var distributingNum = 3;
+			var circuitNum = 5;
+
+			var margin = 40 ;
+			var w1 = 100;
+			var margin_h1 = 70;
+			var w2 = 60;
+			var margin_h2 = 40;
+
+			//配电柜的margin-left
+			var margin_w2= 60 ;
+			var w3 = 20;
+
+
+			//画进电柜
+			var S_cabinet = initCabinet();
+			S_cabinet.move(0, 0).addClass('svg-cabinet');
+			// var use  = draw.use(S_cabinet).move(0, 0).addClass('svg-cabinet');
+
+			//画电容柜
+			for(var i=0;i<capacityNum;i++) {
+				var ele = initCapacity(i);
+				ele.move(w1+margin*(i+1)+w2*i, margin_h1).addClass('svg-capacity');
+				// draw.use(S_capacity).move(w1+margin*(i+1)+w2*i, margin_h1).addClass('svg-capacity');
+			}
+
+			//画配电柜
+
+			for(var i=0;i<distributingNum;i++) {
+				var S_distributing = InitDistrbuting(circuitNum);
+				var base_margin_left = w1+(margin+w2)*capacityNum;
+				var distributing_w = w3*circuitNum+margin*(circuitNum-1);
+				S_distributing.move(base_margin_left+margin_w2*(i+1)+distributing_w*i,0).addClass('svg-distributing');
+			}
+
+			var total_w = w1*cabinetNum + w2*capacityNum + (w3*circuitNum+margin*(circuitNum-1))*distributingNum + margin*(cabinetNum+capacityNum+distributingNum-1);
+
+			draw.line(w1-40,margin_h1,w1+total_w,margin_h1).stroke({ width: 8, color: '#fff' });
+
+
+
+
+			var svgRootDom = document.querySelector("svg");
+
+			svgRootDom.setAttribute("viewBox","0,0,"+(total_w+w1)+",500");
+
+
+
+
+			//进电柜  w=110  margin_h = 70
+			function initCabinet() {
+				var Symbol = draw.group();
+				Symbol.line(10, 2, 20, 2).stroke({ width: 2, color: '#fff' });
+				Symbol.line(5, 10, 25, 10).stroke({ width: 2, color: '#fff' });
+				Symbol.line(0, 20, 30, 20).stroke({ width: 2, color: '#fff' });
+
+				Symbol.circle(30).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(1, 50);
+				Symbol.circle(30).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(1, 60);
+				Symbol.rect(20, 50).fill("#fff").move(5,150).addClass("svg-rect");;
+				Symbol.polyline([[15, 20],[15, 250],[100,250],[100,65]]).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' });
+
+				return Symbol
+			}
+
+			//电容柜 w=70
+			function initCapacity() {
+				var  Symbol = draw.group();
+				Symbol.circle(20).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(20, 50);
+				Symbol.line(30, 0, 30, 190).stroke({ width: 2, color: '#fff' });
+				Symbol.rect(20, 50).fill("#fff").move(20,100).addClass("svg-rect");
+				Symbol.polyline([[30,0], [0,60], [60,60], [30,0]]).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(1, 190);
+
+				return Symbol;
+			}
+
+
+
+
+			function InitDistrbuting(circuitNum) {
+
+				var Symbol = draw.group();
+
+				var base_margin_left = 0;
+
+				//最上面的 竖线 连接线
+				Symbol.line(base_margin_left+w3/2,margin_h1,base_margin_left+w3/2,margin_h1+margin_h2).stroke({ width: 2, color: '#fff' });
+
+				//横线 连接线
+				Symbol.line(base_margin_left+w3/2, margin_h1+margin_h2, base_margin_left+w3/2+(circuitNum-1)*(w3+margin), margin_h1+margin_h2).stroke({ width: 2, color: '#fff' });
+
+				for(var i=0;i<circuitNum;i++) {
+					console.log(i);
+					var S_Circuit = initCircuit();
+					Symbol.use(S_Circuit).move(base_margin_left+(margin+w3)*i, margin_h1+margin_h2).addClass('svg-circuit');
+				}
+				return Symbol
+
+			}
+
+			//回路 w=30
+			function initCircuit() {
+				var Symbol = draw.symbol();
+				Symbol.line(10, 0, 10, 300).stroke({ width: 2, color: '#fff' });
+				Symbol.rect(20, 50).fill("#fff").move(0,60).addClass("svg-rect");
+				Symbol.circle(20).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(1, 150);
+				Symbol.polyline([[0,0], [20,0], [10,20], [0,0]]).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(1, 300);
+
+				return Symbol;
+			}
+
+
+			function setColor() {
+				document.querySelectorAll(".svg-rect")[16].setAttribute("fill","#ff0000");
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+	</body>
+</html>
