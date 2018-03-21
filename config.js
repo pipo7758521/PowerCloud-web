@@ -10,12 +10,12 @@
 			capacityNum:3,
 			distributingNum:2,
 			circuitNum:3
-		},
+		}/*,
 		{
 			capacityNum:3,
 			distributingNum:2,
 			circuitNum:7
-		}
+		}*/
 	];
 	//是否级联
 	window.isConnect = true;
