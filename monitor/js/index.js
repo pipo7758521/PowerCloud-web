@@ -30,7 +30,8 @@
 
 		$(".pop").on('click', '.x', function(event) {
 			event.preventDefault();
-			/* Act on the event */
+			$(".pop").removeClass("show");
+			$("#mask").removeClass('show');
 		});
 
 
@@ -41,7 +42,7 @@
 		api.map.init();
 		bindEvent();
 
-		api.chart.renderCompanyChart();
+		// api.chart.renderCompanyChart();
 	}
 
 })()

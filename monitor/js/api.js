@@ -25,11 +25,6 @@
     client.send(message);*/
   }
 
-  function mqconnected() {
-      alert("mqconnected");
-
-  }
-
   function getMapPoint(type) {
   	if(type == 1) {
   		arr = [
@@ -126,10 +121,37 @@
     }
   }
 
+  function getCompanyDetail(id) {
+    return {
+      staffList: [
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 1},
+        {name: "露娜", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 1},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 1},
+        {name: "露娜", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 1},
+        {name: "孙尚香", duty: "高级工程师", status: 0},
+        {name: "孙尚香", duty: "高级工程师", status: 0}
+
+      ],
+      Ie: 15,
+      stationsName: ["变电站1","变电站2","变电站3"]
+    }
+  }
+
   window.api = window.api || {}
   window.api.data = {
     getMapPoint: getMapPoint,
     mqttConnect: mqttConnect,
-    getStaffDetail: getStaffDetail
+    getStaffDetail: getStaffDetail,
+    getCompanyDetail: getCompanyDetail
   };
 })()

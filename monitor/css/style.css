@@ -77,6 +77,7 @@
 }
 
 #allmap  {
+	background: #000;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -240,7 +241,6 @@
 	position: relative;
 	top: 5px;
 	background: url(../assets/checkbox.png) -90px 0 no-repeat;
-
 }
 .display-menu li.checked .check {
 	background-position: -60px -30px;
@@ -254,21 +254,27 @@
   right: 0;
   top: 0;
   bottom: 0;
-  /*display: none;*/
+  display: none;
+}
+#mask.show {
+	display: block;
 }
 .pop {
 	position: absolute;
-    padding: 20px;
-    background: rgba(255,255,255,0.3);
-    color: #fff;
-    line-height: 30px;
-    font-size: 18px;
-    border: 1px #ffeb3b solid;
-    border-radius: 5px;
-    display: none;
-    /*transition: transform .5s ease;*/
-    /*transform: scaleX(0);*/
-    transform: rotateY(-90deg);
+  padding: 20px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  line-height: 30px;
+  font-size: 18px;
+  border: 1px #ffeb3b solid;
+  border-radius: 5px;
+  display: none;
+  /*transition: transform .5s ease;*/
+  /*transform: scaleX(0);*/
+  transform: rotateY(-90deg);
+}
+.pop.show {
+	display: block;
 }
 .pop .x {
 	position: absolute;
@@ -333,23 +339,22 @@
 
 
 #pop-company-staff {
-	display: block;
+	/*display: block;*/
 	transform: rotate(0);
 	top: 56px;
   left: 10px;
   width: 30%;
-  /*max-width: 470px;*/
+  min-width: 450px;
   height: calc(100vh - 170px);
 }
 
 #pop-company-staff .title {
-	font-size: 28px;
+	font-size: 24px;
   font-weight: bold;
-  margin: 20px 0;
-  margin-left: -20px;
+  margin: 0 0 20px -20px;
   padding: 10px 20px 10px 20px;
   background: #00bcd4;
-  width: 170px;
+  width: 150px;
 }
 
 #pop-company-staff .staff-num {
@@ -411,13 +416,13 @@
 
 
 .pop-chart {
-  display: block;
+  /*display: block;*/
   transform: rotate(0);
   top: 56px;
   right: 10px;
   width: calc( 70% - 120px );
   /* max-width: 470px; */
-  height: calc(50vh - 100px);
+  height: calc(50vh - 110px);
   padding: 20px;
 }
 .pop-chart .chart {
@@ -431,6 +436,11 @@
   padding: 5px 20px 5px 20px;
   background: #00bcd4;
   width: 198px;
+}
+
+#pop-company-load {
+	top: auto;
+	bottom: 71px;
 }
 
 

@@ -119,13 +119,17 @@
     },2100)
 
     // map.centerAndZoom(new BMap.Point(pos[0], pos[1]), 16);
-    var data = window.api.data.getStaffDetail($(this).attr("data-id"));
+    var detail = window.api.data.getStaffDetail($(this).attr("data-id"));
     // var style =_this.parent()[0].style;
-    window.api.pop.popStaffDetail(data);
+    window.api.pop.popStaffDetail(detail);
   }
 
   function handleCompanyClick(event) {
     event.preventDefault();
+    $(".pop").removeClass('show');
+
+    var detail = window.api.data.getCompanyDetail($(this).attr("data-id"));
+    window.api.pop.popCompanyDetail(detail);
   }
   //显示隐藏坐标点
   function togglePoints(type) {
