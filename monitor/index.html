@@ -5,13 +5,19 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" type="text/css" href="css/reset.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
   <script type="text/javascript" src="./lib/jquery-1.8.3.min.js"></script>
+
     <script type="text/javascript" src='./lib/coor-convert.js'></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=786b58359b1b87405c8d94ef045bb13a"></script>
    <script type="text/javascript" src="./lib/MarkerManager.js"></script>
    <script type="text/javascript" src="./lib/RichMarker_min.js"></script>
+
    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-   <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.4/echarts.min.js"></script>
+   <script type="text/javascript" src="lib/macarons.js"></script>
 
   <title>物联网监控平台</title>
 </head>
@@ -20,36 +26,161 @@
   <div id="app">
 
     <div class="nav">
-      <p class="logo"><i class="fa fa-bar-chart"></i></p>
+      <p class="logo"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;物联网监控平台</p>
       <p class="status-bar">
         <span><i class="fa fa-clock-o"></i>2018-3-21</span>
         <span>16:48</span>
         <span>管理员</span>
-        <a class="btn" href="javascript:void(0)"><i class="fa fa-share"></i>退出</a>
+        <a id="btn-exit" class="btn" href="javascript:void(0)"><i class="fa fa-share"></i>退出</a>
       </p>
     </div>
+
     <div class="wrapper">
       <div id="allmap"></div>
+      <div id="mask"></div>
+
+      <!-- 员工 detail -->
+      <div id="pop-staff" class="pop">
+        <a href="javascript:void(0)" class="btn x"></a>
+        <div class="content">
+          <!--
+          <div class="pic"><img src="assets/pic.png"></div>
+          <div class="info">
+            <p class="name">姓名：孙尚香</p>
+            <p class="name">员工ID：123123</p>
+            <p class="name">公司电话：85123657</p>
+            <p class="name">移动电话：12365478965</p>
+            <p class="name">在岗状态：<i class="fa fa-check-circle"></i></p>
+          </div>
+          -->
+        </div>
+      </div>
+
+
+      <!-- 企业 detail -->
+      <div id="pop-company-staff" class="pop">
+        <a href="javascript:void(0)" class="btn x"></a>
+        <div class="content">
+          <p class="title"><i class="fa fa-user"></i>&nbsp;&nbsp;员工信息</p>
+          <p class="staff-num">在岗人数<span>12</span></p>
+          <ul>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">高级工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-exclamation-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">高级工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-exclamation-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">高级工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-exclamation-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+            <li>
+              <span class="name">孙尚香</span>
+              <span class="duty">工程师</span>
+              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="pop-company-i" class="pop pop-chart">
+        <a href="javascript:void(0)" class="btn x"></a>
+        <div class="content">
+          <p class="title"><i class="fa fa-user"></i>&nbsp;&nbsp;变电站电流实时状态</p>
+          <div id="company-chart-i" class="content chart">
+        </div>
+        </div>
+      </div>
+
+      <div id="pop-company-load" class="pop">
+      </div>
     </div>
 
     <div class="bottom">
       <div class="btn-bar">
         <a id="btn-refresh" class="btn icon-btn" href="javascript:void(0)"><i class="fa fa-refresh"></i>刷新</a>
-        <a class="btn icon-btn" href="javascript:void(0)">服务</a>
+        <!-- <a class="btn icon-btn" href="javascript:void(0)">服务</a> -->
         <a id="btn-display" class="btn icon-btn" href="javascript:void(0)">显示
 
         </a>
         <a class="btn icon-btn" href="javascript:void(0)">标签</a>
       </div>
       <ul class="display-menu">
-        <li><span class="check"></span>企业</li>
-        <li><span class="check"></span>变电站</li>
-        <li><span class="check"></span>人员</li>
+        <li class="checked"><span class="check"></span>企业</li>
+        <li class="checked"><span class="check"></span>变电站</li>
+        <li class="checked"><span class="check"></span>人员</li>
       </ul>
     </div>
   </div>
   <script type="text/javascript" src="js/api.js"></script>
+  <script type="text/javascript" src="js/pop.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
+  <script type="text/javascript" src="js/chart.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>

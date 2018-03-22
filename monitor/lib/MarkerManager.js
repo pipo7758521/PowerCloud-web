@@ -97,7 +97,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         marker.maxZoom = maxZoom;
         marker.bAdded = false;
         this._numMarkers.push(marker);
-        marker.enableDragging();
+        // marker.enableDragging();
     }
         /**
          * 批量添加marker

@@ -9,18 +9,21 @@
 
 	function initMap() {
     // 百度地图API功能
-    map = new BMap.Map("allmap");    // 创建Map实例
+    //地图不可点
+    var mapOpts = {enableMapClick:false}
+    map = new BMap.Map("allmap", mapOpts);    // 创建Map实例
 
     var mapStyle={  style : "midnight" }
     map.setMapStyle(mapStyle);
 
 
     map.centerAndZoom(new BMap.Point(116.404, 39.925), 14);  // 初始化地图,设置中心点坐标和地图级别
-    // map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    map.addControl(new BMap.NavigationControl());   //缩放按钮
 
-    var opts = {offset: new BMap.Size(10, 50)}
+    var h = $(window).height() - 290;
+    var ctrlOpts = {offset: new BMap.Size(10, h)}
+    map.addControl(new BMap.NavigationControl(ctrlOpts));   //缩放按钮
 
     renderPoint();
 
@@ -33,33 +36,7 @@
   }
 
 
-/*function getRandomMarker(map,num,borderPadding){
-		var container = map.getContainer()
-		, markers = []
-		, height = parseInt(container.offsetHeight,10) / 2  + borderPadding
-		, width = parseInt(container.offsetWidth,10) / 2  + borderPadding;
-
-		var center = map.getCenter(), pixel = map.pointToPixel(center);
-		var realBounds = mapMgr1._getRealBounds();
-		//随机一个新的坐标，不超过地图+borderPadding范围
-		for(var i = num; i--;){
-			var w = width * Math.random(), h = height * Math.random();
-			var newPixel = { x : pixel.x + (Math.random() > 0.5 ? w : -w),
-						   y : pixel.y + (Math.random() > 0.5 ? h : -h)}
-			, newPoint = map.pixelToPoint(newPixel);
-
-			var marker = new BMap.Marker(newPoint);
-
-			markers.push(marker);
-		}
-		return markers;
-	}
-*/
-
-
   function renderPoint() {
-
-
   	mapMgr1 = new BMapLib.MarkerManager(map,{borderPadding: 10,maxZoom: 21, trackMarkers: true});
   	mapMgr2 = new BMapLib.MarkerManager(map,{borderPadding: 10,maxZoom: 21, trackMarkers: true});
   	mapMgr3 = new BMapLib.MarkerManager(map,{borderPadding: 10,maxZoom: 21, trackMarkers: true});
@@ -104,8 +81,12 @@
     arr.forEach( (o,i) => {
       var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
       points3.push(new BMap.Point(convertor[0], convertor[1]));
-      var html = "<div class='p p-person'></div>";
-      markers3.push(new BMapLib.RichMarker(html, points3[i]))
+      var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'></div>";
+      var marker = new BMapLib.RichMarker(html, points3[i]);
+      markers3.push(marker);
+
+      // marker.addEventListener("click", handleStaffClick);
+
     })
     mapMgr3.addMarkers(markers3,1,20)
     mapMgr3.showMarkers();
@@ -113,8 +94,39 @@
 
 		map.setViewport((points1.concat(points2)).concat(points3));
 
+    bindEvent();
   }
 
+  function bindEvent() {
+    $(".p-staff").on('click', handleStaffClick);
+
+    $(".p-company").on('click', handleCompanyClick);
+  }
+
+  function handleStaffClick(event) {
+    event.preventDefault();
+    $(".pop").removeClass('show');
+
+    var _this = $(this)
+    var pos = _this.attr("data-pos").split("|");
+    map.panTo(new BMap.Point(pos[0], pos[1]));//定位到所点击的位置
+
+    _this.addClass('here');
+
+    setTimeout(function() {
+      _this.removeClass('here');
+          // map.zoomIn();
+    },2100)
+
+    // map.centerAndZoom(new BMap.Point(pos[0], pos[1]), 16);
+    var data = window.api.data.getStaffDetail($(this).attr("data-id"));
+    // var style =_this.parent()[0].style;
+    window.api.pop.popStaffDetail(data);
+  }
+
+  function handleCompanyClick(event) {
+    event.preventDefault();
+  }
   //显示隐藏坐标点
   function togglePoints(type) {
   	if(type == 1) {
