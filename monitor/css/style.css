@@ -12,7 +12,7 @@
 	text-align: center;
 	border-radius: 5px;
 }
-.icon-btn i{
+.btn i{
 	padding-right: 10px
 }
 .btn:hover {
@@ -196,7 +196,7 @@
   bottom: 43px;
   z-index: 200;
   width: 100px;
-   background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,.9);
   padding: 20px;
   border-radius: 5px;
   /*background: #fff;*/
@@ -214,13 +214,15 @@
 
 .bottom .display-menu::after {
 	content: '';
-	width: 10px;
-	height: 10px;
+	width: 0px;
+	height: 0px;
+	border: 5px #fff solid;
+	border-color: transparent rgba(255,255,255,.9) rgba(255,255,255,.9) transparent;
 	position: absolute;
 	bottom: -5px;
 	left: calc(50% - 8px);
 	transform: rotate(45deg);
-	background: inherit;
+	background: transparent;
 }
 
 .bottom .display-menu li {
@@ -247,6 +249,81 @@
 }
 
 
+.share .toggle {
+    float: right;
+    margin: 0;
+}
+.toggle.toggle-off {
+    background-color: #cbd2d8;
+}
+
+.toggle {
+    background-color: #34495e;
+    border-radius: 60px;
+    color: white;
+    height: 29px;
+    margin: 0 12px 12px 0;
+    overflow: hidden;
+    display: inline-block;
+    zoom: 1;
+    -webkit-transition: 0.25s;
+    -moz-transition: 0.25s;
+    -o-transition: 0.25s;
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden;
+}
+.toggle:before, .toggle:after {
+    display: table;
+    content: "";
+}
+.toggle .toggle-radio:first-child {
+    margin-bottom: -29px;
+    left: 0;
+}
+.toggle .toggle-radio {
+    background: url(../assets/icon-on.png) right top no-repeat;
+    color: #1abc9c;
+    display: block;
+    font-weight: 700;
+    height: 21px;
+    left: 120%;
+    margin-left: -13px;
+    padding: 5px 32px 3px;
+    position: relative;
+    text-align: center;
+    z-index: 2;
+    -webkit-transition: 0.25s;
+    -moz-transition: 0.25s;
+    -o-transition: 0.25s;
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden;
+}
+.toggle.toggle-off .toggle-radio {
+     background-image: url(../images/toggle/icon-off.png);
+    background-position: 0 0;
+    color: white;
+    left: 0;
+    margin-left: 0.5px;
+    margin-right: -13px;
+    z-index: 1;
+}
+.toggle input {
+    display: none;
+    position: absolute;
+    outline: none !important;
+    display: block\9;
+    opacity: 0.01;
+    filter: alpha(opacity=1);
+    zoom: 1;
+}
+input[type="radio"], input[type="checkbox"] {
+    margin: 4px 0 0;
+    margin-top: 1px \9;
+    line-height: normal;
+}
+
+
+
 #mask {
 	background: rgba(0,0,0,0.6);
 	position: absolute;
@@ -269,12 +346,11 @@
   border: 1px #ffeb3b solid;
   border-radius: 5px;
   display: none;
-  /*transition: transform .5s ease;*/
-  /*transform: scaleX(0);*/
   transform: rotateY(-90deg);
 }
 .pop.show {
-	display: block;
+	transform: rotateY(0);
+	transition: transform .5s ease;
 }
 .pop .x {
 	position: absolute;
@@ -286,61 +362,34 @@
     margin: 0;
     padding: 2px;
     border-radius: 0;
+    transition: transform .5s ease;
 }
 .pop .x:after {
 	content: '';
 	display: inline-block;
 	width: 20px;
-    height: 20px;
+  height: 20px;
 	background: url(../assets/x.png);
 	background-size: cover;
 	position: absolute;
-    left: 4px;
-    top: 4px;
+  left: 4px;
+  top: 4px;
 }
 .pop .x:hover {
 	filter: brightness(1);
-	background: rgba(255,255,255,0.3)
+	transform: rotate(360deg);
+	/*background: rgba(255,255,255,0.3)*/
+}
+.pop .title > i {
+	margin-right: 15px;
 }
 
 
-#pop-staff {
-	left: 55%;
-	top: 25%;
-	padding: 40px;
-}
-#pop-staff.show {
-	transform: rotateY(0);
-	transition: transform .5s ease;
-	/*animation: showPopstaff .5s ease forwards;*/
-}
-@keyframes showPopstaff {
-	0% {
-		transform: scaleX(0);
-	}
-	35% {
-		transform: scaleX(1);
-	}
-	70% {
-		transform: scaleX(0);
-	}
-	100% {
-		transform: scaleX(1);
-	}
-}
-#pop-staff .pic img {
-	width: 210px;
-	margin:0 auto;
-	display: block;
-}
-#pop-staff .info {
-	margin-top: 20px;
-}
-
+/*企业相关*/
 
 #pop-company-staff {
 	/*display: block;*/
-	transform: rotate(0);
+	/*transform: rotate(0);*/
 	top: 56px;
   left: 10px;
   width: 30%;
@@ -413,11 +462,9 @@
 #pop-company-staff li span:nth-child(3) i.fa-exclamation-circle {
 	color: #ff5722;
 }
-
-
 .pop-chart {
-  /*display: block;*/
-  transform: rotate(0);
+  transform: rotateX(-90deg);
+  /*transform: scaleX(0);*/
   top: 56px;
   right: 10px;
   width: calc( 70% - 120px );
@@ -425,6 +472,7 @@
   height: calc(50vh - 110px);
   padding: 20px;
 }
+
 .pop-chart .chart {
 	height: calc(50vh - 100px);
 }
@@ -443,5 +491,89 @@
 	bottom: 71px;
 }
 
+/*变电站相关*/
+
+#pop-station-sys {
+		top: 56px;
+		left: 10px;
+		right: 10px;
+		height: calc(50vh - 120px);
+		/*display: block;*/
+		width: auto;
+		/*background: #272822;*/
+		transition: transform .5s ease, height .3s ease;
+}
+#station-sys {
+	position: absolute;
+  width: 100%;
+  height: calc(100% - 20px);
+  left: 0;
+  top: 20px;
+}
+#pop-station-i,
+#pop-station-load {
+	top: auto;
+	bottom: 71px;
+	width: calc(50% - 60px);
+	left: 10px;
+	transition: transform .5s ease, height .3s ease ,padding .3s ease ,opacity .3s ease;
+}
+#pop-station-load {
+	left: auto;
+	right: 10px;
+}
+
+#pop-station-sys .btn-bar {
+	position: absolute;
+  bottom: 10px;
+}
+#pop-station-sys .btn:hover {
+	color: #00bcd4;
+}
+#btn-sys-down:hover > i{
+	animation: btnDown .8s ease-in infinite;
+}
+@keyframes btnDown {
+	0% {
+		transform: translateY(-3px);
+	}
+	30% {
+		transform: translateY(3px);
+	}
+	40% {
+		transform: translateY(3px);
+	}
+	100% {
+		transform: translateY(-3px);
+	}
+}
+
+#btn-sys-up {
+	display: none;
+}
+
+.slide-down #pop-station-sys {
+	height: calc(100vh - 180px);
+}
+.slide-down #pop-station-i,
+.slide-down #pop-station-load {
+	height: 0;
+	padding: 0;
+	opacity: 0;
+}
 
 
+/*员工相关*/
+#pop-staff {
+	left: 55%;
+	top: 25%;
+	padding: 40px;
+}
+#pop-staff .pic img {
+	width: 210px;
+	margin:0 auto;
+	display: block;
+}
+#pop-staff .info {
+	margin-top: 20px;
+}

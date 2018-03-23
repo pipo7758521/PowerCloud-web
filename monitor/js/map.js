@@ -17,8 +17,8 @@
     map.setMapStyle(mapStyle);
 
 
-    map.centerAndZoom(new BMap.Point(116.404, 39.925), 14);  // 初始化地图,设置中心点坐标和地图级别
-    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    map.centerAndZoom(new BMap.Point(123.4, 41.8), 14);  // 初始化地图,设置中心点坐标和地图级别
+    map.setCurrentCity("沈阳");          // 设置地图显示的城市 此项是必须设置的
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
     var h = $(window).height() - 290;
@@ -50,57 +50,99 @@
   	var points3 = [];
 
   	//企业
-  	var arr = api.data.getMapPoint(1);
-    arr.forEach( (o,i) => {
-      var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
-      points1.push(new BMap.Point(convertor[0], convertor[1]));
-      var html = "<div class='p p-company'><span class='p-label'>企业："+o.info+"</span></div>";
-      // var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
-			// var marker = new BMap.Marker(points1[i]);  // 创建标注
-      var marker = new BMapLib.RichMarker(html, points1[i]);
-      // var label = new BMap.Label("我是文字标注哦",{offset:new BMap.Size(20,-10)});
-			// marker.setLabel(label);
-      markers1.push(marker);
+    Promise.all([api.data.getMapPoint(1),api.data.getMapPoint(2),api.data.getMapPoint(3)])
+    .then(function(res_arr){
+      res_arr[0].forEach( (o,i) => {
+        // console.log(o.pos)
+        var pos = JSON.parse(o.pos);
+        var convertor = coorConvert.wgs2bd(pos.lng, pos.lat);
+
+        points1.push(new BMap.Point(convertor[0], convertor[1]));
+        var html = "<div class='p p-company'><span class='p-label'>企业："+o.tag+"</span></div>";
+        // var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+        // var marker = new BMap.Marker(points1[i]);  // 创建标注
+        var marker = new BMapLib.RichMarker(html, points1[i]);
+        // var label = new BMap.Label("我是文字标注哦",{offset:new BMap.Size(20,-10)});
+        // marker.setLabel(label);
+        markers1.push(marker);
+      })
+      mapMgr1.addMarkers(markers1,1,20)
+      mapMgr1.showMarkers();
+
+      res_arr[1].forEach( (o,i) => {
+        var pos = JSON.parse(o.pos);
+        var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
+        points2.push(new BMap.Point(convertor[0], convertor[1]));
+        var html = "<div class='p p-station'><span class='p-label'>变电站:"+o.info+"</span></div>";
+        markers2.push(new BMapLib.RichMarker(html, points2[i]))
+      })
+      mapMgr2.addMarkers(markers2,2,20)
+      mapMgr2.showMarkers();
+
+
+      res_arr[2].forEach( (o,i) => {
+        var pos = JSON.parse(o.pos);
+        var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
+        points3.push(new BMap.Point(convertor[0], convertor[1]));
+        var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'></div>";
+        var marker = new BMapLib.RichMarker(html, points3[i]);
+        markers3.push(marker);
+      })
+      mapMgr3.addMarkers(markers3,1,20)
+      mapMgr3.showMarkers();
+
+      var allP = (points1.concat(points2)).concat(points3)
+      console.log(allP)
+      map.setViewport(allP);
+
+      bindEvent();
+
     })
-    mapMgr1.addMarkers(markers1,1,20)
-    mapMgr1.showMarkers();
+
+  	/*api.data.getMapPoint(1).then(function(res_arr) {
+      console.log(res_arr)
+
+    });
+
 
     //变电站
-    var arr = api.data.getMapPoint(2);
-    arr.forEach( (o,i) => {
-      var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
-      points2.push(new BMap.Point(convertor[0], convertor[1]));
-      var html = "<div class='p p-station'><span class='p-label'>变电站:"+o.info+"</span></div>";
-      markers2.push(new BMapLib.RichMarker(html, points2[i]))
-    })
-    mapMgr2.addMarkers(markers2,2,20)
-    mapMgr2.showMarkers();
+    // var arr = api.data.getMapPoint(2);
+    api.data.getMapPoint(2, function(res_arr) {
+      res_arr.forEach( (o,i) => {
+        var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
+        points2.push(new BMap.Point(convertor[0], convertor[1]));
+        var html = "<div class='p p-station'><span class='p-label'>变电站:"+o.info+"</span></div>";
+        markers2.push(new BMapLib.RichMarker(html, points2[i]))
+      })
+      mapMgr2.addMarkers(markers2,2,20)
+      mapMgr2.showMarkers();
+    });
+
 
     //人员
-    var arr = api.data.getMapPoint(3);
-    arr.forEach( (o,i) => {
-      var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
-      points3.push(new BMap.Point(convertor[0], convertor[1]));
-      var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'></div>";
-      var marker = new BMapLib.RichMarker(html, points3[i]);
-      markers3.push(marker);
+    api.data.getMapPoint(3, function(res_arr) {
+      res_arr.forEach( (o,i) => {
+        var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
+        points3.push(new BMap.Point(convertor[0], convertor[1]));
+        var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'></div>";
+        var marker = new BMapLib.RichMarker(html, points3[i]);
+        markers3.push(marker);
+      })
+      mapMgr3.addMarkers(markers3,1,20)
+      mapMgr3.showMarkers();
+    });
 
-      // marker.addEventListener("click", handleStaffClick);
+    var allP = (points1.concat(points2)).concat(points3)
+    console.log(allP)
+		map.setViewport(allP);*/
 
-    })
-    mapMgr3.addMarkers(markers3,1,20)
-    mapMgr3.showMarkers();
-
-
-		map.setViewport((points1.concat(points2)).concat(points3));
-
-    bindEvent();
+    // bindEvent();
   }
 
   function bindEvent() {
     $(".p-staff").on('click', handleStaffClick);
-
     $(".p-company").on('click', handleCompanyClick);
+    $(".p-station").on('click', handleStationClick);
   }
 
   function handleStaffClick(event) {
@@ -130,6 +172,14 @@
 
     var detail = window.api.data.getCompanyDetail($(this).attr("data-id"));
     window.api.pop.popCompanyDetail(detail);
+  }
+
+  function handleStationClick(event) {
+    event.preventDefault();
+    $(".pop").removeClass('show');
+
+    var detail = window.api.data.getStationDetail($(this).attr("data-id"));
+    window.api.pop.popStationDetail(detail);
   }
   //显示隐藏坐标点
   function togglePoints(type) {

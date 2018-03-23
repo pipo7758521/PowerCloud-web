@@ -1,5 +1,61 @@
 (function(){
 
+  const host = "http://202.118.26.7:8080/PowerCloud/api";
+
+  // 封装一个get请求的方法
+  function request(url, type, data) {
+    return new Promise(function(resolve, reject) {
+      var XHR = new XMLHttpRequest();
+
+
+      XHR.open(type, host + url, true);
+      XHR.setRequestHeader("Content-type","application/json; charset=utf-8");
+      XHR.send(data);
+
+      XHR.onreadystatechange = function() {
+        if (XHR.readyState == 4) {
+          if (XHR.status == 200) {
+            try {
+                var response = JSON.parse(XHR.responseText);
+                console.log(response)
+                if(response.succeeded) {
+                  var r = JSON.parse(response.data);
+                  resolve(r);
+                }
+                else {
+                  alert("请求数据错误");
+                  reject();
+                }
+            } catch (e) {
+                reject(e);
+            }
+          } else {
+            reject(new Error(XHR.statusText));
+          }
+        }
+      }
+    })
+  }
+
+
+  /*function request(url, type, data, callback) {
+    $.ajax({
+      url: host + url,
+      type: type,
+      dataType: 'json',
+      data: data,
+      success: function(res) {
+        if(res.succeeded) {
+          var r = JSON.parse(res.data)
+          callback(r)
+        }
+        else {
+          alert("请求数据错误");
+        }
+      }
+    })
+  }*/
+
 	/**/
   function mqttConnect(onMessageArrived) {
     var client = new Paho.MQTT.Client("202.118.26.129", Number(8083), "ttttt");//建立客户端实例
@@ -25,7 +81,17 @@
     client.send(message);*/
   }
 
-  function getMapPoint(type) {
+  function getMapPoint(type, callback) {
+
+    return new Promise(function(resolve,reject){
+      request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
+        resolve(r)
+      })
+    })
+   /* request("/electricitysubstation/getMapPoint", "POST", {type:type}, function(res){
+      callback(res)
+    })*/
+    return
   	if(type == 1) {
   		arr = [
   			{
@@ -147,11 +213,21 @@
     }
   }
 
+  function getStationDetail(id) {
+    return {
+      sys: svg_data,
+      Ie: 15,
+      name: "变电站1"
+    }
+  }
+
+
   window.api = window.api || {}
   window.api.data = {
     getMapPoint: getMapPoint,
     mqttConnect: mqttConnect,
     getStaffDetail: getStaffDetail,
-    getCompanyDetail: getCompanyDetail
+    getCompanyDetail: getCompanyDetail,
+    getStationDetail: getStationDetail
   };
 })()

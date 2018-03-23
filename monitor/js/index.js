@@ -35,6 +35,22 @@
 		});
 
 
+		//系统图放大 缩小
+		$("#pop-station-sys")
+		.delegate('#btn-sys-down', 'click', function(event) {
+			event.preventDefault();
+			$("#pop-station").addClass('slide-down');
+			$(this).hide();
+			$("#btn-sys-up").show();
+		})
+		.delegate('#btn-sys-up', 'click', function(event) {
+			event.preventDefault();
+			$("#pop-station").removeClass('slide-down');
+			$(this).hide();
+			$("#btn-sys-down").show();
+		});
+
+
 	}
 
 
