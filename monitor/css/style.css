@@ -248,21 +248,12 @@
 	background-position: -60px -30px;
 }
 
-
-.share .toggle {
-    float: right;
-    margin: 0;
-}
-.toggle.toggle-off {
-    background-color: #cbd2d8;
-}
-
 .toggle {
     background-color: #34495e;
     border-radius: 60px;
     color: white;
     height: 29px;
-    margin: 0 12px 12px 0;
+    align-self: center;
     overflow: hidden;
     display: inline-block;
     zoom: 1;
@@ -276,6 +267,10 @@
     display: table;
     content: "";
 }
+.toggle.toggle-off {
+    background-color: #cbd2d8;
+}
+
 .toggle .toggle-radio:first-child {
     margin-bottom: -29px;
     left: 0;
