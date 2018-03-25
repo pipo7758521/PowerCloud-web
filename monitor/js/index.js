@@ -99,8 +99,10 @@
 			}
 		});
 		popJQs.removeClass("show");
-		popJQs.hide();
-		updatePopLayout();
+		setTimeout(function () {
+			popJQs.hide();
+			updatePopLayout();
+		},500)
 
 		window.api.map.refresh();
 	}
