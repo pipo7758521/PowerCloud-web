@@ -84,92 +84,92 @@
   function getMapPoint(type, callback) {
 
     return new Promise(function(resolve,reject){
-      request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
-        resolve(r)
-      })
+      // request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
+
+        var arr;
+        if(type == 1) {
+          arr = [
+            {
+              id: 1,
+              pos:`{"lng": "116.2945", "lat": "39.9100"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"lng": "116.3255", "lat": "39.9005"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"lng": "116.3185", "lat": "39.9205"}`,
+              tag: "testtest",
+              status: 0
+            },
+          ]
+        }
+        else if(type == 2) {
+          arr = [
+            {
+              id: 1,
+              pos:`{"longitude": "116.2945", "latitude": "39.9110"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.3245", "latitude": "39.9015"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.2955", "latitude": "39.9092"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.3185", "latitude": "39.9215"}`,
+              tag: "testtest",
+              status: 0
+            },
+          ]
+        }
+        else if(type == 3) {
+          arr = [
+            {
+              id: 1,
+              pos:`{"longitude": "116.2915", "latitude": "39.9110"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.3215", "latitude": "39.9015"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.2925", "latitude": "39.9092"}`,
+              tag: "testtest",
+              status: 0
+            },
+            {
+              id: 1,
+              pos:`{"longitude": "116.3155", "latitude": "39.9215"}`,
+              tag: "testtest",
+              status: 0
+            },
+          ]
+        }
+        resolve(arr)
+      // })
     })
-   /* request("/electricitysubstation/getMapPoint", "POST", {type:type}, function(res){
-      callback(res)
-    })*/
     return
-  	if(type == 1) {
-  		arr = [
-  			{
-  				id: 1,
-  				pos:[116.2945, 39.9100],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3255, 39.9005],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3185, 39.9205],
-  				info: "testtest",
-  				status: 0
-  			},
-  		]
-  	}
-  	else if(type == 2) {
-  		arr = [
-  			{
-  				id: 1,
-  				pos:[116.2945, 39.9110],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3245, 39.9015],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.2955, 39.9092],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3185, 39.9215],
-  				info: "testtest",
-  				status: 0
-  			},
-  		]
-  	}
-  	else if(type == 3) {
-  		arr = [
-  			{
-  				id: 1,
-  				pos:[116.2915, 39.9110],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3215, 39.9015],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.2925, 39.9092],
-  				info: "testtest",
-  				status: 0
-  			},
-  			{
-  				id: 1,
-  				pos:[116.3155, 39.9215],
-  				info: "testtest",
-  				status: 0
-  			},
-  		]
-  	}
+
   	return arr;
   }
 

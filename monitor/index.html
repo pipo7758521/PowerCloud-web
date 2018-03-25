@@ -28,8 +28,8 @@
     <div class="nav">
       <p class="logo"><i class="fa fa-bar-chart"></i>物联网监控平台</p>
       <p class="status-bar">
-        <span><i class="fa fa-clock-o"></i>2018-3-21</span>
-        <span>16:48</span>
+        <span><i class="fa fa-clock-o"></i><i id="date">2018-3-21</i></span>
+        <span id="time">16:48</span>
         <span>管理员</span>
         <a id="btn-exit" class="btn" href="javascript:void(0)"><i class="fa fa-share"></i>退出</a>
       </p>
@@ -40,43 +40,45 @@
       <div id="mask"></div>
 
       <!-- 企业 detail -->
-      <div id="pop-company-staff" class="pop">
-        <a href="javascript:void(0)" class="btn x"></a>
-        <div class="content">
-          <p class="title"><i class="fa fa-user"></i>员工信息</p>
-          <p class="staff-num">在岗人数<span>12</span></p>
-          <ul>
-            <!-- <li>
-              <span class="name">孙尚香</span>
-              <span class="duty">高级工程师</span>
-              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
-            </li>
-            <li>
-              <span class="name">孙尚香</span>
-              <span class="duty">工程师</span>
-              <span class="status">在岗状态：<i class="fa fa-exclamation-circle"></i></span>
-            </li>
-            <li>
-              <span class="name">孙尚香</span>
-              <span class="duty">高级工程师</span>
-              <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
-            </li>
-            -->
-          </ul>
+      <div id="company">
+        <div id="pop-company-staff" class="pop">
+          <a href="javascript:void(0)" class="btn x"></a>
+          <div class="content">
+            <p class="title"><i class="fa fa-user"></i>员工信息</p>
+            <p class="staff-num">在岗人数<span>12</span></p>
+            <ul>
+              <!-- <li>
+                <span class="name">孙尚香</span>
+                <span class="duty">高级工程师</span>
+                <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+              </li>
+              <li>
+                <span class="name">孙尚香</span>
+                <span class="duty">工程师</span>
+                <span class="status">在岗状态：<i class="fa fa-exclamation-circle"></i></span>
+              </li>
+              <li>
+                <span class="name">孙尚香</span>
+                <span class="duty">高级工程师</span>
+                <span class="status">在岗状态：<i class="fa fa-check-circle"></i></span>
+              </li>
+              -->
+            </ul>
+          </div>
         </div>
-      </div>
-      <div id="pop-company-i" class="pop pop-chart">
-        <a href="javascript:void(0)" class="btn x"></a>
-        <div class="content">
-          <p class="title"><i class="fa fa-flash"></i>变电站电流实时状态</p>
-          <div id="company-chart-i" class="content chart"></div>
+        <div id="pop-company-i" class="pop pop-chart">
+          <a href="javascript:void(0)" class="btn x"></a>
+          <div class="content">
+            <p class="title"><i class="fa fa-flash"></i>变电站电流实时状态</p>
+            <div id="company-chart-i" class="content chart"></div>
+          </div>
         </div>
-      </div>
-      <div id="pop-company-load" class="pop pop-chart">
-        <a href="javascript:void(0)" class="btn x"></a>
-        <div class="content">
-          <p class="title"><i class="fa fa-thermometer-full"></i>变电站载荷实时状态</p>
-          <div id="company-chart-load" class="content chart"></div>
+        <div id="pop-company-load" class="pop pop-chart">
+          <a href="javascript:void(0)" class="btn x"></a>
+          <div class="content">
+            <p class="title"><i class="fa fa-thermometer-full"></i>变电站载荷实时状态</p>
+            <div id="company-chart-load" class="content chart"></div>
+          </div>
         </div>
       </div>
 
@@ -112,6 +114,7 @@
       <!-- 员工 detail -->
       <div id="pop-staff" class="pop">
         <a href="javascript:void(0)" class="btn x"></a>
+        <p class="title"><i class="fa fa-user"></i>员工信息</p>
         <div class="content">
           <!--
           <div class="pic"><img src="assets/pic.png"></div>
@@ -131,11 +134,11 @@
       <div class="btn-bar">
         <a id="btn-refresh" class="btn icon-btn" href="javascript:void(0)"><i class="fa fa-refresh"></i>刷新</a>
         <!-- <a class="btn icon-btn" href="javascript:void(0)">服务</a> -->
-        <a id="btn-display" class="btn icon-btn" href="javascript:void(0)">显示
+        <a id="btn-display" class="btn icon-btn" href="javascript:void(0)"><i class="fa fa-map-marker"></i>显示
 
         </a>
-        <span>标签</span>
-        <div class="toggle">
+        <span class="tag-text">标签</span>
+        <div id="tag-toggle" class="toggle toggle-off">
           <label class="toggle-radio" for="toggleOption2">ON</label>
           <input type="radio" name="toggleOptions" id="toggleOption1" value="option1" checked="checked">
           <label class="toggle-radio" for="toggleOption1">OFF</label>
@@ -151,6 +154,7 @@
     </div>
   </div>
   <script type="text/javascript" src="js/svg_data.js"></script>
+  <script type="text/javascript" src="js/mapStyle.js"></script>
   <script type="text/javascript" src="js/api.js"></script>
   <script type="text/javascript" src="js/pop.js"></script>
   <script type="text/javascript" src="js/map.js"></script>

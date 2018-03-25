@@ -1,6 +1,7 @@
 (function(){
 
 	function popStaffDetail(detail) {
+		// maskShow();
 		var popJQ = $("#pop-staff");
 		var html = `<div class="pic"><img src="${detail.pic}"></div>
 				        <div class="info">
@@ -9,7 +10,7 @@
 				          <p class="name">所属公司：${detail.company}</p>
 				          <p class="name">公司电话：${detail.tel}</p>
 				          <p class="name">移动电话：${detail.phone}</p>
-				          <p class="name">在岗状态：${detail.status}</p>
+				          <p class="status">在岗状态：<i class="fa ${detail.status == 0 ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i></p>
 				        </div>`
 		popJQ.find(".content").html(html);
 		// popJQ[0].style.left = "55%";
