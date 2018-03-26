@@ -1,6 +1,10 @@
 (function(){
 
   const host = "http://202.118.26.7:8080/PowerCloud/api";
+  const mqttHost = "202.118.26.129";
+  const mqttPort = 8083;
+  // var client;
+  // var isMqttConnected = false;
 
   // 封装一个get请求的方法
   function request(url, type, data) {
@@ -37,32 +41,13 @@
     })
   }
 
-
-  /*function request(url, type, data, callback) {
-    $.ajax({
-      url: host + url,
-      type: type,
-      dataType: 'json',
-      data: data,
-      success: function(res) {
-        if(res.succeeded) {
-          var r = JSON.parse(res.data)
-          callback(r)
-        }
-        else {
-          alert("请求数据错误");
-        }
-      }
-    })
-  }*/
-
-	/**/
-  function mqttConnect(onMessageArrived) {
-    var client = new Paho.MQTT.Client("202.118.26.129", Number(8083), "ttttt");//建立客户端实例
+  function initMqttConnection(callback, onMessageArrived) {
+    var client = new Paho.MQTT.Client(mqttHost, Number(mqttPort), "webClient_"+Date.now());//建立客户端实例
     client.connect({onSuccess:onConnect});//连接服务器并注册连接成功处理事件
     function onConnect() {
         console.log("onConnected");
-        client.subscribe("/a");//订阅主题
+        // isMqttConnected = true;
+        callback(client);
     }
     client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
     client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
@@ -70,22 +55,31 @@
         if (responseObject.errorCode !== 0) {
             console.log("onConnectionLost:"+responseObject.errorMessage);
             console.log("连接已断开");
+            alert("Error：mqtt连接已断开");
          }
     }
-    /*function onMessageArrived(message) {
-      console.log("收到消息:"+message.payloadString);
-    }*/
-    /*// 发送消息
-    message = new Paho.MQTT.Message("hello");
-    message.destinationName = "/a";
-    client.send(message);*/
   }
+
+  function mqttSubscribe(client,topic) {
+    if(client) {
+      console.log(topic)
+      console.log(client)
+      client.subscribe(topic);//订阅主题
+    }
+  }
+
+  function mqttUnsubscribe(client,topic) {
+    if(client) {
+      console.log("cancel:"+topic)
+      client.unsubscribe(topic);//订阅主题
+    }
+  }
+
 
   function getMapPoint(type, callback) {
 
     return new Promise(function(resolve,reject){
-      // request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
-
+      //request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
         var arr;
         if(type == 1) {
           arr = [
@@ -175,8 +169,12 @@
 
 
   function getStaffDetail(id) {
-    console.log(id);
-    return {
+    return new Promise(function(resolve,reject){
+      request("/electrician/profile?id="+id, "POST", null).then(function(r) {
+        resolve(r)
+      })
+    })
+    /*return {
       id: 12345565657,
       name: "安琪拉",
       pic: "assets/pic.png",
@@ -184,33 +182,27 @@
       tel: 12345678,
       phone: 1345676891,
       status: 0
-    }
+    }*/
   }
 
   function getCompanyDetail(id) {
-    return {
+    return new Promise(function(resolve,reject){
+      request("/customer/getCompanyDetail?id="+id, "POST", null).then(function(r) {
+        resolve(r)
+      })
+    })
+
+    /*return {
       staffList: [
         {name: "孙尚香", duty: "高级工程师", status: 0},
         {name: "孙尚香", duty: "高级工程师", status: 1},
         {name: "露娜", duty: "高级工程师", status: 0},
         {name: "孙尚香", duty: "高级工程师", status: 0},
         {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 1},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 1},
-        {name: "露娜", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 1},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0}
-
       ],
       Ie: 15,
       stationsName: ["变电站1","变电站2","变电站3"]
-    }
+    }*/
   }
 
   function getStationDetail(id) {
@@ -224,8 +216,11 @@
 
   window.api = window.api || {}
   window.api.data = {
+    initMqttConnection: initMqttConnection,
+    mqttSubscribe: mqttSubscribe,
+    mqttUnsubscribe: mqttUnsubscribe,
     getMapPoint: getMapPoint,
-    mqttConnect: mqttConnect,
+    // mqttConnect: mqttConnect,
     getStaffDetail: getStaffDetail,
     getCompanyDetail: getCompanyDetail,
     getStationDetail: getStationDetail

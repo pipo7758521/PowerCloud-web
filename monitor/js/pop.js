@@ -1,14 +1,15 @@
 (function(){
 
 	function popStaffDetail(detail) {
-		// maskShow();
+		clearPop();
 		var popJQ = $("#pop-staff");
-		var html = `<div class="pic"><img src="${detail.pic}"></div>
+		var html = `<div class="pic"><img src="${detail.picc||'./assets/staff-pic.png' }"></div>
 				        <div class="info">
-				        	<p class="name">员工ID：${detail.id}</p>
+				        	<p class="name">员工编号：${detail.id}</p>
 				          <p class="name">员工姓名：${detail.name}</p>
-				          <p class="name">所属公司：${detail.company}</p>
-				          <p class="name">公司电话：${detail.tel}</p>
+				          <p class="name">所属公司：${detail.sccompanyname}</p>
+				          <p class="name">当前职称：${detail.positionaltitle}</p>
+				          <p class="name">办公电话：${detail.tel}</p>
 				          <p class="name">移动电话：${detail.phone}</p>
 				          <p class="status">在岗状态：<i class="fa ${detail.status == 0 ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i></p>
 				        </div>`
@@ -23,6 +24,7 @@
 
 
   function popCompanyDetail(detail) {
+  	clearPop();
   	maskShow();
   	var popJQ = $("#pop-company-staff");
   	var iJQ = $("#pop-company-i");
@@ -57,6 +59,7 @@
   }
 
   function popStationDetail(detail) {
+  	clearPop();
   	maskShow();
   	//系统图
   	var popJQ = $("#pop-station-sys");
@@ -88,9 +91,6 @@
   	//电流图
 	  //载荷图
 	  window.api.chart.renderStationChart(detail);
-
-
-
   }
 
   function setSysData(data,title) {
@@ -157,6 +157,10 @@
 
   function maskShow(){
   	$("#mask").addClass('show');
+  }
+
+  function clearPop() {
+  	$(".pop").removeClass('show');
   }
 
 

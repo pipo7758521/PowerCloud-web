@@ -58,13 +58,14 @@
   	//企业
     Promise.all([api.data.getMapPoint(1),api.data.getMapPoint(2),api.data.getMapPoint(3)])
     .then(function(res_arr){
+
+
       res_arr[0].forEach( (o,i) => {
-        console.log(o.pos)
         var pos = JSON.parse(o.pos);
         var convertor = coorConvert.wgs2bd(pos.lng, pos.lat);
 
         points1.push(new BMap.Point(convertor[0], convertor[1]));
-        var html = "<div class='p p-company'><span class='p-tag'>企业："+o.tag+"</span></div>";
+        var html = "<div class='p p-company' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>企业："+o.tag+"</span></div>";
         // var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
         // var marker = new BMap.Marker(points1[i]);  // 创建标注
         var marker = new BMapLib.RichMarker(html, points1[i]);
@@ -79,10 +80,10 @@
         var pos = JSON.parse(o.pos);
         var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
         points2.push(new BMap.Point(convertor[0], convertor[1]));
-        var html = "<div class='p p-station'><span class='p-tag'>变电站:"+o.tag+"</span></div>";
+        var html = "<div class='p p-station' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>变电站:"+o.tag+"</span></div>";
         markers2.push(new BMapLib.RichMarker(html, points2[i]))
       })
-      mapMgr2.addMarkers(markers2,2,20)
+      mapMgr2.addMarkers(markers2,1,20)
       mapMgr2.showMarkers();
 
 
@@ -90,7 +91,7 @@
         var pos = JSON.parse(o.pos);
         var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
         points3.push(new BMap.Point(convertor[0], convertor[1]));
-        var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>员工:"+o.tag+"</span></div>";
+        var html = "<div class='p p-staff' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>员工:"+o.tag+"</span></div>";
         var marker = new BMapLib.RichMarker(html, points3[i]);
         markers3.push(marker);
       })
@@ -109,44 +110,6 @@
 
     })
 
-  	/*api.data.getMapPoint(1).then(function(res_arr) {
-      console.log(res_arr)
-
-    });
-
-
-    //变电站
-    // var arr = api.data.getMapPoint(2);
-    api.data.getMapPoint(2, function(res_arr) {
-      res_arr.forEach( (o,i) => {
-        var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
-        points2.push(new BMap.Point(convertor[0], convertor[1]));
-        var html = "<div class='p p-station'><span class='p-tag'>变电站:"+o.info+"</span></div>";
-        markers2.push(new BMapLib.RichMarker(html, points2[i]))
-      })
-      mapMgr2.addMarkers(markers2,2,20)
-      mapMgr2.showMarkers();
-    });
-
-
-    //人员
-    api.data.getMapPoint(3, function(res_arr) {
-      res_arr.forEach( (o,i) => {
-        var convertor = coorConvert.wgs2bd(o.pos[0], o.pos[1]);
-        points3.push(new BMap.Point(convertor[0], convertor[1]));
-        var html = "<div class='p p-staff' data-id='"+i+"' data-pos='"+convertor.join("|")+"'></div>";
-        var marker = new BMapLib.RichMarker(html, points3[i]);
-        markers3.push(marker);
-      })
-      mapMgr3.addMarkers(markers3,1,20)
-      mapMgr3.showMarkers();
-    });
-
-    var totalPoint = (points1.concat(points2)).concat(points3)
-    console.log(totalPoint)
-		map.setViewport(totalPoint);*/
-
-    // bindEvent();
   }
 
   function bindEvent() {
@@ -156,13 +119,11 @@
 
     // tagEvent;
     $(".p-staff, .p-company, .p-station")
-    .on('mouseover', function(event) {
+    .on('mouseenter', function(event) {
       if(!$("#tag-toggle").hasClass('toggle-off')){
         return
       }
-
       $(this).find(".p-tag").addClass('on');
-
     })
     .on('mouseleave', function(event) {
       if(!$("#tag-toggle").hasClass('toggle-off')){
@@ -185,50 +146,61 @@
 
   function handleStaffClick(event) {
     event.preventDefault();
-    $(".pop").removeClass('show');
 
-    var _this = $(this)
+    var _this = $(this);
 
     _this.find(".p-tag").removeClass('on');
 
-    var pos = _this.attr("data-pos").split("|");
-    map.panTo(new BMap.Point(pos[0], pos[1]));//定位到所点击的位置
+    pointClickAnimation(_this);
 
-    _this.addClass('here');
-
-    setTimeout(function() {
-      _this.removeClass('here');
-          // map.zoomIn();
-    },2100)
-
-    var detail = window.api.data.getStaffDetail($(this).attr("data-id"));
-    setTimeout(function() {
+    window.api.data.getStaffDetail(_this.attr("data-id"))
+    .then(function(detail) {
+      console.log(detail)
       window.api.pop.popStaffDetail(detail);
-    },500)
+    })
     // map.centerAndZoom(new BMap.Point(pos[0], pos[1]), 16);
 
     // var style =_this.parent()[0].style;
 
   }
 
+
   function handleCompanyClick(event) {
     event.preventDefault();
-    $(this).find(".p-tag").removeClass('on');
 
-    $(".pop").removeClass('show');
+    var _this = $(this)
+    _this.find(".p-tag").removeClass('on');
 
-    var detail = window.api.data.getCompanyDetail($(this).attr("data-id"));
-    window.api.pop.popCompanyDetail(detail);
+    pointClickAnimation(_this);
+
+    setTimeout(function() {
+      window.api.data.getCompanyDetail(_this.attr("data-id"))
+      .then(function(detail) {
+        console.log(detail)
+        window.api.pop.popCompanyDetail(detail);
+      })
+    },1500);
   }
 
   function handleStationClick(event) {
     event.preventDefault();
-    $(this).find(".p-tag").removeClass('on');
 
-    $(".pop").removeClass('show');
+    var _this = $(this)
+    _this.find(".p-tag").removeClass('on');
 
-    var detail = window.api.data.getStationDetail($(this).attr("data-id"));
+    pointClickAnimation(_this);
+
+    var detail = window.api.data.getStationDetail(_this.attr("data-id"));
     window.api.pop.popStationDetail(detail);
+  }
+
+  //点击坐标点的动画：放大并移到窗口正中 ，动画时长2s
+  function pointClickAnimation(pointJQ) {
+    var pos = pointJQ.attr("data-pos").split("|");
+    map.panTo(new BMap.Point(pos[0], pos[1]));//定位到所点击的位置
+
+    pointJQ.addClass('here');
+    setTimeout(function() {pointJQ.removeClass('here');},2100);
   }
   //显示隐藏坐标点
   function togglePoints(type) {

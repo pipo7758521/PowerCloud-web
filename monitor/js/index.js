@@ -13,7 +13,6 @@
 
 	function bindEvent() {
 
-
 		//坐标点显示/隐藏 点击
 		btnDisplayJQ.on("click", function(e) {
 			if(displayMenuJQ.hasClass("active")) {
@@ -110,7 +109,6 @@
 	function updatePopLayout(popJQ) {
 		var allHide = true;
 		popJQs.each(function(index, el) {
-			console.log($(el).is(':visible'))
 			allHide &= (!$(el).is(':visible'))
 		});
 		if(allHide){
@@ -132,12 +130,45 @@
 		window.timer = setTimeout(initTimer, 1000)
 	}
 
+	/*
+	 * 这里是长连接监听到消息的集中处理器
+	 * 根据消息种类的不同，分别调用其他模块的各函数
+	*/
+	function onMessageArrived(msg) {
+		console.log("=== mqtt ===");
+		console.log(msg.payloadString);
+		var msg = [
+			{
+				id: 1,
+				I:10,
+			},
+			{
+				id: 2,
+				I:11,
+			},
+			{
+				id: 3,
+				I:12,
+			}
+		]
+		// api.chart.companyMqttDataListener(msg.payloadString);
+	}
+
 	window.onload = function() {
 
-		api.map.init();
-		refresh();
+		api.data.initMqttConnection(function(client) {
+			//获取所有变电站的状态
+			// api.data.mqttSubscribe(client, "/a");
 
-		bindEvent();
+			api.map.init();
+			refresh();
+			bindEvent();
+
+		}, onMessageArrived);
+
+		/*api.map.init();
+		refresh();
+		bindEvent();*/
 
 		initTimer();
 
