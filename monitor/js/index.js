@@ -111,7 +111,9 @@
 		popJQs.each(function(index, el) {
 			allHide &= (!$(el).is(':visible'))
 		});
+		//所有POP都关闭了，此时应该断掉与POP相关的mqtt client
 		if(allHide){
+			window.api.pop.clearPop();
 			maskJQ.removeClass('show');
 		}
 

@@ -151,13 +151,18 @@
 
     _this.find(".p-tag").removeClass('on');
 
+    window.api.pop.clearPop();
     pointClickAnimation(_this);
 
-    window.api.data.getStaffDetail(_this.attr("data-id"))
-    .then(function(detail) {
-      console.log(detail)
-      window.api.pop.popStaffDetail(detail);
-    })
+    setTimeout(function() {
+      window.api.data.getStaffDetail(_this.attr("data-id"))
+      .then(function(detail) {
+        console.log(detail)
+        window.api.pop.popStaffDetail(detail);
+      })
+    },500);
+
+
     // map.centerAndZoom(new BMap.Point(pos[0], pos[1]), 16);
 
     // var style =_this.parent()[0].style;
@@ -171,6 +176,7 @@
     var _this = $(this)
     _this.find(".p-tag").removeClass('on');
 
+    window.api.pop.clearPop();
     pointClickAnimation(_this);
 
     setTimeout(function() {
@@ -188,6 +194,7 @@
     var _this = $(this)
     _this.find(".p-tag").removeClass('on');
 
+    window.api.pop.clearPop();
     pointClickAnimation(_this);
 
     var detail = window.api.data.getStationDetail(_this.attr("data-id"));

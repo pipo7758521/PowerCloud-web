@@ -1,7 +1,8 @@
 (function(){
 
+	var g_clientSys;
+
 	function popStaffDetail(detail) {
-		clearPop();
 		var popJQ = $("#pop-staff");
 		var html = `<div class="pic"><img src="${detail.picc||'./assets/staff-pic.png' }"></div>
 				        <div class="info">
@@ -24,7 +25,6 @@
 
 
   function popCompanyDetail(detail) {
-  	clearPop();
   	maskShow();
   	var popJQ = $("#pop-company-staff");
   	var iJQ = $("#pop-company-i");
@@ -59,7 +59,6 @@
   }
 
   function popStationDetail(detail) {
-  	clearPop();
   	maskShow();
   	//系统图
   	var popJQ = $("#pop-station-sys");
@@ -69,11 +68,11 @@
 
   	sysJQ.html(detail.sys);
 	  $("#station-sys svg")[0].style.transform = "rotate(0)";
-	  setInterval(function() {
+	 /* setInterval(function() {
  		// window.api.data.mqttConnect(function(msg) {
  			console.log("update data")
  			setSysData(sys_data, detail.name + " - " + "电力系统图")
-    },3000)
+    },3000)*/
 
   	popJQ.show();
   	iJQ.show();
@@ -161,19 +160,22 @@
 
   function clearPop() {
   	$(".pop").removeClass('show');
+  	//关闭mqtt链接
+  	window.api.chart.clearClient();
+
+  	if(g_clientSys) {
+  		g_clientSys.disconnect();
+  		g_clientSys = null;
+  	}
   }
-
-
-
-
-
 
 
   window.api = window.api || {}
   window.api.pop = {
     popStaffDetail: popStaffDetail,
     popCompanyDetail: popCompanyDetail,
-    popStationDetail: popStationDetail
+    popStationDetail: popStationDetail,
+    clearPop: clearPop
   };
 
 })()

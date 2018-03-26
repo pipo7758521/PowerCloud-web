@@ -51,3 +51,10 @@ body {
   margin: 0;
   overflow: hidden;
 }
+.BMap_cpyCtrl {
+    display: none;
+}
+
+.anchorBL {
+    display: none;
+}

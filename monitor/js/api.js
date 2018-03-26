@@ -63,7 +63,6 @@
   function mqttSubscribe(client,topic) {
     if(client) {
       console.log(topic)
-      console.log(client)
       client.subscribe(topic);//订阅主题
     }
   }
@@ -170,43 +169,48 @@
 
   function getStaffDetail(id) {
     return new Promise(function(resolve,reject){
-      request("/electrician/profile?id="+id, "POST", null).then(function(r) {
+      // request("/electrician/profile?id="+id, "POST", null).then(function(r) {
+        var r = {
+          id: 12345565657,
+          name: "安琪拉",
+          pic: "assets/pic.png",
+          company: "铁西区人民政府",
+          tel: 12345678,
+          phone: 1345676891,
+          status: 0
+        }
         resolve(r)
-      })
+      // })
     })
-    /*return {
-      id: 12345565657,
-      name: "安琪拉",
-      pic: "assets/pic.png",
-      company: "铁西区人民政府",
-      tel: 12345678,
-      phone: 1345676891,
-      status: 0
-    }*/
   }
 
   function getCompanyDetail(id) {
     return new Promise(function(resolve,reject){
-      request("/customer/getCompanyDetail?id="+id, "POST", null).then(function(r) {
+      // request("/customer/getCompanyDetail?id="+id, "POST", null).then(function(r) {
+        var r = {
+          staffList: [
+            {name: "孙尚香", duty: "高级工程师", status: 0},
+            {name: "孙尚香", duty: "高级工程师", status: 1},
+            {name: "露娜", duty: "高级工程师", status: 0},
+            {name: "孙尚香", duty: "高级工程师", status: 0},
+            {name: "孙尚香", duty: "高级工程师", status: 0},
+          ],
+          Ie: 15,
+          stationsName: [
+            {id:1, name:"变电站1"},
+            {id:2, name:"变电站2"},
+            {id:3, name:"变电站3"}
+          ]
+        }
         resolve(r)
-      })
+      // })
     })
-
-    /*return {
-      staffList: [
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 1},
-        {name: "露娜", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-        {name: "孙尚香", duty: "高级工程师", status: 0},
-      ],
-      Ie: 15,
-      stationsName: ["变电站1","变电站2","变电站3"]
-    }*/
   }
 
   function getStationDetail(id) {
     return {
+      id: 1,
+      companyId: 1,
       sys: svg_data,
       Ie: 15,
       name: "变电站1"
