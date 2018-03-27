@@ -4,12 +4,19 @@ module.exports = function(grunt) {
     grunt.initConfig({
         path: {
             dev: 'code',
-            release: 'dist'
+            release: 'dist',
+            tmp: 'tmp'
         },
         clean: {
             dist: {
                 src: [
-                    '<%= path.release %>/*'
+                    '<%= path.release %>/*',
+                    '<%= path.tmp %>'
+                ]
+            },
+            finished: {
+                src: [
+                    '<%= path.tmp %>'
                 ]
             }
         },
@@ -23,21 +30,26 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        filerev: {
-            files: {
-                src: [
-                    '<%= path.release %>/assets/.{png,jpg,jpeg,gif}',
-                    '<%= path.release %>/js/{,*/}*.js',
-                    '<%= path.release %>/css/{,*/}*.css'
-                ]
-            }
-        },
         useminPrepare: {
             html: ['<%= path.dev %>/*.html'],
             options: {
                 root: '<%= path.dev %>',
                 dest: '<%= path.release %>'
             }
+        },
+        concat: {
+            release: {
+                files: {
+                    '<%= path.release %>/css/style.css': ['<%= path.dev %>/**/*.css']
+                }
+            },
+        },
+        cssmin:{
+            release: {
+                files: {
+                    '<%= path.release %>/css/style.css': ['<%= path.release %>/css/style.css']
+                }
+            },
         },
         usemin: {
             html: '<%= path.release %>/*.html',
@@ -61,23 +73,21 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= path.dev %>',
-                    dest: '.tmp/concat',
+                    dest: '<%= path.tmp %>',
                     src: '**/*.js'
                 }]
             }
         },
         uglify: {
-            options: {
-             mangle: true, //混淆变量名
-             comments: 'false' //false（删除全部注释），some（保留@preserve @license @cc_on等注释）
-            },
-            my_target: {
-                 files: [{
-                   expand:true,
-                   cwd: '<%= path.release %>',
-                   dest: '<%= path.release %>',
-                   src: '<%= path.release %>*.js'
-                 }]
+            release: {
+                options: {
+                    mangle: true, //混淆变量名
+                    comments: 'false' //false（删除全部注释），some（保留@preserve @license @cc_on等注释）
+                },
+                files: {
+                    '<%= path.release %>/js/index.js': ['<%= path.tmp %>/**/*.js']
+                }
+
             }
         },
         htmlmin: {
@@ -103,13 +113,12 @@ module.exports = function(grunt) {
         'clean:dist',
         'copy:main',
         'useminPrepare',
+        'concat:release',
+        'cssmin:release',
         'babel',
-        'concat',
-        'cssmin',
-
         'uglify',
-        'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'clean:finished',
     ])
 }

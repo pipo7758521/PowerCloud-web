@@ -17,7 +17,7 @@
     // Browser globals (root is window)
     root.coorConvert = factory();
   }
-}(this, function () {
+}(window, function () {
   //定义一些常量
   var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
   var PI = 3.1415926535897932384626;
@@ -140,7 +140,7 @@
   var out_of_china = function out_of_china(lng, lat) {
     var lat = +lat;
     var lng = +lng;
-    // 纬度3.86~53.55,经度73.66~135.05 
+    // 纬度3.86~53.55,经度73.66~135.05
     return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
   };
 
@@ -152,7 +152,7 @@
       }
       else{
           return [0,0]
-      } 
+      }
   }
 
   //经度纬度是否合法

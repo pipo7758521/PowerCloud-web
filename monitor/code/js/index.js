@@ -174,19 +174,9 @@
 	window.onload = function() {
 		document.onselectstart = new Function('event.returnValue=false;');
 
-		api.data.initMqttConnection(function(client) {
-			//获取所有变电站的状态
-			// api.data.mqttSubscribe(client, "/a");
-
-			api.map.init();
-			refresh();
-			bindEvent();
-
-		}, onMessageArrived);
-
-		/*api.map.init();
+		api.map.init();
 		refresh();
-		bindEvent();*/
+		bindEvent();
 
 		initTimer();
 
