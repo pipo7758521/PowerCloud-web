@@ -8,6 +8,8 @@
 
 	var tagToggleJQ = $("#tag-toggle");
 
+	var popStationJQ = $("#pop-station");
+
 	var popJQs = $(".pop");
 	var maskJQ = $("#mask");
 
@@ -31,9 +33,18 @@
 
 		displayMenuJQ.on('click', 'li', function(event) {
 			event.preventDefault();
-			var i = $(this).index()
-			api.map.togglePoints(i+1);
-			$(this).toggleClass("checked");
+			var i = $(this).index();
+			if(i == 0) { //选择：全部
+				// displayMenuJQ.find("li").toggleClass("checked");
+				// api.map.togglePoints(1);
+				// api.map.togglePoints(2);
+				// api.map.togglePoints(3);
+			}
+			else {
+				$(this).toggleClass("checked");
+				api.map.togglePoints(i+1);
+			}
+
 		});
 
 		//标签显示 隐藏
@@ -73,15 +84,19 @@
 		$("#pop-station-sys")
 		.delegate('#btn-sys-down', 'click', function(event) {
 			event.preventDefault();
-			$("#pop-station").addClass('slide-down');
-			$(this).hide();
-			$("#btn-sys-up").show();
+			popStationJQ.addClass('slide-down');
+			setTimeout(function() {
+				$("#pop-station-i").hide();
+				$("#pop-station-load").hide();
+			},500)
 		})
 		.delegate('#btn-sys-up', 'click', function(event) {
 			event.preventDefault();
-			$("#pop-station").removeClass('slide-down');
-			$(this).hide();
-			$("#btn-sys-down").show();
+			$("#pop-station-i").show();
+			$("#pop-station-load").show();
+			setTimeout(function() {
+				popStationJQ.removeClass('slide-down');
+			},100)
 		});
 
 
@@ -102,7 +117,6 @@
 			popJQs.hide();
 			updatePopLayout();
 		},500)
-
 		window.api.map.refresh();
 	}
 
@@ -115,6 +129,7 @@
 		if(allHide){
 			window.api.pop.clearPop();
 			maskJQ.removeClass('show');
+			popStationJQ.removeClass('slide-down');
 		}
 
 		/*console.log(popJQ.attr("id"))
@@ -157,6 +172,7 @@
 	}
 
 	window.onload = function() {
+		document.onselectstart = new Function('event.returnValue=false;');
 
 		api.data.initMqttConnection(function(client) {
 			//获取所有变电站的状态

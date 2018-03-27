@@ -1,8 +1,8 @@
 (function(){
 
-  const host = "http://202.118.26.7:8080/PowerCloud/api";
-  const mqttHost = "202.118.26.129";
-  const mqttPort = 8083;
+  const HOST = "http://202.118.26.7:8080/PowerCloud/api";
+  const MQTT_HOST = "202.118.26.129";
+  const MQTT_PORT = 8083;
   // var client;
   // var isMqttConnected = false;
 
@@ -12,7 +12,7 @@
       var XHR = new XMLHttpRequest();
 
 
-      XHR.open(type, host + url, true);
+      XHR.open(type, HOST + url, true);
       XHR.setRequestHeader("Content-type","application/json; charset=utf-8");
       XHR.send(data);
 
@@ -42,7 +42,7 @@
   }
 
   function initMqttConnection(callback, onMessageArrived) {
-    var client = new Paho.MQTT.Client(mqttHost, Number(mqttPort), "webClient_"+Date.now());//建立客户端实例
+    var client = new Paho.MQTT.Client(MQTT_HOST, Number(MQTT_PORT), "webClient_"+Date.now());//建立客户端实例
     client.connect({onSuccess:onConnect});//连接服务器并注册连接成功处理事件
     function onConnect() {
         console.log("onConnected");
@@ -67,10 +67,10 @@
     }
   }
 
-  function mqttUnsubscribe(client,topic) {
+  function mqttDisconnect(client) {
     if(client) {
-      console.log("cancel:"+topic)
-      client.unsubscribe(topic);//订阅主题
+      console.log("disconnect")
+      client.disconnect();//订阅主题
     }
   }
 
@@ -78,7 +78,7 @@
   function getMapPoint(type, callback) {
 
     return new Promise(function(resolve,reject){
-      //request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
+      // request("/electricitysubstation/getMapPoint?type="+type, "POST", null).then(function(r) {
         var arr;
         if(type == 1) {
           arr = [
@@ -111,19 +111,19 @@
               status: 0
             },
             {
-              id: 1,
+              id: 2,
               pos:`{"longitude": "116.3245", "latitude": "39.9015"}`,
               tag: "testtest",
               status: 0
             },
             {
-              id: 1,
-              pos:`{"longitude": "116.2955", "latitude": "39.9092"}`,
+              id: 3,
+              pos:`{"longitude": "116.2955", "latitude": "39.9080"}`,
               tag: "testtest",
               status: 0
             },
             {
-              id: 1,
+              id: 4,
               pos:`{"longitude": "116.3185", "latitude": "39.9215"}`,
               tag: "testtest",
               status: 0
@@ -134,25 +134,25 @@
           arr = [
             {
               id: 1,
-              pos:`{"longitude": "116.2915", "latitude": "39.9110"}`,
+              pos:`{"longitude": "116.2915", "latitude": "39.9010"}`,
               tag: "testtest",
               status: 0
             },
             {
-              id: 1,
+              id: 2,
               pos:`{"longitude": "116.3215", "latitude": "39.9015"}`,
               tag: "testtest",
               status: 0
             },
             {
-              id: 1,
+              id: 3,
               pos:`{"longitude": "116.2925", "latitude": "39.9092"}`,
               tag: "testtest",
               status: 0
             },
             {
-              id: 1,
-              pos:`{"longitude": "116.3155", "latitude": "39.9215"}`,
+              id: 4,
+              pos:`{"longitude": "116.3155", "latitude": "39.9205"}`,
               tag: "testtest",
               status: 0
             },
@@ -208,13 +208,18 @@
   }
 
   function getStationDetail(id) {
-    return {
-      id: 1,
-      companyId: 1,
-      sys: svg_data,
-      Ie: 15,
-      name: "变电站1"
-    }
+    return new Promise(function(resolve,reject){
+      // request("/electricitysubstation/getStationDetail?id="+id, "POST", null).then(function(r) {
+        var r = {
+          id: 1,
+          companyId: 1,
+          sys: svg_data,
+          Ie: 15,
+          name: "变电站1"
+        }
+        resolve(r)
+      // })
+    })
   }
 
 
@@ -222,9 +227,9 @@
   window.api.data = {
     initMqttConnection: initMqttConnection,
     mqttSubscribe: mqttSubscribe,
-    mqttUnsubscribe: mqttUnsubscribe,
+    mqttDisconnect: mqttDisconnect,
+
     getMapPoint: getMapPoint,
-    // mqttConnect: mqttConnect,
     getStaffDetail: getStaffDetail,
     getCompanyDetail: getCompanyDetail,
     getStationDetail: getStationDetail

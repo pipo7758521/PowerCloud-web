@@ -71,7 +71,7 @@
   var g_stationsLen;
   var g_Ie;
 
-  const mqttTopic = "/companyCurrent";
+  const MQTT_TOPIC = "/companyCurrent";
   var g_clientCurrent;  //电流的 mqtt client , 同一时间有且只有一个
   var g_companyCurrent = {}; //某个企业下，所有变电站的当前电流信息，用于同步时钟，画折线图
   var g_timer;
@@ -104,40 +104,35 @@
     g_companyCurrent = {};
     api.data.initMqttConnection(function(client) {
       g_clientCurrent = client;
-      var topic = mqttTopic+"/"+companyId+"/#";
+      var topic = MQTT_TOPIC+"/"+companyId+"/#";
       topic = "/a";
       window.api.data.mqttSubscribe(g_clientCurrent, topic);
     }, onMessageArrived);
 
     //这里收到该企业下，所有变电站发来的消息
     function onMessageArrived(msg) {
-      // var msg = randomData();
       //判断是哪个变电站 TODO
-      var stationId = 1;
-      g_companyCurrent["id_"+stationId] = (randomData()).value;
-      var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
-      var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
-      chartI.setOption(new_opt_i);
-      chartLoad.setOption(new_opt_load);
+      console.log(msg);
+      try {
+      	var topic = msg.destinationName;
+	      var stationId = (topic.split("/"))[2] || 1;
+	      g_companyCurrent["id_"+stationId] = (randomData()).value;
+      } catch(e){console.log("Error: error in onMessageArrived", e)}
     }
 
     //起一个定时器，每五秒钟读一次g_companyCurrent里的电流
     clearInterval(g_timer);
     g_timer = setInterval(function() {
       var msg = [];
-
       stationList.forEach(function(o,i) {
         if(o.id) {
-          //如果没有电流，则写为0
-          msg.push({value: g_companyCurrent["id_"+o.id] || 0});
+          msg.push({value: g_companyCurrent["id_"+o.id] || 0});//如果没有电流，则写为0
         }
       })
-
       var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
       var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
       companyChartI.setOption(new_opt_i);
       companyChartLoad.setOption(new_opt_load);
-
     }, 5000);
 
     /*setInterval(function() {
@@ -151,22 +146,9 @@
     },1000)*/
 	}
 
-	/*function companyMqttDataListener(msg) {
-		console.log("listener!");
-		try {
-			var msg = randomData();
-	    var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
-	    var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
-	    companyChartI.setOption(new_opt_i);
-	    companyChartLoad.setOption(new_opt_load);
-		}
-		catch(e) {
-
-		}
-
-	}*/
-
 	function renderStationChart(detail) {
+    g_Ie = 10 || detail.Ie;
+
     var stationId = detail.id;
     var companyId = detail.companyId;
 
@@ -191,7 +173,7 @@
 
     api.data.initMqttConnection(function(client) {
 			g_clientCurrent = client;
-      var topic = mqttTopic+"/"+companyId+"/"+stationId;
+      var topic = MQTT_TOPIC+"/"+companyId+"/"+stationId;
       var topic = "/a";
       window.api.data.mqttSubscribe(g_clientCurrent, topic);
 		}, onMessageArrived);
@@ -330,7 +312,7 @@
 
   function clearClient() {
     if(g_clientCurrent){
-      g_clientCurrent.disconnect();
+    	window.api.data.mqttDisconnect(g_clientCurrent);
       g_clientCurrent = null;
     }
   }

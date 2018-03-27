@@ -67,7 +67,11 @@
   	var loadJQ = $("#pop-station-load");
 
   	sysJQ.html(detail.sys);
-	  $("#station-sys svg")[0].style.transform = "rotate(0)";
+  	var svgJQ = $("#station-sys svg");
+  	if(svgJQ.length){
+  		svgJQ[0].style.transform = "rotate(0)";
+  	}
+
 	 /* setInterval(function() {
  		// window.api.data.mqttConnect(function(msg) {
  			console.log("update data")
@@ -162,9 +166,8 @@
   	$(".pop").removeClass('show');
   	//关闭mqtt链接
   	window.api.chart.clearClient();
-
   	if(g_clientSys) {
-  		g_clientSys.disconnect();
+  		window.api.data.mqttDisconnect(g_clientSys);
   		g_clientSys = null;
   	}
   }
