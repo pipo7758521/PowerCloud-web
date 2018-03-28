@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   externals: {
-	  "BMapLib": "BMapLib"
+	  "echarts": "echarts"
 	},
   module: {
   	rules: [
@@ -35,6 +35,13 @@ module.exports = {
             limit: 10000,
             name: 'assets/[name].[ext]'
           }
+        }]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader'
         }]
       }
     ]

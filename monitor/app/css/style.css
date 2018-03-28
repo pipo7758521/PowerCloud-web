@@ -349,6 +349,7 @@ i.fa{
 	top: 5px;
 	background: url(../assets/checkbox.png) -90px 0 no-repeat;
 }
+
 .display-menu li.checked .check {
 	background-position: -60px -30px;
 }
@@ -379,7 +380,7 @@ i.fa{
     content: "";
 }
 .toggle.toggle-off {
-    background-color: #95A5A6;
+    background-color: #6e7979;
 }
 
 .toggle .toggle-radio:first-child {

@@ -1,6 +1,4 @@
 	import {mapStyle} from './lib/mapStyle.js';
-  // import api from './api.js';
-  // import pop from './pop.js';
   //把百度地图的两个开源库合成一个了
   import {BMapLib} from './lib/bMapLib_RichMarker_MarkerManager.js';
   var api = require('./api.js');
@@ -227,15 +225,17 @@
   }
 
   //显示隐藏坐标点
-  function togglePoints(type) {
-  	if(type == 1) {
-  		mapMgr1.toggle();
+  //pointType: 1->企业 2->变电站 3->人员
+  //operation: 0->关闭 1->显示
+  function togglePoints(pointType,operation) {
+  	if(pointType == 1) {
+  		operation == 0 ? mapMgr1.hide() : mapMgr1.show();
   	}
-  	else if(type == 2) {
-  		mapMgr2.toggle();
+  	else if(pointType == 2) {
+  		operation == 0 ? mapMgr2.hide() : mapMgr2.show();
   	}
-  	else if(type == 3) {
-  		mapMgr3.toggle();
+  	else if(pointType == 3) {
+  		operation == 0 ? mapMgr3.hide() : mapMgr3.show();
   	}
   }
 

@@ -1,4 +1,5 @@
 import {initMqttConnection, mqttSubscribe, mqttDisconnect} from './api.js';
+require('./lib/macarons.js');
 
 //最大窗口长度
 const MAX_LEN = 10;
@@ -215,6 +216,7 @@ function initChartOption(chartType, legendData) {
     series.push({
       name: legendData[i] + (chartType == 0 ? "" : "载荷"),
       type: 'line',
+      smooth: true,
       showSymbol: true,
       hoverAnimation: false,
       data: [],
@@ -236,7 +238,14 @@ function initChartOption(chartType, legendData) {
   }
   opt =  $.extend(true, {}, COMMPON_OPT);
   opt.xAxis.name = "时间";
-  opt.yAxis.name = chartType == 0 ? "当前电流(A)" : "当前载荷(%)";
+  if(chartType == 0) {
+    opt.yAxis.name = "当前电流(A)";
+  }
+  else {
+    opt.yAxis.name = "当前载荷(%)";
+    opt.yAxis.axisLabel = {formatter: '{value} %'};
+  }
+
   if(g_stationsLen == 1) {
   	opt.legend = null;
   	opt.grid.left = '8%';
@@ -258,9 +267,15 @@ function initChartOption(chartType, legendData) {
           gt: 80,
           lte: 100,
           color: '#ffde33'
+      }, {
+          gt: 100,
+          color: '#f44336'
       }],
       outOfRange: {
           color: '#f44336'
+      },
+      textStyle: {
+        color: '#fff'
       }
     }
   }

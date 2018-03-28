@@ -37,17 +37,30 @@ function bindEvent() {
 	displayMenuJQ.on('click', 'li', function(event) {
 		event.preventDefault();
 		var i = $(this).index();
+		//operation: 0->关闭 1->显示
+		var operation = $(this).hasClass('checked') ? 0 : 1;
+		//自己改变状态
+		$(this).toggleClass('checked');
+
 		if(i == 0) { //选择：全部
-			// displayMenuJQ.find("li").toggleClass("checked");
-			// map.togglePoints(1);
-			// map.togglePoints(2);
-			// map.togglePoints(3);
+			var itemJQs = $(this).siblings();
+			operation == 0 ? itemJQs.removeClass("checked") : itemJQs.addClass("checked");
+			map.togglePoints(1, operation);
+			map.togglePoints(2, operation);
+			map.togglePoints(3, operation);
 		}
 		else {
-			$(this).toggleClass("checked");
-			map.togglePoints(i+1);
-		}
+			var checkedItemLen = displayMenuJQ.find("li:gt(0).checked").length;
+			var firstJQ = displayMenuJQ.find("li:eq(0)");
+			if(checkedItemLen == 0){
+				firstJQ.removeClass('checked');
+			}
+			else if(checkedItemLen == 3){
+				firstJQ.addClass('checked');
+			}
 
+			map.togglePoints(i, operation);
+		}
 	});
 
 	//标签显示 隐藏
@@ -134,20 +147,18 @@ function updatePopLayout(popJQ) {
 		maskJQ.removeClass('show');
 		popStationJQ.removeClass('slide-down');
 	}
-
-	/*console.log(popJQ.attr("id"))
-	if(popJQ.attr("id") == "pop-company-staff") {
-		$("#company .pop-chart").addClass('wide');
-		$("#company .pop-chart")[0].resize();
-	}*/
 }
 
 //右上角时间显示
 function initTimer() {
 	var now = new Date();
-	$("#date").html([now.getFullYear(),now.getMonth()+1,now.getDate()].join("-"));
-	$("#time").html([now.getHours(),now.getMinutes(),now.getSeconds()].join(":"));
-	window.timer = setTimeout(initTimer, 1000)
+	$("#date").html([now.getFullYear(),format(now.getMonth()+1),format(now.getDate())].join("-"));
+	$("#time").html([now.getHours(),format(now.getMinutes()),format(now.getSeconds())].join(":"));
+	window.timer = setTimeout(initTimer, 1000);
+
+	function format(v){
+		return v < 10 ? "0"+v : v;
+	}
 }
 
 window.onload = function() {
