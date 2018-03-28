@@ -1,0 +1,18 @@
+{
+	"succeeded": true,
+	"data": {
+    "staffList": [
+      {"name": "孙尚香", "duty": "高级工程师", "status": 0},
+      {"name": "孙尚香", "duty": "高级工程师", "status": 1},
+      {"name": "露娜", "duty": "高级工程师", "status": 0},
+      {"name": "孙尚香", "duty": "高级工程师", "status": 0},
+      {"name": "孙尚香", "duty": "高级工程师", "status": 0}
+    ],
+    "Ie": 15,
+    "stationsName": [
+      {"id":1, "name":"变电站1"},
+      {"id":2, "name":"变电站2"},
+      {"id":3, "name":"变电站3"}
+    ]
+  }
+}

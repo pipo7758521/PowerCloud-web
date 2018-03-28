@@ -1,6 +1,13 @@
-(function(){
+	import {mapStyle} from './lib/mapStyle.js';
+  // import api from './api.js';
+  // import pop from './pop.js';
+  //把百度地图的两个开源库合成一个了
+  import {BMapLib} from './lib/bMapLib_RichMarker_MarkerManager.js';
+  var api = require('./api.js');
+  var coorConvert = require('./lib/coor-convert.js');
+  var pop = require('./pop.js');
 
-	var map;
+  var map;
 	var mapMgr1;
 	var mapMgr2;
 	var mapMgr3;
@@ -10,7 +17,7 @@
   var stationStatusClient;
   const MQTT_TOPIC = "/stationStatus";
 
-	function initMap() {
+	function init() {
     // 百度地图API功能
     //地图不可点
     var mapOpts = {enableMapClick:false}
@@ -34,11 +41,11 @@
     renderPoint().then(function() {
       bindEvent();
 
-      window.api.data.initMqttConnection(function(client) {
+      api.initMqttConnection(function(client) {
         stationStatusClient = client;
         var topic = MQTT_TOPIC;
         topic = "/a";
-        window.api.data.mqttSubscribe(stationStatusClient, topic);
+        api.mqttSubscribe(stationStatusClient, topic);
       }, handleMqttStatus);
 
     });
@@ -64,7 +71,7 @@
   	var points3 = [];
     return new Promise(function(resolve,reject){
       //企业
-      Promise.all([api.data.getMapPoint(1),api.data.getMapPoint(2),api.data.getMapPoint(3)])
+      Promise.all([api.getMapPoint(1),api.getMapPoint(2),api.getMapPoint(3)])
       .then(function(res_arr){
 
 
@@ -158,13 +165,13 @@
 
     _this.find(".p-tag").removeClass('on');
 
-    window.api.pop.clearPop();
+    pop.clearPop();
     pointClickAnimation(_this);
 
     setTimeout(function() {
-      window.api.data.getStaffDetail(_this.attr("data-id"))
+      api.getStaffDetail(_this.attr("data-id"))
       .then(function(detail) {
-        window.api.pop.popStaffDetail(detail);
+        pop.popStaffDetail(detail);
       })
     },500);
 
@@ -181,14 +188,14 @@
     var _this = $(this)
     _this.find(".p-tag").removeClass('on');
 
-    window.api.pop.clearPop();
+    pop.clearPop();
     pointClickAnimation(_this);
 
     setTimeout(function() {
-      window.api.data.getCompanyDetail(_this.attr("data-id"))
+      api.getCompanyDetail(_this.attr("data-id"))
       .then(function(detail) {
         console.log(detail)
-        window.api.pop.popCompanyDetail(detail);
+        pop.popCompanyDetail(detail);
       })
     },500);
   }
@@ -199,13 +206,13 @@
     var _this = $(this)
     _this.find(".p-tag").removeClass('on');
 
-    window.api.pop.clearPop();
+    pop.clearPop();
     pointClickAnimation(_this);
 
     setTimeout(function() {
-      window.api.data.getStationDetail(_this.attr("data-id"))
+      api.getStationDetail(_this.attr("data-id"))
       .then(function(detail) {
-        window.api.pop.popStationDetail(detail);
+        pop.popStationDetail(detail);
       })
     },500);
   }
@@ -275,12 +282,10 @@
     if(totalPoint.length) map.setViewport(totalPoint);
   }
 
-  window.api = window.api || {}
-  window.api.map = {
-    init: initMap,
-    togglePoints: togglePoints,
-    toggleTag: toggleTag,
-    refresh: refresh
+  export {
+    init,
+    togglePoints,
+    toggleTag,
+    refresh
   };
 
-})()

@@ -1,0 +1,23 @@
+{
+	"succeeded": true,
+	"data": [
+          {
+            "id": 1,
+            "pos":"{\"lng\": \"116.2945\", \"lat\": \"39.9100\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 1,
+            "pos":"{\"lng\": \"116.3255\", \"lat\": \"39.9005\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 1,
+            "pos":"{\"lng\": \"116.3185\", \"lat\": \"39.9205\"}",
+            "tag": "testtest",
+            "status": 0
+          }
+        ]
+}

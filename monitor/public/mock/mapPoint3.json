@@ -1,0 +1,29 @@
+{
+	"succeeded": true,
+	"data": [
+          {
+            "id": 1,
+            "pos":"{\"longitude\": \"116.2915\", \"latitude\": \"39.9010\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 2,
+            "pos":"{\"longitude\": \"116.3215\", \"latitude\": \"39.9015\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 3,
+            "pos":"{\"longitude\": \"116.2925\", \"latitude\": \"39.9092\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 4,
+            "pos":"{\"longitude\": \"116.3155\", \"latitude\": \"39.9205\"}",
+            "tag": "testtest",
+            "status": 0
+          }
+        ]
+}

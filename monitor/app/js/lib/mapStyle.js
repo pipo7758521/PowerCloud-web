@@ -1,4 +1,4 @@
-var mapStyle = [
+export var mapStyle = [
           {
                     "featureType": "water",
                     "elementType": "all",

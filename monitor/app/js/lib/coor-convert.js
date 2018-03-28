@@ -17,7 +17,7 @@
     // Browser globals (root is window)
     root.coorConvert = factory();
   }
-}(window, function () {
+}(this, function () {
   //定义一些常量
   var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
   var PI = 3.1415926535897932384626;
