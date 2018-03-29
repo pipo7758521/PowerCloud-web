@@ -1,0 +1,12 @@
+{
+	"succeeded": true,
+	"data": {
+		"id": 12345565657,
+		"name": "安琪拉",
+		"pic": "assets/pic.png",
+		"company": "铁西区人民政府",
+		"tel": 12345678,
+		"phone": 1345676891,
+		"status": 0
+	}
+}

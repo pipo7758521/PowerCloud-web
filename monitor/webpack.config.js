@@ -1,10 +1,15 @@
 const path = require('path');
 
-module.exports = {
-	devtool: process.env.NODE_ENV === 'development' ? '#eval-source-map' : "#cheap-module-source-map",
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const config = {
+  devtool: process.env.NODE_ENV === 'development' ? '#eval-source-map' : "#cheap-module-source-map",
   entry: './app/js/main.js',
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
   externals: {
@@ -14,17 +19,17 @@ module.exports = {
   	rules: [
       {
         test: /\.css$/,
-        use: [
-          {
-          	loader: 'style-loader' ,
-					},
-          {
-          	loader: 'css-loader',
-          	options: {
-					    sourceMap: true
-					  }
-        	},
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [
+            {
+              loader: 'css-loader',
+              options:{
+                  minimize: true //css压缩
+              }
+            }
+          ]
+        })
       },
       {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
@@ -46,6 +51,40 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin(
+      ['dist'],
+      {
+          root: __dirname,       　　　　　　　　　　//根目录
+          verbose: true,        　　　　　　　　　　//开启在控制台输出信息
+          dry: false        　　　　　　　　　　//启用删除文件
+      }
+    ),
+    new CopyWebpackPlugin([ { from: path.join(__dirname, "app/mock"), to: 'mock' } ]),
+    new OptimizeCSSPlugin(),
+    new ExtractTextPlugin("styles.css"),
+    new HtmlWebpackPlugin({
+      template : './index.html',
+      filename : 'index.html',
+      inject : true,
+      minify: { removeAttributeQuotes: true, removeComments: true },
+    }),
+
+  ],
+  optimization: {
+    runtimeChunk: {
+        name: "manifest"
+    },
+    splitChunks: {
+        cacheGroups: {
+            commons: {
+                test: /[\\/]node_modules[\\/]/,
+                name: "common",
+                chunks: "all"
+            }
+        }
+    }
+  },
   devServer: {
     host: '127.0.0.1',
     port: 8000,
@@ -63,7 +102,10 @@ module.exports = {
       }
     },
     open: false,
-    contentBase: path.join(__dirname, "public"),
+    contentBase: path.join(__dirname, "dist"),
   },
 
 };
+
+module.exports = config;
+

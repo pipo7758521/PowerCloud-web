@@ -1,0 +1,27 @@
+{
+	"succeeded": true,
+	"data": [{
+            "id": 1,
+            "pos":"{\"longitude\": \"116.2945\", \"latitude\": \"39.9110\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 2,
+            "pos":"{\"longitude\": \"116.3245\", \"latitude\": \"39.9015\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 3,
+            "pos":"{\"longitude\": \"116.2955\", \"latitude\": \"39.9080\"}",
+            "tag": "testtest",
+            "status": 0
+          },
+          {
+            "id": 4,
+            "pos":"{\"longitude\": \"116.3185\", \"latitude\": \"39.9215\"}",
+            "tag": "testtest",
+            "status": 0
+          }]
+}

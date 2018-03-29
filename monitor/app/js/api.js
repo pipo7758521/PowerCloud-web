@@ -4,6 +4,7 @@ const MQTT_PORT = 8083;
 var UrlPath = {};
 
 var debug = process.env.NODE_ENV === 'development';
+
 if(debug){
   UrlPath = {
     mapPoint1: "api/mapPoint1.json",
