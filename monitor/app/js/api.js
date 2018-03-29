@@ -19,7 +19,7 @@ else {
   HOST = "http://202.118.26.7:8080/PowerCloud/api";
   UrlPath = {
     mapPoint: "/electricitysubstation/getMapPoint",
-    staffDetail: "/electricitysubstation/getStationDetail",
+    staffDetail: "/electrician/profile",
     companyDetail: "/customer/getCompanyDetail",
     stationDetail: "/electricitysubstation/getStationDetail",
   }

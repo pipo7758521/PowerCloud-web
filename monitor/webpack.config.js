@@ -6,11 +6,12 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const config = {
-  devtool: process.env.NODE_ENV === 'development' ? '#eval-source-map' : "#cheap-module-source-map",
+  // devtool: '#eval-source-map',
+  // devtool: process.env.NODE_ENV === 'development' ? '#eval-source-map' : "#cheap-module-source-map",
   entry: './app/js/main.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'js/bundle.js'
   },
   externals: {
 	  "echarts": "echarts"
@@ -25,7 +26,8 @@ const config = {
             {
               loader: 'css-loader',
               options:{
-                  minimize: true //css压缩
+                  minimize: true, //css压缩
+                  sourceMap:true
               }
             }
           ]
@@ -62,7 +64,7 @@ const config = {
     ),
     new CopyWebpackPlugin([ { from: path.join(__dirname, "app/mock"), to: 'mock' } ]),
     new OptimizeCSSPlugin(),
-    new ExtractTextPlugin("styles.css"),
+    new ExtractTextPlugin("css/style.css"),
     new HtmlWebpackPlugin({
       template : './index.html',
       filename : 'index.html',

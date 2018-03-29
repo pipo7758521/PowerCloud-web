@@ -1,7 +1,8 @@
-var api = require('./api.js')
+import {initMqttConnection, mqttSubscribe, mqttDisconnect} from './api.js';
 var chart = require('./chart.js')
 
 var g_clientSys;
+var MQTT_TOPIC_SYS = "/systemStatus"
 
 var staffImgUrl = require('../assets/staff-pic.png');
 
@@ -63,6 +64,7 @@ function popCompanyDetail(detail) {
 }
 
 function popStationDetail(detail) {
+	var staionId = detail.id;
 	maskShow();
 	//系统图
 	var popJQ = $("#pop-station-sys");
@@ -76,11 +78,24 @@ function popStationDetail(detail) {
 		svgJQ[0].style.transform = "rotate(0)";
 	}
 
- /* setInterval(function() {
-		// api.mqttConnect(function(msg) {
-			console.log("update data")
-			setSysData(sys_data, detail.name + " - " + "电力系统图")
-},3000)*/
+	clearClient();
+	initMqttConnection(function(client) {
+    g_clientSys = client;
+    var topic = MQTT_TOPIC_SYS+"/"+staionId;
+    mqttSubscribe(g_clientSys, topic);
+  }, onMessageArrived);
+
+  //这里收到该企业下，所有变电站发来的消息
+  function onMessageArrived(msg) {
+    //判断是哪个变电站 TODO
+    console.log("==== handle Mqtt system graph status ====");
+    try {
+    	var topic = msg.destinationName;
+    	console.log(msg.payloadString);
+    	var data = JSON.parse(msg.payloadString);
+      setSysData(data, detail.name + " - " + "电力系统图");
+    } catch(e){console.error("Error: error in onMessageArrived", e)}
+  }
 
 	popJQ.show();
 	iJQ.show();
@@ -127,7 +142,9 @@ function setSysData(data,title) {
 		cab_nodes[3].innerHTML = "Ia: "+ item.cabinet.Ia;
 		cab_nodes[4].innerHTML = "Ib: "+ item.cabinet.Ib;
 		cab_nodes[5].innerHTML = "Ic: "+ item.cabinet.Ic;
-		cab_nodes[6].innerHTML = "cosφ: "+ item.cabinet.cosφ;
+
+		cab_nodes[6].innerHTML = "";
+		// cab_nodes[6].innerHTML = "cosφ: "+ item.cabinet.cosφ;
 		//进线柜 电表颜色
 		setColor(document.querySelectorAll(".s-cab-rect")[i],item.cabinet.status);
 
@@ -170,8 +187,12 @@ function clearPop() {
 	$(".pop").removeClass('show');
 	//关闭mqtt链接
 	chart.clearClient();
+	clearClient();
+}
+
+function clearClient() {
 	if(g_clientSys) {
-		api.mqttDisconnect(g_clientSys);
+		mqttDisconnect(g_clientSys);
 		g_clientSys = null;
 	}
 }

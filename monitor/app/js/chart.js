@@ -106,19 +106,23 @@ function renderCompanyChart(detail) {
   initMqttConnection(function(client) {
     g_clientCurrent = client;
     var topic = MQTT_TOPIC+"/"+companyId+"/#";
-    topic = "/a";
     mqttSubscribe(g_clientCurrent, topic);
   }, onMessageArrived);
 
   //这里收到该企业下，所有变电站发来的消息
   function onMessageArrived(msg) {
-    //判断是哪个变电站 TODO
-    console.log(msg);
+    //判断是哪个变电站
     try {
+      console.log("=== handle mqtt company current ===",msg.destinationName);
+      console.log(msg.payloadString);
+      var data = JSON.parse(msg.payloadString);
     	var topic = msg.destinationName;
       var stationId = (topic.split("/"))[2] || 1;
-      g_companyCurrent["id_"+stationId] = (randomData()).value;
-    } catch(e){console.log("Error: error in onMessageArrived", e)}
+      // g_companyCurrent["id_"+stationId] = (randomData()).value;  //debug
+      if(data.I) {
+        g_companyCurrent["id_"+stationId] = data.I;
+      }
+    } catch(e){console.error("Error: error in onMessageArrived", e)}
   }
 
   //起一个定时器，每五秒钟读一次g_companyCurrent里的电流
@@ -136,19 +140,10 @@ function renderCompanyChart(detail) {
     companyChartLoad.setOption(new_opt_load);
   }, 5000);
 
-  /*setInterval(function() {
-    // mqttConnect(function(msg) {
-    var msg = randomData();
-    var new_opt_i = updateChartOption(detail, stationsLen, 0,msg)
-    var new_opt_load = updateChartOption(detail, stationsLen, 1, msg)
-    companyChartI.setOption(new_opt_i);
-    companyChartLoad.setOption(new_opt_load);
-    // })
-  },1000)*/
 }
 
 function renderStationChart(detail) {
-  g_Ie = 10 || detail.Ie;
+  g_Ie = detail.Ie;
 
   var stationId = detail.id;
   var companyId = detail.companyId;
@@ -175,32 +170,31 @@ function renderStationChart(detail) {
   initMqttConnection(function(client) {
 		g_clientCurrent = client;
     var topic = MQTT_TOPIC+"/"+companyId+"/"+stationId;
-    var topic = "/a";
+    // var topic = "/a";
     mqttSubscribe(g_clientCurrent, topic);
 	}, onMessageArrived);
 
 
   function onMessageArrived(msg) {
-    var msg = [
-      {
-        value: (randomData()).value
-      }
-    ];
-    var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
-    var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
-    chartI.setOption(new_opt_i);
-    chartLoad.setOption(new_opt_load);
+    try {
+      console.log("=== handle mqtt station current ===");
+      console.log(msg.payloadString);
+      var data = JSON.parse(msg.payloadString);
+      if(!data.I) return
+      var msg = [
+        {
+          // value: (randomData()).value
+          value: data.I
+        }
+      ];
+      var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
+      var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
+      chartI.setOption(new_opt_i);
+      chartLoad.setOption(new_opt_load);
+    }
+    catch(e){console.error("Error: error in onMessageArrived", e)}
   }
-  /*setInterval(function() {
 
-    // mqttConnect(function(msg) {
-    var msg = randomData();
-    var new_opt_i = updateChartOption(0, msg, g_xAxisDataI, g_seriesDataI);
-  	var new_opt_load = updateChartOption(1, msg, g_xAxisDataLoad, g_seriesDataLoad);
-    chartI.setOption(new_opt_i);
-    chartLoad.setOption(new_opt_load);
-    // })
-  },1000)*/
 }
 
 /**

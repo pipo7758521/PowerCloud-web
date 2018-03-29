@@ -42,7 +42,6 @@
       api.initMqttConnection(function(client) {
         stationStatusClient = client;
         var topic = MQTT_TOPIC;
-        topic = "/a";
         api.mqttSubscribe(stationStatusClient, topic);
       }, handleMqttStatus);
 
@@ -241,10 +240,13 @@
 
   //监听 变电站状态变化函数
   function handleMqttStatus(msg) {
+    console.log("==== handle Mqtt station status ====");
     try {
+      console.log(msg.payloadString);
       var stationJQs = $(".p-station");
       stationJQs.attr({"class":"p p-station s-0-0"});
-      msg = [
+      var data = JSON.parse(msg.payloadString)
+      /*msg = [
         {
             companyId: 1, //企业Id
             id: 1,        // 变电站id
@@ -257,15 +259,19 @@
             statusA: 1,
             statusB: 2
         }
-      ];
+      ];*/
       var statusAText = ["正常", "处理中", "报警"];
-      var statusBText = ["正常", "过载", "重载"];
+      var statusBText = ["载荷正常", "过载", "重载"];
       var html = [];
-      msg.forEach(function(o,i) {
+      data.forEach(function(o,i) {
+        o.statusA = o.statusA || 0;
+        o.statusB = o.statusB || 0;
         var stationJQ = $(".p-station[data-id="+o.id+"]");
-        stationJQ.removeClass('s-0-0').addClass(['s', o.statusA, o.statusB].join("-"));
-        var name = ((stationJQ.find(".p-tag").html()).split("："))[1]
-        html.push("<p><i class='fa fa-exclamation-circle'></i>"+name+"："+statusAText[+o.statusA]+" - "+statusBText[+o.statusB]+"</p>");
+        if(stationJQ.length) {
+          stationJQ.removeClass('s-0-0').addClass(['s', o.statusA, o.statusB].join("-"));
+          var name = ((stationJQ.find(".p-tag").html()).split("："))[1]
+          html.push("<p><i class='fa fa-exclamation-circle'></i>"+name+"："+statusAText[+o.statusA]+" - "+statusBText[+o.statusB]+"</p>");
+        }
       });
       //更新左上角TIP的内容
       var tipJQ = $("#status-tip .content");
@@ -275,7 +281,7 @@
       else {
         tipJQ.html('<p style="text-align: center;">目前没有告警信息</p>');
       }
-    }catch(e) {}
+    }catch(e) {console.error(e)}
   }
 
   function refresh() {
