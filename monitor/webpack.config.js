@@ -11,7 +11,8 @@ const config = {
   entry: './app/js/main.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js'
+    filename: 'js/bundle.js',
+    // publicPath: './assets/'
   },
   externals: {
 	  "echarts": "echarts"
@@ -21,6 +22,7 @@ const config = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
+          publicPath: '../',
           fallback: "style-loader",
           use: [
             {
@@ -34,15 +36,40 @@ const config = {
         })
       },
       {
+        test: /\.scss$/,                   //scss
+        use: ExtractTextPlugin.extract({
+          publicPath: '../',
+          fallback: "style-loader",
+          use: [
+            {
+              loader: 'css-loader',
+              options:{
+                  minimize: true, //css压缩
+                  sourceMap:true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options:{
+                  minimize: true, //css压缩
+                  sourceMap:true
+              }
+            },
+          ]
+        })
+      },
+      {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
         exclude: /favicon\.png$/,
-        use: [{
+        use: [
+        {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            name: 'assets/[name].[ext]'
+            name: "assets/[name].[ext]"
           }
-        }]
+        }
+        ]
       },
       {
         test: /\.js$/,

@@ -9,7 +9,7 @@ var staffImgUrl = require('../assets/staff-pic.png');
 function popStaffDetail(detail) {
 
 	var popJQ = $("#pop-staff");
-	var html = `<div class="pic"><img src="${detail.picc||staffImgUrl }"></div>
+	var html = `<div class="pic"><img src="${detail.pic||staffImgUrl }"></div>
 			        <div class="info">
 			        	<p class="name">员工编号：${detail.id||"-"}</p>
 			          <p class="name">员工姓名：${detail.name||""}</p>
@@ -130,18 +130,18 @@ function setSysData(data,title) {
 	data.forEach( (item,i) => {
 		var info1 = "";
 		for( var o in item.vm) {
-			info1 += o+": "+(item.vm)[o]+" ";
+			info1 +=  `${o}: ${+(item.vm)[o].toFixed(2)}  `;
 		}
 		vmEle[i].innerHTML = info1;
 
 		//进线柜信息
 		var cab_nodes = cabinetEle[i].childNodes;
-		cab_nodes[0].innerHTML = "Uab: "+ item.cabinet.Uab;
-		cab_nodes[1].innerHTML = "Ubc: "+ item.cabinet.Ubc;
-		cab_nodes[2].innerHTML = "Uac: "+ item.cabinet.Uac;
-		cab_nodes[3].innerHTML = "Ia: "+ item.cabinet.Ia;
-		cab_nodes[4].innerHTML = "Ib: "+ item.cabinet.Ib;
-		cab_nodes[5].innerHTML = "Ic: "+ item.cabinet.Ic;
+		cab_nodes[0].innerHTML = "Uab: "+ (+item.cabinet.Uab).toFixed(2);
+		cab_nodes[1].innerHTML = "Ubc: "+ (+item.cabinet.Ubc).toFixed(2);
+		cab_nodes[2].innerHTML = "Uac: "+ (+item.cabinet.Uac).toFixed(2);
+		cab_nodes[3].innerHTML = "Ia: "+ (+item.cabinet.Ia).toFixed(2);
+		cab_nodes[4].innerHTML = "Ib: "+ (+item.cabinet.Ib).toFixed(2);
+		cab_nodes[5].innerHTML = "Ic: "+ (+item.cabinet.Ic).toFixed(2);
 
 		cab_nodes[6].innerHTML = "";
 		// cab_nodes[6].innerHTML = "cosφ: "+ item.cabinet.cosφ;
@@ -160,9 +160,9 @@ function setSysData(data,title) {
 			d.forEach( (c,c_i) => {
 				var _i = i*data.length*d.length + d_i*d.length + c_i;
 					var circuit_nodes= circuitEle[_i].childNodes;
-				circuit_nodes[0].innerHTML = "Ia: "+ c.Ia;
-				circuit_nodes[1].innerHTML = "Ib: "+ c.Ib;
-				circuit_nodes[2].innerHTML = "Ic: "+ c.Ic;
+				circuit_nodes[0].innerHTML = "Ia: "+ (+c.Ia).toFixed(2);
+				circuit_nodes[1].innerHTML = "Ib: "+ (+c.Ib).toFixed(2);
+				circuit_nodes[2].innerHTML = "Ic: "+ (+c.Ic).toFixed(2);
 
 				var cirEle = document.querySelectorAll(".s-rect")[_i];
 				setColor(cirEle,c.status);

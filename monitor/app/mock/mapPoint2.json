@@ -1,5 +1,6 @@
 {
 	"succeeded": true,
+  "ok": true,
 	"data": [{
             "id": 1,
             "pos":"{\"longitude\": \"116.2945\", \"latitude\": \"39.9110\"}",

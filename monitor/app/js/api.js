@@ -7,6 +7,7 @@ var debug = process.env.NODE_ENV === 'development';
 
 if(debug){
   UrlPath = {
+    login: "",
     mapPoint1: "api/mapPoint1.json",
     mapPoint2: "api/mapPoint2.json",
     mapPoint3: "api/mapPoint3.json",
@@ -18,6 +19,7 @@ if(debug){
 else {
   HOST = "http://202.118.26.7:8080/PowerCloud/api";
   UrlPath = {
+    login: "/user/login",
     mapPoint: "/electricitysubstation/getMapPoint",
     staffDetail: "/electrician/profile",
     companyDetail: "/customer/getCompanyDetail",
@@ -26,46 +28,61 @@ else {
 }
 
 // 封装一个get请求的方法
-function request(url, type, data) {
+function request(url, type="GET", data) {
   return new Promise(function(resolve, reject) {
-    var XHR = new XMLHttpRequest();
-
-
-    XHR.open(type, HOST + url, true);
-    XHR.setRequestHeader("Content-type","application/json; charset=utf-8");
-    XHR.send(data);
-
-    XHR.onreadystatechange = function() {
-      if (XHR.readyState == 4) {
-        if (XHR.status == 200) {
-          try {
-              var response = JSON.parse(XHR.responseText);
-              console.log(response)
-              if(response.succeeded) {
-                var r = typeof(response.data) == "string" ? JSON.parse(response.data) : response.data;
-                resolve(r);
-              }
-              else {
-                alert("请求数据错误");
-                reject();
-              }
-          } catch (e) {
-              reject(e);
-          }
-        } else {
-          reject(new Error(XHR.statusText));
+    fetch(HOST + url,{
+      method: type,
+      headers: {
+        'Content-type': '"application/json; charset=utf-8"'
+      },
+      credentials: 'include',
+      body: data
+    })
+    .then(checkStatus)
+    .then(parseJSON)
+    .then((response) => {
+      if(response.succeeded) {
+        var data;
+        try {
+          data = typeof(response.data) == "string" ? JSON.parse(response.data) : response.data;
+        } catch(e) {
+          data = response.data;
         }
+        resolve({
+          ok: response.ok,
+          data: data
+        });
       }
-    }
+      else {
+        alert("请求数据错误");
+        reject();
+      }
+    })
+    .catch((err) => {
+      alert("请求数据错误!");
+      console.error("Error in fetch URL", err);
+      reject();
+    });
   })
+
+  function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response;
+    }
+    const error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
+  function parseJSON(response) {
+    return response.json();
+  }
 }
 
 function initMqttConnection(callback, onMessageArrived) {
   var client = new Paho.MQTT.Client(MQTT_HOST, Number(MQTT_PORT), "webClient_"+Date.now());//建立客户端实例
   client.connect({onSuccess:onConnect});//连接服务器并注册连接成功处理事件
   function onConnect() {
-      console.log("onConnected");
-      // isMqttConnected = true;
+      console.log("mqtt onConnected");
       callback(client);
   }
   client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
@@ -93,6 +110,20 @@ function mqttDisconnect(client) {
   }
 }
 
+function login(account, password) {
+  return new Promise(function(resolve,reject){
+    if(!account || !password) {
+      resolve({
+        ok: false,
+        data: "信息填写不完整"
+      })
+      return
+    }
+    request(UrlPath.login+"?account="+account+"&password="+password, "POST", null).then(function(r) {
+      resolve(r)
+    })
+  })
+}
 
 function getMapPoint(type, callback) {
 
@@ -139,6 +170,7 @@ export {
   initMqttConnection,
   mqttSubscribe,
   mqttDisconnect,
+  login,
   getMapPoint,
   getStaffDetail,
   getCompanyDetail,

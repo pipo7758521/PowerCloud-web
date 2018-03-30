@@ -2,7 +2,9 @@ require("../css/reset.css");
 require("../css/style.css");
 var map = require('./map.js');
 var pop = require('./pop.js');
+import {login} from './api.js';
 
+var isLogin = false;
 //显示按钮
 var btnDisplayJQ = $("#btn-display");
 var displayMenuJQ = $(".display-menu");
@@ -161,13 +163,64 @@ function initTimer() {
 	}
 }
 
-window.onload = function() {
-	document.onselectstart = new Function('event.returnValue=false;');
+function bindLogin() {
+	var loginJQ = $("#login");
+	var loginBtnJQ = $("#btn-login");
+	var loginTipJQ = $("#login-tip");
+	var loginnameJQ = $("#login-name");
 
+	var accountJQ = $("#account");
+	var pwdJQ = $("#password");
+
+	var logoutBtnJQ = $("#btn-logout");
+
+	$("body").on('keydown', function(event) {
+		if (event.keyCode == 13 && isLogin == false){
+	    event.returnValue=false;
+	    loginBtnJQ[0].click();
+	  }
+	});
+	loginBtnJQ.on('click', function(event) {
+		event.preventDefault();
+		var account = $.trim(accountJQ.val());
+		var password = $.trim(pwdJQ.val());
+		login(account, password).then(function(r){
+			if(r.ok) {
+				$("body").addClass('login');
+				isLogin = true;
+				accountJQ.val("");
+				pwdJQ.val("");
+				loginTipJQ.html("");
+				loginnameJQ.text(r.data.name);
+				start();
+			}
+			else {
+				$("body").removeClass('login');
+				loginTipJQ.html(r.data);
+			}
+		})
+	});
+
+	logoutBtnJQ.on('click', function(event) {
+		location.reload();
+	});
+}
+
+function start() {
 	map.init();
 	refresh();
 	bindEvent();
+}
+
+window.onload = function() {
+	document.onselectstart = new Function('event.returnValue=false;');
+	bindLogin();
+	if(isLogin) {
+		$("body").addClass('login');
+		start();
+	}
 
 	initTimer();
+
 
 }

@@ -19,13 +19,25 @@
       <p class="status-bar">
         <span><i class="fa fa-clock-o"></i><i id="date">2018-3-21</i></span>
         <span id="time">16:48</span>
-        <span>管理员</span>
-        <a id="btn-exit" class="btn" href="javascript:void(0)"><i class="fa fa-share"></i>退出</a>
+        <span id="login-name">管理员</span>
+        <a id="btn-logout" class="btn" href="javascript:void(0)"><i class="fa fa-share"></i>退出</a>
       </p>
     </div>
 
     <div class="wrapper">
+      <!-- 地图 -->
       <div id="allmap"></div>
+      <!-- 登录 -->
+      <div id="login">
+        <p class="title"><i class="fa fa-user-circle-o"></i></p>
+        <ul class="info">
+          <li><i class="fa fa-user"></i><input placeholder="请输入账号" id="account" type="text" /></li>
+          <li><i class="fa fa-key"></i><input placeholder="请输入密码" id="password" type="password" /></li>
+          <li><a href="javascript:void(0)" id="btn-login" class="btn">Login</a></li>
+        </ul>
+        <p id="login-tip"></p>
+      </div>
+
 
       <div id="status-tip">
         <p class="title"><i class="fa  fa-bell"></i>实时状态监控</p>

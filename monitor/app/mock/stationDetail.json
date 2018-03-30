@@ -1,5 +1,6 @@
 {
 	"succeeded": true,
+  	"ok": true,
 	"data": {
     "id": 1,
     "companyId": 1,

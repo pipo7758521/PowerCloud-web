@@ -1,5 +1,6 @@
 {
 	"succeeded": true,
+  "ok": true,
 	"data": {
     "staffList": [
       {"name": "孙尚香", "duty": "高级工程师", "status": 0},
