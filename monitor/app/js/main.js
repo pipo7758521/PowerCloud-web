@@ -116,8 +116,6 @@ function bindEvent() {
 			popStationJQ.removeClass('slide-down');
 		},100)
 	});
-
-
 }
 
 //点击刷新，回归原始状态
@@ -220,7 +218,6 @@ window.onload = function() {
 	document.onselectstart = new Function('event.returnValue=false;');
 	bindLogin();
 	isLogin().then( r => {
-		console.log(1111)
 		if(r.ok) {
 			loginFlag = true;
 			$("body").addClass('login');
@@ -231,7 +228,6 @@ window.onload = function() {
 			$("body").removeClass('login');
 		}
 	}, err => {
-		console.log(222)
 		loginFlag = false;
 		$("body").removeClass('login');
 	})
