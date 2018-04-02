@@ -2,9 +2,9 @@ require("../css/reset.css");
 require("../css/style.css");
 var map = require('./map.js');
 var pop = require('./pop.js');
-import {login} from './api.js';
+import {isLogin, login, logout} from './api.js';
 
-var isLogin = false;
+var loginFlag = false;
 //显示按钮
 var btnDisplayJQ = $("#btn-display");
 var displayMenuJQ = $(".display-menu");
@@ -154,8 +154,8 @@ function updatePopLayout(popJQ) {
 //右上角时间显示
 function initTimer() {
 	var now = new Date();
-	$("#date").html([now.getFullYear(),format(now.getMonth()+1),format(now.getDate())].join("-"));
-	$("#time").html([now.getHours(),format(now.getMinutes()),format(now.getSeconds())].join(":"));
+	$("#date").text([now.getFullYear(),format(now.getMonth()+1),format(now.getDate())].join("-"));
+	$("#time").text([now.getHours(),format(now.getMinutes()),format(now.getSeconds())].join(":"));
 	window.timer = setTimeout(initTimer, 1000);
 
 	function format(v){
@@ -167,7 +167,7 @@ function bindLogin() {
 	var loginJQ = $("#login");
 	var loginBtnJQ = $("#btn-login");
 	var loginTipJQ = $("#login-tip");
-	var loginnameJQ = $("#login-name");
+
 
 	var accountJQ = $("#account");
 	var pwdJQ = $("#password");
@@ -175,7 +175,7 @@ function bindLogin() {
 	var logoutBtnJQ = $("#btn-logout");
 
 	$("body").on('keydown', function(event) {
-		if (event.keyCode == 13 && isLogin == false){
+		if (event.keyCode == 13 && loginFlag == false){
 	    event.returnValue=false;
 	    loginBtnJQ[0].click();
 	  }
@@ -187,26 +187,30 @@ function bindLogin() {
 		login(account, password).then(function(r){
 			if(r.ok) {
 				$("body").addClass('login');
-				isLogin = true;
+				loginFlag = true;
 				accountJQ.val("");
 				pwdJQ.val("");
-				loginTipJQ.html("");
-				loginnameJQ.text(r.data.name);
-				start();
+				loginTipJQ.text("");
+				start(r.data.name);
 			}
 			else {
 				$("body").removeClass('login');
-				loginTipJQ.html(r.data);
+				loginFlag = false;
+				loginTipJQ.text(r.data);
 			}
 		})
 	});
 
 	logoutBtnJQ.on('click', function(event) {
-		location.reload();
+		logout().then( r => {
+			$("body").removeClass('login');
+		})
 	});
 }
 
-function start() {
+function start(username="admin") {
+	var loginnameJQ = $("#login-name");
+	loginnameJQ.text(username);
 	map.init();
 	refresh();
 	bindEvent();
@@ -215,10 +219,23 @@ function start() {
 window.onload = function() {
 	document.onselectstart = new Function('event.returnValue=false;');
 	bindLogin();
-	if(isLogin) {
-		$("body").addClass('login');
-		start();
-	}
+	isLogin().then( r => {
+		console.log(1111)
+		if(r.ok) {
+			loginFlag = true;
+			$("body").addClass('login');
+			start(r.data.username);
+		}
+		else {
+			loginFlag = false;
+			$("body").removeClass('login');
+		}
+	}, err => {
+		console.log(222)
+		loginFlag = false;
+		$("body").removeClass('login');
+	})
+
 
 	initTimer();
 

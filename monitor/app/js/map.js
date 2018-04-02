@@ -134,6 +134,10 @@
     $(".p-company").on('click', handleCompanyClick);
     $(".p-station").on('click', handleStationClick);
 
+    $(".p-staff").on('touchstart', handleStaffClick);
+    $(".p-company").on('touchstart', handleCompanyClick);
+    $(".p-station").on('touchstart', handleStationClick);
+
     // tagEvent;
     $(".p-staff, .p-company, .p-station")
     .on('mouseenter', function(event) {

@@ -1,7 +1,7 @@
-var HOST = "";
-const MQTT_HOST = "202.118.26.129";
+let HOST = "";
+let MQTT_HOST = "202.118.26.129";
 const MQTT_PORT = 8083;
-var UrlPath = {};
+let UrlPath = {};
 
 var debug = process.env.NODE_ENV === 'development';
 
@@ -18,9 +18,12 @@ if(debug){
 }
 else {
   // HOST = "http://202.118.26.7:8080/PowerCloud/api";
+  MQTT_HOST = "202.118.26.74";
   HOST = "/PowerCloud/api";
   UrlPath = {
+    isLogin: "/user/getUserInfo",
     login: "/user/login",
+    logout: "/user/logout",
     mapPoint: "/electricitysubstation/getMapPoint",
     staffDetail: "/electrician/profile",
     companyDetail: "/customer/getCompanyDetail",
@@ -111,6 +114,16 @@ function mqttDisconnect(client) {
   }
 }
 
+function isLogin() {
+  return new Promise(function(resolve,reject){
+    request(UrlPath.isLogin, "POST", null).then(function(r) {
+      resolve(r);
+    }, function(err) {
+      reject();
+    })
+  })
+}
+
 function login(account, password) {
   return new Promise(function(resolve,reject){
     if(!account || !password) {
@@ -121,6 +134,14 @@ function login(account, password) {
       return
     }
     request(UrlPath.login+"?account="+account+"&password="+password, "POST", null).then(function(r) {
+      resolve(r)
+    })
+  })
+}
+
+function logout() {
+  return new Promise(function(resolve,reject){
+    request(UrlPath.logout, "POST", null).then(function(r) {
       resolve(r)
     })
   })
@@ -171,7 +192,9 @@ export {
   initMqttConnection,
   mqttSubscribe,
   mqttDisconnect,
+  isLogin,
   login,
+  logout,
   getMapPoint,
   getStaffDetail,
   getCompanyDetail,
