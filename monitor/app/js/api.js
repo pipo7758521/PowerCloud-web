@@ -17,7 +17,8 @@ if(debug){
   }
 }
 else {
-  HOST = "http://202.118.26.7:8080/PowerCloud/api";
+  // HOST = "http://202.118.26.7:8080/PowerCloud/api";
+  HOST = "/PowerCloud/api";
   UrlPath = {
     login: "/user/login",
     mapPoint: "/electricitysubstation/getMapPoint",

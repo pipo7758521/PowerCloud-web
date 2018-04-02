@@ -1,8 +1,11 @@
-/*body {
-	width: 100%;
-	background-color: #11131d;
-  	background-image:radial-gradient(ellipse farthest-corner at center top, #214661 0%, #090909 100%);
-}*/
+.BMap_cpyCtrl {
+    display: none;
+}
+
+.anchorBL {
+    display: none;
+}
+
 i.fa{
 	margin-right: 15px;
 }
@@ -126,6 +129,7 @@ i.fa{
   color: #fff;
   outline: none;
   font-size: 16px;
+  -webkit-box-shadow: 0 0 0 1000px rgba(0,0,0,0) inset;
 }
 #btn-login {
   width: 100%;

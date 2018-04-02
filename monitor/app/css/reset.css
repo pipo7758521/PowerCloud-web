@@ -51,10 +51,7 @@ body {
   margin: 0;
   overflow: hidden;
 }
-.BMap_cpyCtrl {
-    display: none;
-}
 
-.anchorBL {
-    display: none;
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px rgba(0,0,0,0) inset;
 }
