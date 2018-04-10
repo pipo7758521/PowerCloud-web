@@ -1,0 +1,20 @@
+{
+  "code": 20000,
+  "data": {
+    "total": 2,
+    "items": [{
+      "magDomainID": 1,
+      "magDomain": "管理域1",
+      "createrID": "aaa",
+      "CreateTime": "2018-04-10",
+      "status": "0"
+    }, {
+      "magDomainID": 2,
+      "magDomain": "管理域2",
+      "createrID": "aaa",
+      "CreateTime": "2018-04-12",
+      "status": "1"
+    }]
+  }
+}
+

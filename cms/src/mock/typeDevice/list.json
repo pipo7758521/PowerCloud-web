@@ -1,0 +1,20 @@
+{
+  "code": 20000,
+  "data": {
+    "total": 2,
+    "items": [{
+      "typeDeviceID": 1,
+      "typeDeviceName": "王小虎",
+      "functionName": "aaa",
+      "className": "bbb",
+      "description": "aaaaa"
+    }, {
+      "typeDeviceID": 2,
+      "typeDeviceName": "王小虎2",
+      "functionName": "aaa",
+      "className": "bbb",
+      "description": "aaaaa"
+    }]
+  }
+
+}
