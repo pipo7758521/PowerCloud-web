@@ -127,7 +127,7 @@ export const constantRouterMap = [
       {
         path: 'electrician',
         name: 'Electrician',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/basic/typeDevice'),
         meta: { title: '电工信息', icon: 'user' },
       }
     ]

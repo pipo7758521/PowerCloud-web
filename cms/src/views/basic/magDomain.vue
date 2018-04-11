@@ -66,10 +66,10 @@ export default {
           ]
     		}
     	],
-      subTable: {
+      subTable: [{
         path: "magDomain_electricitySubstation",
         button: "查看变电所"
-      },
+      }],
       fetchList: fetchList,
       insertData: insertData,
       updateData: updateData,

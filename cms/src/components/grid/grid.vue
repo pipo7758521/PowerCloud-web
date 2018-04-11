@@ -22,12 +22,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="subTable" align="center" label="详情" class-name="small-padding fixed-width">
+     <el-table-column v-if="subTable.length" v-for="sub in subTable" align="center" label="详情" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          </el-button>
+        </template>
+      </el-table-column>
+
+
+     <!--  <el-table-column v-if="subTable" align="center" label="详情" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button  size="mini" type="primary" plain @click="handleSubTable(scope.row)">{{subTable.button}}
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="150px">
         <template slot-scope="scope" >
@@ -93,22 +101,28 @@ export default {
     waves
   },
   props: {
-    isSubTable: {
+    isSubTable: {  //当前表格是否是子表
       type: Boolean,
       default: function () {
         return false
       }
     },
-    column: {
+    column: {   //当前表格的 每个列 的字段属性
       type: Array,
       default: function () {
         return []
       }
     },
-    subTable: {
+    /*subTable: {  //当前表格是否含有子表
       type: Object,
       default: function () {
         return null
+      }
+    },*/
+    subTable: {  //当前表格是否含有子表
+      type: Array,
+      default: function () {
+        return []
       }
     },
     fetchList: {
@@ -305,10 +319,10 @@ console.log("temp===")
       this.listQuery.page = val
       this.getList()
     },
-    handleSubTable(row) {
+    handleSubTable(sub, row) {
       console.log(row)
       console.log(this.$route.path)
-      this.$router.push({path: `${this.$route.path}/${row.id}/${this.subTable.path}`})
+      this.$router.push({path: `${this.$route.path}/${row.id}/${sub.path}`})
     },
     handleBack() {
       var arr = this.$route.path.split("/")
