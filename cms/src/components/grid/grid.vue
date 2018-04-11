@@ -7,23 +7,30 @@
     <!-- 表格 -->
   	<el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column v-for="item in column" align="center" :label="item.label" >
+      <el-table-column v-if="item.isVisible !== false" v-for="item in column" align="center" :label="item.label"
+        :width= "(item.mainKey||item.key == 'status') ? '80px' : ''">
 
-        <template slot-scope="scope" >
+        <template slot-scope="scope">
           <!-- 文本 -->
-          <span v-if="item.type == 'text'||item.type == 'number'">{{scope.row[item.key]}}</span>
+          <span v-if="item.type == 'text'|| item.type == 'number'">
+            {{scope.row[item.key]}}
+          </span>
           <!-- 选项 -->
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
+          <span v-else-if="item.type == 'select'">{{scope.row[item.key]}}</span>
         </template>
 
 
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="230" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除
+          </el-button>
+
+          <el-button v-if="subTable" size="mini" type="primary" @click="handleSubTable(scope.row)">{{subTable.button}}
           </el-button>
         </template>
       </el-table-column>
@@ -38,13 +45,13 @@
     <!-- 编辑框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="20%" style='margin-left:50px;margin-right:50px;'>
-      	<el-form-item v-for="item in column" v-if="!item.hidden"
+      	<el-form-item v-for="item in column" v-if="item.isEdit !== false"
       		:label="item.label"
       		:prop="item.key">
           <!-- 文本 -->
       		<el-input v-if="item.type == 'text'||item.type == 'number'" v-model="temp[item.key]"></el-input>
           <!-- 下拉选择框 -->
-          <el-select v-else-if="item.type =='select'" class="filter-item" v-model="temp[item.key]" placeholder="请选择" @change="changechange()">
+          <el-select v-else-if="item.type =='select'" class="filter-item" v-model="temp[item.key]" placeholder="请选择">
             <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
             </el-option>
           </el-select>
@@ -78,6 +85,12 @@ export default {
       type: Array,
       default: function () {
         return []
+      }
+    },
+    subTable: {
+      type: Object,
+      default: function () {
+        return null
       }
     },
     fetchList: {
@@ -269,10 +282,10 @@ console.log("temp===")
       this.listQuery.page = val
       this.getList()
     },
-    changechange() {
-      // this.$set(this.temp.status,this.temp.status);
-      // this.temp.status = "1";
-      // console.log(this.temp.status)
+    handleSubTable(row) {
+      console.log(row)
+      console.log(this.$route.path)
+      this.$router.push({path: `${this.$route.path}/${row.magDomainID}/${this.subTable.path}`})
     }
   }
 

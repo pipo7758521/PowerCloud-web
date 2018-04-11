@@ -26,7 +26,7 @@ export default {
     			key: "typeDeviceID",
     			label: "ID",
     			type: "number",
-    			hidden: true,
+    			isEdit: false,
     			mainKey: true,   //主键！！！ 用于删除
     		},
     		{

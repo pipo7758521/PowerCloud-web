@@ -1,0 +1,29 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "gatewayID": 1,
+      "gatewayName": "网关1",
+      "manufacturer": "生产厂家1",
+      "mac": "00:01:6C:06:A6:29",
+      "subjectID": "0",
+      "electricitySubstationID": 1,
+      "gatewayUSR": "username",
+      "gatewayPSW": "password",
+      "description": "test"
+
+    }, {
+      "gatewayID": 2,
+      "gatewayName": "网关2",
+      "manufacturer": "生产厂家2",
+      "mac": "00:01:6C:06:A6:29",
+      "subjectID": "1",
+      "electricitySubstationID": 1,
+      "gatewayUSR": "username",
+      "gatewayPSW": "password",
+      "description": "test"
+    }]
+  }
+}
+

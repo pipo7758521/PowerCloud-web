@@ -74,7 +74,7 @@
         if(res_arr[0].ok){
           res_arr[0].data.forEach( (o,i) => {
             var pos = JSON.parse(o.pos);
-            var convertor = coorConvert.wgs2bd(pos.lng, pos.lat);
+            var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
 
             points1.push(new BMap.Point(convertor[0], convertor[1]));
             var html = "<div class='p p-company' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>企业："+o.tag+"</span></div>";

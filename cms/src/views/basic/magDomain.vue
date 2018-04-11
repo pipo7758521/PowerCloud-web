@@ -1,6 +1,7 @@
 <template>
 	<cms-grid
-    :column="column"
+    :column = "column"
+    :subTable = "subTable"
     :fetchList = "fetchList"
     :insertData = "insertData"
     :updateData = "updateData"
@@ -25,7 +26,7 @@ export default {
     			key: "magDomainID",
     			label: "ID",
     			type: "number",
-    			hidden: true,
+    			isEdit: false,
     			mainKey: true,   //主键！！！ 用于删除
     		},
     		{
@@ -39,13 +40,13 @@ export default {
     			key: "createrID",
     			label: "创建人",
     			type: "text",
-    			hidden: true,
+    			isEdit: false,
     		},
     		{
     			key: "CreateTime",
     			label: "创建时间",
     			type: "date",
-    			hidden: true,
+    			isEdit: false,
     		},
     		{
     			key: "status",
@@ -64,6 +65,10 @@ export default {
           ]
     		}
     	],
+      subTable: {
+        path: "magDomain_electricitySubstation",
+        button: "查看变电所"
+      },
       fetchList: fetchList,
       insertData: insertData,
       updateData: updateData,

@@ -57,11 +57,18 @@ export const constantRouterMap = [
         meta: { title: '管理域', icon: 'example' },
       },
       {
+        path: 'magDomain/:magDomainID/magDomain_electricitySubstation',
+        name: 'MagDomain_electricitySubstation',
+        component: () => import('@/views/basic/magDomain_electricitySubstation'),
+        meta: { title: '管理域-变电所关联', icon: 'example' },
+        hidden: true
+      },
+      /*{
         path: 'magDomain_electricitySubstation',
         name: 'MagDomain_electricitySubstation',
         component: () => import('@/views/table/index'),
         meta: { title: '管理域-变电所关联', icon: 'example' },
-      },
+      },*/
     ]
   },
   //网关配置
@@ -75,7 +82,7 @@ export const constantRouterMap = [
       {
         path: 'deviceGateway',
         name: 'DeviceGateway',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/gateway/deviceGateway'),
         meta: { title: '网关信息', icon: 'table' },
       },
       {

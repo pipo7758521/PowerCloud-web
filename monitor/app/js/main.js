@@ -201,14 +201,14 @@ function bindLogin() {
 
 	logoutBtnJQ.on('click', function(event) {
 		logout().then( r => {
-			$("body").removeClass('login');
+			location.reload();
 		})
 	});
 }
 
-function start(username="admin") {
+function start(name="admin") {
 	var loginnameJQ = $("#login-name");
-	loginnameJQ.text(username);
+	loginnameJQ.text(name);
 	map.init();
 	refresh();
 	bindEvent();
@@ -221,7 +221,7 @@ window.onload = function() {
 		if(r.ok) {
 			loginFlag = true;
 			$("body").addClass('login');
-			start(r.data.username);
+			start(r.data.name);
 		}
 		else {
 			loginFlag = false;

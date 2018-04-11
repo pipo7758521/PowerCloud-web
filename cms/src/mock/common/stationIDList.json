@@ -1,0 +1,20 @@
+{
+  "err": 0,
+  "data": {
+    "total": 5,
+    "items": [{
+      "electricitySubstationID": 1
+    }, {
+      "electricitySubstationID": 2
+    },
+    {
+      "electricitySubstationID": 3
+    },
+    {
+      "electricitySubstationID": 4
+    },
+    {
+      "electricitySubstationID": 5
+    }]
+  }
+}
