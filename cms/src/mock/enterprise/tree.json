@@ -1,0 +1,95 @@
+{
+	"err": 0,
+	"data": [
+		{
+			"id":1,
+			"company": "铁西区人民政府",
+			"children": [
+				{
+					"id": 1,
+					"substationname": "变电所1",
+					"type": "变电所",
+					"children": [
+						{
+							"id": 1,
+							"status": 0,
+							"type": "进线柜",
+							"children": [
+								{
+									"id": 1,
+									"circuitname": "进线柜总表"
+								}
+							]
+						},
+						{
+							"id": 1,
+							"status": 0,
+							"type": "电容柜"
+						},
+						{
+							"id": 1,
+							"status": 0,
+							"type": "馈电柜",
+							"children": [
+								{
+									"id": 2,
+									"circuitname": "馈电柜表1#"
+								},
+								{
+									"id": 3,
+									"circuitname": "馈电柜表1#"
+								},
+								{
+									"id": 4,
+									"circuitname": "馈电柜表1#"
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": 2,
+					"substationname": "变电所2",
+					"type": "箱变",
+					"children": [
+						{
+							"id": 1,
+							"status": 0,
+							"type": "进线柜",
+							"children": [
+								{
+									"id": 1,
+									"circuitname": "进线柜总表"
+								}
+							]
+						},
+						{
+							"id": 1,
+							"status": 0,
+							"type": "电容柜"
+						},
+						{
+							"id": 1,
+							"status": 0,
+							"type": "馈电柜",
+							"children": [
+								{
+									"id": 2,
+									"circuitname": "馈电柜表1#"
+								},
+								{
+									"id": 3,
+									"circuitname": "馈电柜表1#"
+								},
+								{
+									"id": 4,
+									"circuitname": "馈电柜表1#"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

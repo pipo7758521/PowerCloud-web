@@ -106,7 +106,7 @@ export const constantRouterMap = [
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/enterprise/tree'),
         meta: { title: '架构总览', icon: 'tree' }
       },
       {
