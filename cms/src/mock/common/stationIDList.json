@@ -3,18 +3,18 @@
   "data": {
     "total": 5,
     "items": [{
-      "electricitySubstationID": 1
+      "id": 1
     }, {
-      "electricitySubstationID": 2
+      "id": 2
     },
     {
-      "electricitySubstationID": 3
+      "id": 3
     },
     {
-      "electricitySubstationID": 4
+      "id": 4
     },
     {
-      "electricitySubstationID": 5
+      "id": 5
     }]
   }
 }

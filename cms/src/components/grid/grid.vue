@@ -1,6 +1,7 @@
 <template>
 	  <div class="app-container calendar-list-container">
     <div class="filter-container">
+      <el-button v-if="isSubTable" class="filter-item" style="margin-left: 10px;" @click="handleBack" type="primary" plain icon="el-icon-back">返回上一级</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
   	</div>
 
@@ -9,7 +10,6 @@
       style="width: 100%">
       <el-table-column v-if="item.isVisible !== false" v-for="item in column" align="center" :label="item.label"
         :width= "(item.mainKey||item.key == 'status') ? '80px' : ''">
-
         <template slot-scope="scope">
           <!-- 文本 -->
           <span v-if="item.type == 'text'|| item.type == 'number'">
@@ -20,21 +20,33 @@
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
           <span v-else-if="item.type == 'select'">{{scope.row[item.key]}}</span>
         </template>
-
-
       </el-table-column>
 
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
+      <el-table-column v-if="subTable" align="center" label="详情" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除
-          </el-button>
-
-          <el-button v-if="subTable" size="mini" type="primary" @click="handleSubTable(scope.row)">{{subTable.button}}
+          <el-button  size="mini" type="primary" plain @click="handleSubTable(scope.row)">{{subTable.button}}
           </el-button>
         </template>
       </el-table-column>
+
+      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="150px">
+        <template slot-scope="scope" >
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除
+          </el-button>
+        </template>
+      </el-table-column>
+
+      <!-- 子表 -->
+      <!-- <el-table-column v-if="subTable" type="expand">
+        <template slot-scope="props">
+          <slot></slot>
+        </template>
+      </el-table-column> -->
+
     </el-table>
+
+
 
     <!-- 分页 -->
     <div class="pagination-container">
@@ -44,7 +56,7 @@
 
     <!-- 编辑框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="20%" style='margin-left:50px;margin-right:50px;'>
+      <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="30%" style='margin-left:50px;margin-right:50px;'>
       	<el-form-item v-for="item in column" v-if="item.isEdit !== false"
       		:label="item.label"
       		:prop="item.key">
@@ -81,6 +93,12 @@ export default {
     waves
   },
   props: {
+    isSubTable: {
+      type: Boolean,
+      default: function () {
+        return false
+      }
+    },
     column: {
       type: Array,
       default: function () {
@@ -169,7 +187,13 @@ export default {
   methods: {
   	getList() {
   		this.listLoading = true
-	    this.fetchList(this.listQuery).then(response => {
+      //如果是子表，则要根据父表的ID查找对应的子表
+      let parentId = null
+      if(this.isSubTable) {
+        let arr = this.$route.path.split("/")
+        parentId = arr[arr.length-2]
+      }
+	    this.fetchList(parentId).then(response => {
 	      this.list = response.data.items
 	      this.total = response.data.total
 	      this.listLoading = false
@@ -177,10 +201,9 @@ export default {
   	},
   	//清空 tmp数据
   	resetTemp() {
-      console.log("====here")
 			this.temp = {}
 	    this.column.forEach( (o,i) => {
-        //太恶心了。双向绑定的，要这么赋值
+        //太恶心了 双向绑定的，要这么赋值
         this.$set(this.temp, o.key, o.default || "")
 	    })
 	    console.log(this.temp)
@@ -285,7 +308,12 @@ console.log("temp===")
     handleSubTable(row) {
       console.log(row)
       console.log(this.$route.path)
-      this.$router.push({path: `${this.$route.path}/${row.magDomainID}/${this.subTable.path}`})
+      this.$router.push({path: `${this.$route.path}/${row.id}/${this.subTable.path}`})
+    },
+    handleBack() {
+      var arr = this.$route.path.split("/")
+      let path = arr.slice(0,arr.length-2).join("/")
+      this.$router.push({path: path})
     }
   }
 

@@ -1,0 +1,31 @@
+{
+  "err": 0,
+  "data": {
+    "total": 3,
+    "items": [{
+      "id": 1,
+      "gatewayid": "1",
+      "deviceid": "1",
+      "num": "Data0",
+      "typedevicename": "ElecMeter01",
+      "instruction": "instruction1"
+
+    }, {
+      "id": 2,
+      "gatewayid": "1",
+      "deviceid": "2",
+      "num": "Data1",
+      "typedevicename": "ElecMeter02",
+      "instruction": "instruction2"
+    },
+    {
+      "id": 3,
+      "gatewayid": "1",
+      "deviceid": "10",
+      "num": "Data10",
+      "typedevicename": "ElecMeter02",
+      "instruction": "instruction3"
+    }]
+  }
+}
+

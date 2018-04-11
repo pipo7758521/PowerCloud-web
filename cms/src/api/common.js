@@ -7,3 +7,10 @@ export function stationIDList() {
     method: 'get',
   })
 }
+
+export function deviceElecMeterList() {
+  return request({
+    url: '/common/stationIDList.json',
+    method: 'get',
+  })
+}

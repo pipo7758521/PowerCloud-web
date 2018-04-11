@@ -1,12 +1,17 @@
 <template>
-	<cms-grid
-    :column="column"
+  <!-- <div> -->
+    <!-- <p>当前管理域</p> -->
+    <cms-grid
+    :isSubTable = "true"
+    :column = "column"
     :fetchList = "fetchList"
     :insertData = "insertData"
     :updateData = "updateData"
     :deleteData = "deleteData"
   >
   </cms-grid>
+  <!-- </div> -->
+
 </template>
 
 <script type="text/javascript">
@@ -25,11 +30,11 @@ export default {
       let list = response.data.items;
       let options = [];
       list.forEach( (o,i) => {
-        options.push({value: o.electricitySubstationID})
+        options.push({value: o.id})
       })
 
       this.column.forEach( (o,i) => {
-        if(o.key == "electricitySubstationID") {
+        if(o.key == "electricitysubstationid") {
           o.options = options;
         }
       })
@@ -47,16 +52,16 @@ export default {
           mainKey: true,   //主键！！！ 用于删除
         },
         {
-    			key: "magDomainID",
+    			key: "magdomainid",
     			label: "管理域ID",
     			type: "number",
           isEdit: false,
-          isVisible: false,
+          // isVisible: false,
     			required: true,
           errorMessage: "必填"
     		},
         {
-          key: "electricitySubstationID",
+          key: "electricitysubstationid",
           label: "变电所ID",
           type: "select",
           required: true,

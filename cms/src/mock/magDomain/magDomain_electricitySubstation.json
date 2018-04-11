@@ -4,13 +4,13 @@
     "total": 2,
     "items": [{
       "id": 1,
-      "magDomainID": 1,
-      "electricitySubstationID": 1,
+      "magdomainid": 1,
+      "electricitysubstationid": 1,
       "status": "0"
     }, {
       "id": 1,
-      "magDomainID": 1,
-      "electricitySubstationID": 2,
+      "magdomainid": 1,
+      "electricitysubstationid": 2,
       "status": "0"
     }]
   }

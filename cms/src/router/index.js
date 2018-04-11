@@ -57,81 +57,83 @@ export const constantRouterMap = [
         meta: { title: '管理域', icon: 'example' },
       },
       {
-        path: 'magDomain/:magDomainID/magDomain_electricitySubstation',
+        path: 'magDomain/:magdomainid/magDomain_electricitySubstation',
         name: 'MagDomain_electricitySubstation',
         component: () => import('@/views/basic/magDomain_electricitySubstation'),
         meta: { title: '管理域-变电所关联', icon: 'example' },
         hidden: true
       },
-      /*{
-        path: 'magDomain_electricitySubstation',
-        name: 'MagDomain_electricitySubstation',
-        component: () => import('@/views/table/index'),
-        meta: { title: '管理域-变电所关联', icon: 'example' },
-      },*/
     ]
   },
-  //网关配置
+  //网关信息
   {
     path: '/Gateway',
     component: Layout,
-    redirect: '/gateway/table',
-    name: 'gateway',
-    meta: { title: '网关配置', icon: 'example' },
     children: [
       {
-        path: 'deviceGateway',
+        path: 'gateway',
         name: 'DeviceGateway',
         component: () => import('@/views/gateway/deviceGateway'),
         meta: { title: '网关信息', icon: 'table' },
-      },
-      {
-        path: 'deviceGateway_instructions ',
-        name: 'DeviceGateway_instructions ',
-        component: () => import('@/views/table/index'),
-        meta: { title: '网关指令', icon: 'table' },
-      },
+      }
     ]
   },
-  //企业配置
+  {
+    path: '/Gateway/gateway/:gatewayid/deviceGateway_instructions',
+    component: Layout,
+    redirect: '/Gateway/gateway',
+    name: 'deviceGateway_instructions',
+    meta: { title: '网关信息', icon: 'example' },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        meta: { title: '网关指令', icon: 'example' },
+        name: 'DeviceGateway_instructions ',
+        component: () => import('@/views/gateway/deviceGateway_instructions'),
+        hidden: true
+      }
+    ]
+  },
+  //企业信息
   {
     path: '/Enterprise',
     component: Layout,
     redirect: '/enterprise/table',
     name: 'enterprise',
-    meta: { title: '企业配置', icon: 'example' },
+    meta: { title: '企业信息', icon: 'example' },
     children: [
-      /*{
+      {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }*/
+        meta: { title: '架构总览', icon: 'tree' }
+      },
+      {
+        path: 'customer',
+        name: 'Customer',
+        component: () => import('@/views/basic/typeDevice'),
+        meta: { title: '企业信息', icon: 'example' },
+      },
     ]
   },
   {
     path: '/Staff',
     component: Layout,
-    redirect: '/staff/table',
-    name: 'staff',
-    meta: { title: '人员配置', icon: 'example' },
+    // redirect: '/staff/table',
+    // name: 'staff',
+    // meta: { title: '人员配置', icon: 'user' },
     children: [
       {
         path: 'electrician',
         name: 'Electrician',
         component: () => import('@/views/table/index'),
-        meta: { title: '电工信息', icon: 'table' },
-      },
-      {
-        path: 'electrician2',
-        name: 'Electrician2',
-        component: () => import('@/views/table/index'),
-        meta: { title: '电工信息', icon: 'table' },
+        meta: { title: '电工信息', icon: 'user' },
       }
     ]
   },
 
-  {
+  /*{
     path: '/Example',
     component: Layout,
     redirect: '/example/table',
@@ -164,7 +166,7 @@ export const constantRouterMap = [
         meta: { title: 'Form', icon: 'form' }
       }
     ]
-  },
+  },*/
 
   { path: '*', redirect: '/404', hidden: true }
 ]

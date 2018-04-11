@@ -1,6 +1,7 @@
 <template>
 	<cms-grid
-		:column="column"
+    :isSubTable = "true"
+		:column = "column"
 		:fetchList = "fetchList"
 		:insertData = "insertData"
 		:updateData = "updateData"
@@ -13,23 +14,23 @@
 
 import Grid from "@/components/grid/grid"
 
-import { fetchList, insertData, updateData, deleteData } from '@/api/deviceGateway'
-import { stationIDList } from '@/api/common'
+import { fetchList, insertData, updateData, deleteData } from '@/api/deviceGateway_instructions.js'
+import { deviceElecMeterList } from '@/api/common'
 export default {
 	components: {
 		"cms-grid": Grid
 	},
   created () {
     //与 变电所ID 相关联
-    stationIDList().then( response => {
+    deviceElecMeterList().then( response => {
       let list = response.data.items;
       let options = [];
       list.forEach( (o,i) => {
-        options.push({value: o.electricitySubstationID})
+        options.push({value: o.id})
       })
 
       this.column.forEach( (o,i) => {
-        if(o.key == "electricitySubstationID") {
+        if(o.key == "deviceid") {
           o.options = options;
         }
       })
@@ -40,65 +41,45 @@ export default {
     return {
       column : [
         {
-          key: "gatewayID",
+          key: "id",
           label: "ID",
           type: "number",
           isEdit: false,
           mainKey: true,   //主键！！！ 用于删除
         },
         {
-          key: "gatewayName",
-          label: "网关名称",
-          type: "text",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "manufacturer",
-          label: "生产企业",
-          type: "text",
-          // required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "mac",
-          label: "MAC地址",
-          type: "text",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "subjectID",
-          label: "订阅主题ID",
+          key: "gatewayid",
+          label: "网关ID",
           type: "number",
+          isEdit: false,
+        },
+        {
+          key: "num",
+          label: "指令编号Data+i",
+          type: "text",
           required: true,
           errorMessage: "必填"
         },
         {
-          key: "electricitySubstationID",
-          label: "安装变电所ID",
+          key: "deviceid",
+          label: "设备ID",
           type: "select",
           required: true,
           errorMessage: "必填",
         },
         {
-          key: "gatewayUSR",
-          label: "网关用户名",
+          key: "typedevicename",
+          label: "设备类型（电表）",
           type: "text",
           required: true,
           errorMessage: "必填"
         },
         {
-          key: "gatewayPSW",
-          label: "网关密码",
+          key: "instruction",
+          label: "指令",
           type: "text",
           required: true,
           errorMessage: "必填"
-        },
-        {
-          key: "description",
-          label: "备注说明",
-          type: "text",
         }
       ],
       fetchList:  fetchList,

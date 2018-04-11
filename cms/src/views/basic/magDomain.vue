@@ -15,6 +15,7 @@
 import Grid from "@/components/grid/grid"
 import { fetchList, insertData, updateData, deleteData } from '@/api/magDomain'
 
+
 export default {
 	components: {
 		"cms-grid": Grid
@@ -23,27 +24,27 @@ export default {
 		return {
 			column: [
     		{
-    			key: "magDomainID",
+    			key: "id",
     			label: "ID",
     			type: "number",
     			isEdit: false,
     			mainKey: true,   //主键！！！ 用于删除
     		},
     		{
-    			key: "magDomain",
+    			key: "magdomain",
     			label: "管理域名称",
     			type: "text",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
-    			key: "createrID",
+    			key: "createrid",
     			label: "创建人",
     			type: "text",
     			isEdit: false,
     		},
     		{
-    			key: "CreateTime",
+    			key: "createtime",
     			label: "创建时间",
     			type: "date",
     			isEdit: false,
@@ -73,6 +74,7 @@ export default {
       insertData: insertData,
       updateData: updateData,
       deleteData: deleteData,
+
 		}
 	}
 }

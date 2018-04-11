@@ -23,28 +23,28 @@ export default {
 		return {
 			column: [
     		{
-    			key: "typeDeviceID",
+    			key: "id",
     			label: "ID",
     			type: "number",
     			isEdit: false,
     			mainKey: true,   //主键！！！ 用于删除
     		},
     		{
-    			key: "typeDeviceName",
+    			key: "typedevicename",
     			label: "设备名称",
     			type: "text",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
-    			key: "functionName",
+    			key: "functionname",
     			label: "解析函数名称",
     			type: "text",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
-    			key: "className",
+    			key: "classname",
     			label: "解析类名称",
     			type: "text",
     			required: true,

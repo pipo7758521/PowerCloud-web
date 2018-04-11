@@ -3,16 +3,16 @@
   "data": {
     "total": 2,
     "items": [{
-      "magDomainID": 1,
-      "magDomain": "管理域1",
-      "createrID": "aaa",
-      "CreateTime": "2018-04-10",
+      "id": 1,
+      "magdomain": "管理域1",
+      "createrid": "aaa",
+      "createtime": "2018-04-10",
       "status": "0"
     }, {
-      "magDomainID": 2,
-      "magDomain": "管理域2",
-      "createrID": "aaa",
-      "CreateTime": "2018-04-12",
+      "id": 2,
+      "magdomain": "管理域2",
+      "createrid": "aaa",
+      "createtime": "2018-04-12",
       "status": "1"
     }]
   }

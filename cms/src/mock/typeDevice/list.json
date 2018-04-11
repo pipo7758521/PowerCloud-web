@@ -3,16 +3,16 @@
   "data": {
     "total": 2,
     "items": [{
-      "typeDeviceID": 1,
-      "typeDeviceName": "设备1",
-      "functionName": "aaa",
-      "className": "bbb",
+      "id": 1,
+      "typedevicename": "设备1",
+      "functionname": "aaa",
+      "classname": "bbb",
       "description": "aaaaa"
     }, {
-      "typeDeviceID": 2,
-      "typeDeviceName": "设备2",
-      "functionName": "aaa",
-      "className": "bbb",
+      "id": 2,
+      "typedevicename": "设备2",
+      "functionname": "aaa",
+      "classname": "bbb",
       "description": "aaaaa"
     }]
   }

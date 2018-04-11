@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 
-export function fetchList(magDomainid) {
+export function fetchList(gatewayid) {
   return request({
-    url: '/magDomain/magDomain_electricitySubstation.json?id='+magDomainid,
+    url: '/deviceGateway/deviceGateway_instructions.json?gatewayid='+gatewayid,
     method: 'get',
   })
 }

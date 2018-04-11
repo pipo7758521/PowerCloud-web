@@ -1,6 +1,7 @@
 <template>
 	<cms-grid
-		:column="column"
+		:column = "column"
+    :subTable = "subTable"
 		:fetchList = "fetchList"
 		:insertData = "insertData"
 		:updateData = "updateData"
@@ -40,14 +41,14 @@ export default {
     return {
       column : [
         {
-          key: "gatewayID",
+          key: "id",
           label: "ID",
           type: "number",
           isEdit: false,
           mainKey: true,   //主键！！！ 用于删除
         },
         {
-          key: "gatewayName",
+          key: "gatewayname",
           label: "网关名称",
           type: "text",
           required: true,
@@ -58,7 +59,7 @@ export default {
           label: "生产企业",
           type: "text",
           // required: true,
-          errorMessage: "必填"
+          // errorMessage: "必填"
         },
         {
           key: "mac",
@@ -68,28 +69,28 @@ export default {
           errorMessage: "必填"
         },
         {
-          key: "subjectID",
+          key: "subjectid",
           label: "订阅主题ID",
-          type: "number",
+          type: "text",
           required: true,
           errorMessage: "必填"
         },
+        // {
+        //   key: "electricitysubstationid",
+        //   label: "安装变电所ID",
+        //   type: "select",
+        //   required: true,
+        //   errorMessage: "必填",
+        // },
         {
-          key: "electricitySubstationID",
-          label: "安装变电所ID",
-          type: "select",
-          required: true,
-          errorMessage: "必填",
-        },
-        {
-          key: "gatewayUSR",
+          key: "gatewayusr",
           label: "网关用户名",
           type: "text",
           required: true,
           errorMessage: "必填"
         },
         {
-          key: "gatewayPSW",
+          key: "gatewaypsw",
           label: "网关密码",
           type: "text",
           required: true,
@@ -101,6 +102,10 @@ export default {
           type: "text",
         }
       ],
+      subTable: {
+        path: "deviceGateway_instructions",
+        button: "查看网关指令"
+      },
       fetchList:  fetchList,
       insertData: insertData,
       updateData: updateData,
