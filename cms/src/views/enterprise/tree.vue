@@ -1,8 +1,19 @@
 <template>
   <div class="app-container">
     <!-- <el-input placeholder="Filter keyword" v-model="filterText" style="margin-bottom:30px;"></el-input> -->
-    <el-tree class="filter-tree" :data="treeData" default-expand-all :filter-node-method="filterNode" ref="tree"  :render-content="renderContent">
-
+    <el-tree
+      :data="treeData"
+      default-expand-all
+      :expand-on-click-node="false">
+      <span :class="['custom-tree-node','tree-level-'+node.level]" slot-scope="{ node, data }">
+        <span v-if="node.level == 1">企业 - {{node.data.company}}</span>
+        <span v-else-if="node.level == 2"> 变电所 - {{node.data.substationname}}(类型：{{node.data.type}})</span>
+        <span v-else-if="node.level == 3">柜 - {{node.data.type}}</span>
+        <span v-else-if="node.level == 4">电表 - {{node.data.circuitname}}</span>
+        <span class="tree-item-btn-bar">
+         <el-button size="mini" type="text" @click="goToEnterprise(node.level)">详情>></el-button>
+        </span>
+      </span>
     </el-tree>
 
   </div>
@@ -54,46 +65,13 @@ export default {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    renderContent(h, { node, data, store }) {
-      console.log(node)
-      if(node.level == 1) {
-        return (
-          <span class="custom-tree-node tree-level-1">
-            <span>企业 - {node.data.company}</span>
-            <span class="tree-item-btn-bar">
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>详情>></el-button>
-            </span>
-          </span>);
+    goToEnterprise(level) {
+      let path
+      if(level == 1) {
+        path = "/Enterprise/customer"
       }
-      else if(node.level == 2) {
-        return (
-          <span class="custom-tree-node tree-level-2">
-            <span>变电所 - {node.data.substationname}(类型：{node.data.type})</span>
-            <span class="tree-item-btn-bar">
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>详情>></el-button>
-            </span>
-          </span>);
-      }
-      else if(node.level == 3) {
-        return (
-          <span class="custom-tree-node">
-            <span>柜 - {node.data.type}</span>
-            <span class="tree-item-btn-bar">
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>详情>></el-button>
-            </span>
-          </span>);
-      }
-      else if(node.level == 4) {
-        return (
-          <span class="custom-tree-node">
-            <span>电表 - </span>
-            <span>{node.data.circuitname}</span>
-            <span class="tree-item-btn-bar">
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>详情>></el-button>
-            </span>
-          </span>);
-      }
-    }
+      this.$router.push({path: path})
+    },
   },
 
   data() {

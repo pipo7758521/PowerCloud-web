@@ -104,7 +104,7 @@ export default {
       ],
       subTable: [{
         path: "deviceGateway_instructions",
-        button: "查看网关指令"
+        button: "配置网关指令"
       }],
       fetchList:  fetchList,
       insertData: insertData,

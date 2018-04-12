@@ -8,7 +8,20 @@
     <!-- 表格 -->
   	<el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column v-if="item.isVisible !== false" v-for="item in column" align="center" :label="item.label"
+
+      <!-- 详情展开 -->
+      <el-table-column v-if="detailColumn.length" type="expand">
+        <template  slot-scope="props">
+          <el-form label-position="left" inline class="table-expand">
+            <el-form-item  v-for="item in detailColumn" :label="item.label" >
+              <span>{{ props.row[item.key] }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+
+
+      <el-table-column v-if="!item.isDetail" v-for="item in listColumn" align="center" :label="item.label"
         :width= "(item.mainKey||item.key == 'status') ? '80px' : ''">
         <template slot-scope="scope">
           <!-- 文本 -->
@@ -24,7 +37,7 @@
 
      <el-table-column v-if="subTable.length" v-for="sub in subTable" align="center" label="详情" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          <el-button  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
           </el-button>
         </template>
       </el-table-column>
@@ -39,11 +52,16 @@
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="150px">
         <template slot-scope="scope" >
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除
+          <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button> -->
+          <el-button type="primary" plain icon="el-icon-edit" circle @click="handleUpdate(scope.row)"></el-button>
+           <el-button type="danger" plain icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
+
+          <!-- <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除 -->
           </el-button>
         </template>
       </el-table-column>
+
+
 
       <!-- 子表 -->
       <!-- <el-table-column v-if="subTable" type="expand">
@@ -75,6 +93,8 @@
             <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
             </el-option>
           </el-select>
+          <!-- date日期选择 -->
+          <el-date-picker v-if="item.type == 'date'"v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
 
       	</el-form-item>
       </el-form>
@@ -152,17 +172,32 @@ export default {
 
     //生成 表单校验规则
     this.formRules = {};
+
+    // let tmpColumn = [];
     this.column.forEach( (o,i) => {
     	this.formRules[o.key] = [{
     		required: o.required,
     		trigger: o.type == "select" ? "change" : "blur",
     		message: o.errorMessage
     	}]
+      if(o.isDetail) {
+        // this.$set(this.detailColumn,)
+        this.detailColumn.push(o)
+      }
+      else {
+        this.listColumn.push(o)
+      }
+
+
+
     })
+    console.log(this.detailColumn)
     console.log(this.formRules)
   },
   data() {
     return {
+      listColumn: [],
+      detailColumn: [],
     	temp: null,  //每一项数据的tmp
     	list: null,
     	tableKey: 0,
@@ -333,3 +368,20 @@ console.log("temp===")
 
 }
 </script>
+
+<style lang="scss">
+  .table-expand {
+    font-size: 0;
+
+    .el-form-item {
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 50%;
+    }
+
+    label.el-form-item__label {
+      width: 150px;
+      color: #99a9bf;
+    }
+  }
+</style>
