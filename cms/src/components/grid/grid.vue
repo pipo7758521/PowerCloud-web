@@ -14,7 +14,8 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" >
-              <span>{{ props.row[item.key] }}</span>
+              <span v-if="item.type == 'image'"><img width="60" :src="props.row[item.key]"/></span>
+              <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -32,6 +33,7 @@
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
           <span v-else-if="item.type == 'select'">{{scope.row[item.key]}}</span>
+          <span v-else-if="item.type == 'image'"><img  :src="scope.row[item.key]"/></span>
         </template>
       </el-table-column>
 
@@ -42,13 +44,6 @@
         </template>
       </el-table-column>
 
-
-     <!--  <el-table-column v-if="subTable" align="center" label="详情" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button  size="mini" type="primary" plain @click="handleSubTable(scope.row)">{{subTable.button}}
-          </el-button>
-        </template>
-      </el-table-column> -->
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="150px">
         <template slot-scope="scope" >
@@ -87,7 +82,9 @@
       		:label="item.label"
       		:prop="item.key">
           <!-- 文本 -->
-      		<el-input v-if="item.type == 'text'||item.type == 'number'" v-model="temp[item.key]"></el-input>
+      		<el-input v-if="item.type == 'text'" v-model="temp[item.key]"></el-input>
+          <!-- 数字 -->
+          <el-input v-if="item.type == 'number'" v-model.number="temp[item.key]"></el-input>
           <!-- 下拉选择框 -->
           <el-select v-else-if="item.type =='select'" class="filter-item" v-model="temp[item.key]" placeholder="请选择">
             <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
@@ -133,12 +130,6 @@ export default {
         return []
       }
     },
-    /*subTable: {  //当前表格是否含有子表
-      type: Object,
-      default: function () {
-        return null
-      }
-    },*/
     subTable: {  //当前表格是否含有子表
       type: Array,
       default: function () {
@@ -173,32 +164,27 @@ export default {
     //生成 表单校验规则
     this.formRules = {};
 
-    // let tmpColumn = [];
     this.column.forEach( (o,i) => {
     	this.formRules[o.key] = [{
     		required: o.required,
     		trigger: o.type == "select" ? "change" : "blur",
-    		message: o.errorMessage
+    		message: o.errorMessage,
+        type: o.type
     	}]
       if(o.isDetail) {
-        // this.$set(this.detailColumn,)
         this.detailColumn.push(o)
       }
       else {
         this.listColumn.push(o)
       }
-
-
-
     })
-    console.log(this.detailColumn)
     console.log(this.formRules)
   },
   data() {
     return {
-      listColumn: [],
-      detailColumn: [],
-    	temp: null,  //每一项数据的tmp
+      listColumn: [],   //表格中展示的列
+      detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
+    	temp: null,       //每一行数据的tmp，用于添加、编辑等传递参数
     	list: null,
     	tableKey: 0,
       total: null,

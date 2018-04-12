@@ -28,13 +28,19 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    // redirect: '/dashboard',
+    redirect: '/Enterprise/tree',
     name: 'Dashboard',
     hidden: true,
     children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
-    }]
+      // path: 'dashboard',
+      // component: () => import('@/views/dashboard/index')
+      path: 'tree',
+      name: 'Tree',
+      component: () => import('@/views/enterprise/tree'),
+      meta: { title: '架构总览', icon: 'tree' }
+    }
+    ]
   },
   //基础配置
   {
@@ -99,7 +105,7 @@ export const constantRouterMap = [
   {
     path: '/Enterprise',
     component: Layout,
-    redirect: '/enterprise/table',
+    redirect: '/Enterprise/tree',
     name: 'enterprise',
     meta: { title: '企业信息', icon: 'example' },
     children: [
