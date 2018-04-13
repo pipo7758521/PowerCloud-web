@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 
-export function fetchList(token) {
+export function fetchList(id) {
   return request({
-    url: '/enterprise/subStation.json',
+    url: '/enterprise/subStation.json?companyid='+id,
     method: 'get',
   })
 }

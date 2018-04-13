@@ -48,13 +48,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/basic/table',
     name: 'basic',
-    meta: { title: '基础配置', icon: 'example' },
+    meta: { title: '基础配置', icon: 'manage' },
     children: [
       {
         path: 'typeDevice',
         name: 'TypeDevice',
         component: () => import('@/views/basic/typeDevice'),
-        meta: { title: '设备类型', icon: 'example' },
+        meta: { title: '设备类型', icon: 'device' },
       },
       {
         path: 'magDomain',
@@ -63,7 +63,7 @@ export const constantRouterMap = [
         meta: { title: '管理域', icon: 'example' },
       },
       {
-        path: 'magDomain/:magdomainid/magDomain_electricitySubstation',
+        path: 'magDomain/:magdomainid/magDomain_electricitySubstation',  //这里的参数要与数据库中的字段对应
         name: 'MagDomain_electricitySubstation',
         component: () => import('@/views/basic/magDomain_electricitySubstation'),
         meta: { title: '管理域-变电所关联', icon: 'example' },
@@ -80,7 +80,7 @@ export const constantRouterMap = [
         path: 'gateway',
         name: 'DeviceGateway',
         component: () => import('@/views/gateway/deviceGateway'),
-        meta: { title: '网关信息', icon: 'table' },
+        meta: { title: '网关信息', icon: 'network' },
       }
     ]
   },
@@ -89,12 +89,12 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/Gateway/gateway',
     name: 'deviceGateway_instructions',
-    meta: { title: '网关信息', icon: 'example' },
+    meta: { title: '网关信息', icon: 'network' },
     hidden: true,
     children: [
       {
         path: '',
-        meta: { title: '网关指令', icon: 'example' },
+        meta: { title: '网关指令', icon: 'network' },
         name: 'DeviceGateway_instructions ',
         component: () => import('@/views/gateway/deviceGateway_instructions'),
         hidden: true
@@ -107,7 +107,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/Enterprise/tree',
     name: 'enterprise',
-    meta: { title: '企业信息', icon: 'example' },
+    meta: { title: '企业信息', icon: 'enterprise' },
     children: [
       {
         path: 'tree',
@@ -119,7 +119,14 @@ export const constantRouterMap = [
         path: 'customer',
         name: 'Customer',
         component: () => import('@/views/enterprise/customer'),
-        meta: { title: '企业信息', icon: 'example' },
+        meta: { title: '企业信息', icon: 'enterprise' },
+      },
+      {
+        path: 'customer/:companyid/subStation',
+        name: 'SubStation',
+        component: () => import('@/views/enterprise/subStation'),
+        meta: { title: '变电所信息', icon: 'example' },
+        hidden: true
       },
     ]
   },
@@ -134,7 +141,7 @@ export const constantRouterMap = [
         path: 'electrician',
         name: 'Electrician',
         component: () => import('@/views/basic/typeDevice'),
-        meta: { title: '电工信息', icon: 'user' },
+        meta: { title: '电工信息', icon: 'group_fill' },
       }
     ]
   },

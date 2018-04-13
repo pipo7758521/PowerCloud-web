@@ -32,15 +32,15 @@ export default {
           mainKey: true,   //主键！！！ 用于删除
     		},
     		{
-          key: "subStationName",
-    			label: "名称简写",
+          key: "substationname",
+    			label: "变电所名称",
     			type: "text",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
-          key: "companyID",
-    			label: "公司名称",
+          key: "companyid",
+    			label: "所属企业ID",
     			type: "text",
     			required: true,
     			errorMessage: "必填"
@@ -52,71 +52,86 @@ export default {
     		},
         {
           key: "type",
-          label: "经纬度",
+          label: "变电所类型",
           type: "text",
         },
         {
           key: "lacation",
-          label: "业务负责人姓名",
+          label: "地图位置",
           type: "text",
         },
         {
-          key: "powerType",
-          label: "业务负责人办公电话",
-          type: "text",
+          key: "powertype",
+          label: "电压状态",
+          type: "select",
+          options:[
+            {label:"单电源", value:"0"},
+            {label:"双电源", value:"1"},
+          ]
         },
         {
-          key: "voltageClass",
-          label: "业务负责人移动电话",
-          type: "text",
+          key: "voltageclass",
+          label: "电压等级",
+          type: "select",
+          options:[
+            {label:"220V", value:"0"},
+            {label:"380V", value:"1"},
+            {label:"10kv", value:"2"},
+          ]
         },
         {
           key: "diagram",
-          label: "开票信息",
+          label: "系统图",
           type: "text",
           isDetail: true
         },
         {
           key: "total",
-          label: "开户行",
+          label: "总容量",
           type: "text",
           isDetail: true
         },
         {
-          key: "ConstructionUnit",
-          label: "银行账户",
+          key: "constructionunit",
+          label: "承建单位",
           type: "text",
           isDetail: true
         },
         {
-          key: "ConstructionTime",
-          label: "财务负责人姓名",
+          key: "constructiontime",
+          label: "建设时间",
           type: "text",
           isDetail: true
         },
         {
-          key: "inVoltage",
-          label: "财务负责人办公电话",
+          key: "involtage",
+          label: "入所侧电压",
           type: "text",
           isDetail: true
         },
         {
-          key: "outVoltage",
-          label: "财务负责人移动电话",
+          key: "outvoltage",
+          label: "出所侧电压",
           type: "text",
           isDetail: true
-        },
-        {
-          key: "pic",
-          label: "图纸",
-          type: "text",
-          isDetail: true
-        },
+        }
     	],
       subTable: [
         {
-          path:"electricitySubstation",
-          button: "管理变电所"
+          // title: "图纸",
+          path: "substation",
+          button: "配置图纸",
+          plain: true
+        },
+        {
+          // title: "视频",
+          path: "substation",
+          button: "配置视频",
+          plain: true
+        },
+        {
+          path:"substation",
+          button: "管理机柜"
         }
       ],
     	fetchList: fetchList,

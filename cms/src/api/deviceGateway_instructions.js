@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 
-export function fetchList(gatewayid) {
+export function fetchList(data) {
   return request({
-    url: '/deviceGateway/deviceGateway_instructions.json?gatewayid='+gatewayid,
+    url: '/deviceGateway/deviceGateway_instructions.json',
     method: 'get',
+    params: data
   })
 }
 

@@ -158,7 +158,7 @@ export default {
     	],
       subTable: [
         {
-          path:"electricitySubstation",
+          path:"subStation",
           button: "管理变电所"
         }
       ],

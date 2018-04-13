@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 
-export function fetchList(magDomainid) {
+export function fetchList(data) {
   return request({
-    url: '/magDomain/magDomain_electricitySubstation.json?id='+magDomainid,
+    url: '/magDomain/magDomain_electricitySubstation.json',
     method: 'get',
+    params: data
   })
 }
 
