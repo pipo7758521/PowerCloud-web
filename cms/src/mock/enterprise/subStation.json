@@ -1,0 +1,43 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "substationname": "s-1变电所",
+      "companyid": 1,
+      "companycode": "123123-123",
+      "address": "辽宁省沈阳市xxxxxx",
+      "lacation": "{\"lat\":\"123.340501\",\"lng\":\"41.826984\"}",
+      "type": "箱变",
+      "powertype": "1",
+      "voltageclass": "2",
+      "diagram": "<svg></svg>",
+      "total": "工商银行",
+      "constructionunit": "东北大学",
+      "constructiontime": "2008-04-10",
+      "involtage": "100",
+      "outvoltage": "100",
+      "status": "0"
+    },
+    {
+      "id": 2,
+      "substationname": "s-2变电所",
+      "companyid": 1,
+      "companycode": "123123-123",
+      "address": "辽宁省沈阳市xxxxxx",
+      "lacation": "{\"lat\":\"123.340501\",\"lng\":\"41.826984\"}",
+      "type": "箱变",
+      "powertype": "1",
+      "voltageclass": "1",
+      "diagram": "<svg></svg>",
+      "total": "工商银行",
+      "constructionunit": "东北大学",
+      "constructiontime": "2008-04-10",
+      "involtage": "100",
+      "outvoltage": "100",
+      "status": "1"
+    }]
+  }
+}
+

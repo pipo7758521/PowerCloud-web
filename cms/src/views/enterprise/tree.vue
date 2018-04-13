@@ -11,7 +11,7 @@
         <span v-else-if="node.level == 3">柜 - {{node.data.type}}</span>
         <span v-else-if="node.level == 4">电表 - {{node.data.circuitname}}</span>
         <span class="tree-item-btn-bar">
-         <el-button size="mini" type="text" @click="goToEnterprise(node.level)">详情>></el-button>
+         <el-button size="mini" type="text" @click="goToEnterprise(node)">详情>></el-button>
         </span>
       </span>
     </el-tree>
@@ -65,10 +65,16 @@ export default {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    goToEnterprise(level) {
+    goToEnterprise(node) {
+      console.log(node)
       let path
+      let level = node.level
       if(level == 1) {
         path = "/Enterprise/customer"
+      }
+      else if(level == 2) {
+        let parentId = node.parent.data.id;
+        path = "/Enterprise/customer/"+parentId+"/subStation"
       }
       this.$router.push({path: path})
     },

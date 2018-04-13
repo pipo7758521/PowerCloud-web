@@ -6,7 +6,7 @@
   	</div>
 
     <!-- 表格 -->
-  	<el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
+  	<el-table :data="list" v-loading="listLoading" border fit highlight-current-row
       style="width: 100%">
 
       <!-- 详情展开 -->
@@ -14,7 +14,8 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" >
-              <span>{{ props.row[item.key] }}</span>
+              <span v-if="item.type == 'image'"><img width="60" :src="props.row[item.key]"/></span>
+              <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -31,32 +32,26 @@
           <!-- 选项 -->
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
-          <span v-else-if="item.type == 'select'">{{scope.row[item.key]}}</span>
+          <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
+          <span v-else-if="item.type == 'image'"><img  :src="scope.row[item.key]"/></span>
         </template>
       </el-table-column>
 
-     <el-table-column v-if="subTable.length" v-for="sub in subTable" align="center" label="详情" class-name="small-padding fixed-width">
+    <!-- 进入字列表 -->
+     <el-table-column v-if="subTable.length" v-for="sub in subTable" align="center" :label="sub.title || '详情'" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          </el-button>
+          <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
           </el-button>
         </template>
       </el-table-column>
 
-
-     <!--  <el-table-column v-if="subTable" align="center" label="详情" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button  size="mini" type="primary" plain @click="handleSubTable(scope.row)">{{subTable.button}}
-          </el-button>
-        </template>
-      </el-table-column> -->
-
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="150px">
+      <!-- 操作列 -->
+      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="120px">
         <template slot-scope="scope" >
-          <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button> -->
           <el-button type="primary" plain icon="el-icon-edit" circle @click="handleUpdate(scope.row)"></el-button>
            <el-button type="danger" plain icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
-
-          <!-- <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)">删除 -->
           </el-button>
         </template>
       </el-table-column>
@@ -87,7 +82,9 @@
       		:label="item.label"
       		:prop="item.key">
           <!-- 文本 -->
-      		<el-input v-if="item.type == 'text'||item.type == 'number'" v-model="temp[item.key]"></el-input>
+      		<el-input v-if="item.type == 'text'" v-model="temp[item.key]"></el-input>
+          <!-- 数字 -->
+          <el-input v-if="item.type == 'number'" v-model.number="temp[item.key]"></el-input>
           <!-- 下拉选择框 -->
           <el-select v-else-if="item.type =='select'" class="filter-item" v-model="temp[item.key]" placeholder="请选择">
             <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
@@ -110,16 +107,12 @@
 
 
 <script>
-import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 // import { fetchList, insertData, editData, deleteData } from '@/api/typeDevice'
 import request from '@/utils/request'
 
 export default {
-  name: 'table',
-  directives: {
-    waves
-  },
+  name: 'grid',
   props: {
     isSubTable: {  //当前表格是否是子表
       type: Boolean,
@@ -133,12 +126,6 @@ export default {
         return []
       }
     },
-    /*subTable: {  //当前表格是否含有子表
-      type: Object,
-      default: function () {
-        return null
-      }
-    },*/
     subTable: {  //当前表格是否含有子表
       type: Array,
       default: function () {
@@ -173,43 +160,37 @@ export default {
     //生成 表单校验规则
     this.formRules = {};
 
-    // let tmpColumn = [];
     this.column.forEach( (o,i) => {
     	this.formRules[o.key] = [{
     		required: o.required,
     		trigger: o.type == "select" ? "change" : "blur",
-    		message: o.errorMessage
+    		message: o.errorMessage,
+        type: o.type
     	}]
       if(o.isDetail) {
-        // this.$set(this.detailColumn,)
         this.detailColumn.push(o)
       }
       else {
         this.listColumn.push(o)
       }
-
-
-
     })
-    console.log(this.detailColumn)
     console.log(this.formRules)
   },
   data() {
     return {
-      listColumn: [],
-      detailColumn: [],
-    	temp: null,  //每一项数据的tmp
-    	list: null,
-    	tableKey: 0,
-      total: null,
+      listColumn: [],   //表格中展示的列
+      detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
+    	temp: null,       //每一行数据的tmp，用于添加、编辑等传递参数
+    	list: null,  //显示的列表数据
+      total: null, //总条目数
       listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        // importance: undefined,
+        // title: undefined,
+        // type: undefined,
+        // sort: '+id'
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -217,7 +198,7 @@ export default {
         update: '编辑',
         create: '新增'
       },
-      formRules: null,
+      formRules: null,  //表单验证规则
     }
   },
   filters: {
@@ -236,13 +217,11 @@ export default {
   methods: {
   	getList() {
   		this.listLoading = true
-      //如果是子表，则要根据父表的ID查找对应的子表
-      let parentId = null
+      //如果是子表，则路由中的参数就是对应的父表的ID
       if(this.isSubTable) {
-        let arr = this.$route.path.split("/")
-        parentId = arr[arr.length-2]
+        this.listQuery.search = JSON.stringify(this.$route.params)
       }
-	    this.fetchList(parentId).then(response => {
+	    this.fetchList(this.listQuery).then(response => {
 	      this.list = response.data.items
 	      this.total = response.data.total
 	      this.listLoading = false
@@ -355,14 +334,27 @@ console.log("temp===")
       this.getList()
     },
     handleSubTable(sub, row) {
-      console.log(row)
-      console.log(this.$route.path)
       this.$router.push({path: `${this.$route.path}/${row.id}/${sub.path}`})
     },
     handleBack() {
-      var arr = this.$route.path.split("/")
-      let path = arr.slice(0,arr.length-2).join("/")
-      this.$router.push({path: path})
+      this.$router.back(-1)
+    },
+    //在列表中，将select的项目显示成label的形式，而非value
+    filterOptionLabel(row, item) {
+      let value = ""
+      if(Array.isArray(item.options)) {
+        item.options.forEach( (o,i) => {
+          if(o.value == row[item.key]) {
+            value = o.label || o.value
+            return
+          }
+        })
+        return value
+      }
+      else {
+        return row[item.key]
+      }
+
     }
   }
 

@@ -1,11 +1,10 @@
 import request from '@/utils/request'
 
 
-export function fetchList(data) {
+export function fetchList(token) {
   return request({
-    url: '/magDomain/list.json',
+    url: '/enterprise/customer.json',
     method: 'get',
-    params: data
   })
 }
 
