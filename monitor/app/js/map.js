@@ -73,17 +73,16 @@
 
         if(res_arr[0].ok){
           res_arr[0].data.forEach( (o,i) => {
-            var pos = JSON.parse(o.pos);
-            var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
+            try {
+              var pos = JSON.parse(o.pos);
+              var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
 
-            points1.push(new BMap.Point(convertor[0], convertor[1]));
-            var html = "<div class='p p-company' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>企业："+o.tag+"</span></div>";
-            // var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
-            // var marker = new BMap.Marker(points1[i]);  // 创建标注
-            var marker = new BMapLib.RichMarker(html, points1[i]);
-            // var label = new BMap.Label("我是文字标注哦",{offset:new BMap.Size(20,-10)});
-            // marker.setLabel(label);
-            markers1.push(marker);
+              points1.push(new BMap.Point(convertor[0], convertor[1]));
+              var html = "<div class='p p-company' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>企业："+o.tag+"</span></div>";
+              var marker = new BMapLib.RichMarker(html, points1[i]);
+              markers1.push(marker);
+            }
+            catch(e) {}
           })
           mapMgr1.addMarkers(markers1,1,20)
           mapMgr1.showMarkers();
@@ -91,11 +90,14 @@
 
         if(res_arr[1].ok){
           res_arr[1].data.forEach( (o,i) => {
-            var pos = JSON.parse(o.pos);
-            var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
-            points2.push(new BMap.Point(convertor[0], convertor[1]));
-            var html = "<div class='p p-station s-0-0' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>变电站："+o.tag+"</span></div>";
-            markers2.push(new BMapLib.RichMarker(html, points2[i]))
+            try {
+              var pos = JSON.parse(o.pos);
+              var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
+              points2.push(new BMap.Point(convertor[0], convertor[1]));
+              var html = "<div class='p p-station s-0-0' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>变电站："+o.tag+"</span></div>";
+              markers2.push(new BMapLib.RichMarker(html, points2[i]));
+            }
+            catch(e) {}
           })
           mapMgr2.addMarkers(markers2,1,20)
           mapMgr2.showMarkers();
@@ -104,24 +106,24 @@
 
         if(res_arr[2].ok){
           res_arr[2].data.forEach( (o,i) => {
-            var pos = JSON.parse(o.pos);
-            var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
-            points3.push(new BMap.Point(convertor[0], convertor[1]));
-            var html = "<div class='p p-staff' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>员工："+o.tag+"</span></div>";
-            var marker = new BMapLib.RichMarker(html, points3[i]);
-            markers3.push(marker);
+            //有些员工可能没有坐标
+            try {
+              var pos = JSON.parse(o.pos);
+              var convertor = coorConvert.wgs2bd(pos.longitude, pos.latitude);
+              points3.push(new BMap.Point(convertor[0], convertor[1]));
+              var html = "<div class='p p-staff' data-id='"+o.id+"' data-pos='"+convertor.join("|")+"'><span class='p-tag'>员工："+o.tag+"</span></div>";
+              var marker = new BMapLib.RichMarker(html, points3[i]);
+              markers3.push(marker);
+            }
+            catch(e) {}
           })
           mapMgr3.addMarkers(markers3,1,20)
           mapMgr3.showMarkers();
         }
 
-
         totalPoint = (points1.concat(points2)).concat(points3)
+        console.log(totalPoint)
         map.setViewport(totalPoint);
-
-        // if($("#tag-toggle").hasClass('toggle-off')){
-        //   $(".p-tag").addClass('off')
-        // }
 
         resolve();
 
