@@ -1,10 +1,7 @@
 <template>
 	<cms-grid
+        :moduleName = "moduleName"
 		:column="column"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
 	>
 	</cms-grid>
 </template>
@@ -13,14 +10,13 @@
 
 import Grid from "@/components/grid/grid"
 
-import { fetchList, insertData, updateData, deleteData } from '@/api/typeDevice'
-
 export default {
 	components: {
 		"cms-grid": Grid
 	},
 	data () {
 		return {
+            moduleName: "typeDevice",
 			column: [
     		{
     			key: "id",
@@ -32,34 +28,30 @@ export default {
     		{
     			key: "typedevicename",
     			label: "设备名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
     			key: "functionname",
     			label: "解析函数名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
     			key: "classname",
     			label: "解析类名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
     			key: "description",
     			label: "备注说明",
-    			type: "text",
+    			type: "string",
     		}
-    	],
-    	fetchList: fetchList,
-    	insertData: insertData,
-    	updateData: updateData,
-    	deleteData: deleteData,
+    	]
 		}
 	}
 }

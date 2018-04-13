@@ -3,7 +3,7 @@ import request from '@/utils/request'
 
 export function fetchList(id) {
   return request({
-    url: '/enterprise/subStation.json?companyid='+id,
+    url: '/enterprise/electricitySubstation.json?companyid='+id,
     method: 'get',
   })
 }

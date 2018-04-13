@@ -13,7 +13,7 @@
       <el-table-column v-if="detailColumn.length" type="expand">
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
-            <el-form-item  v-for="item in detailColumn" :label="item.label" >
+            <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
               <span v-if="item.type == 'image'"><img width="60" :src="props.row[item.key]"/></span>
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
@@ -22,11 +22,11 @@
       </el-table-column>
 
 
-      <el-table-column v-if="!item.isDetail" v-for="item in listColumn" align="center" :label="item.label"
+      <el-table-column v-if="!item.isDetail" v-for="item in listColumn" :key="item.key" align="center" :label="item.label"
         :width= "(item.mainKey||item.key == 'status') ? '80px' : ''">
         <template slot-scope="scope">
           <!-- 文本 -->
-          <span v-if="item.type == 'text'|| item.type == 'number'">
+          <span v-if="item.type == 'string'|| item.type == 'number'">
             {{scope.row[item.key]}}
           </span>
           <!-- 选项 -->
@@ -38,7 +38,7 @@
       </el-table-column>
 
     <!-- 进入字列表 -->
-     <el-table-column v-if="subTable.length" v-for="sub in subTable" align="center" :label="sub.title || '详情'" class-name="small-padding fixed-width">
+     <el-table-column v-if="subTable.length" v-for="sub in subTable" :key="sub.path" align="center" :label="sub.title || '详情'" class-name="small-padding fixed-width" >
         <template slot-scope="scope">
           <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
           </el-button>
@@ -78,11 +78,11 @@
     <!-- 编辑框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="30%" style='margin-left:50px;margin-right:50px;'>
-      	<el-form-item v-for="item in column" v-if="item.isEdit !== false"
+      	<el-form-item v-for="item in column" :key="item.key" v-if="item.isEdit !== false"
       		:label="item.label"
       		:prop="item.key">
           <!-- 文本 -->
-      		<el-input v-if="item.type == 'text'" v-model="temp[item.key]"></el-input>
+      		<el-input v-if="item.type == 'string'" v-model="temp[item.key]"></el-input>
           <!-- 数字 -->
           <el-input v-if="item.type == 'number'" v-model.number="temp[item.key]"></el-input>
           <!-- 下拉选择框 -->
@@ -91,7 +91,9 @@
             </el-option>
           </el-select>
           <!-- date日期选择 -->
-          <el-date-picker v-if="item.type == 'date'"v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-else-if="item.type == 'date'" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
+          <!-- URL -->
+          <el-input v-else-if="item.type == 'image'" v-model="temp[item.key]"></el-input>
 
       	</el-form-item>
       </el-form>
@@ -108,12 +110,18 @@
 
 <script>
 import { parseTime } from '@/utils'
-// import { fetchList, insertData, editData, deleteData } from '@/api/typeDevice'
+import { fetchList, insertData, editData, deleteData } from '@/api/api'
 import request from '@/utils/request'
 
 export default {
   name: 'grid',
   props: {
+    moduleName: {
+      type: String,
+      default: function () {
+        return ""
+      }
+    },
     isSubTable: {  //当前表格是否是子表
       type: Boolean,
       default: function () {
@@ -134,39 +142,51 @@ export default {
     },
     fetchList: {
       type: Function,
-      default: function () {
-      }
+      default: fetchList
     },
     insertData: {
       type: Function,
-      default: function () {
-      }
+      default: insertData
     },
     updateData: {
       type: Function,
-      default: function () {
-      }
+      default: editData
     },
     deleteData: {
       type: Function,
-      default: function () {
-      }
+      default: deleteData
     },
   },
   created() {
+    console.log(this.subTable)
     this.getList()
     this.resetTemp()
 
     //生成 表单校验规则
+    //参照： https://github.com/yiminghe/async-validator
     this.formRules = {};
 
     this.column.forEach( (o,i) => {
-    	this.formRules[o.key] = [{
-    		required: o.required,
-    		trigger: o.type == "select" ? "change" : "blur",
-    		message: o.errorMessage,
+      let rule = {
+        required: o.required,
+        trigger: "blur",
+        message: o.errorMessage,
         type: o.type
-    	}]
+      }
+      if(o.type == "select") {
+        rule.trigger = "blur"
+        rule.type = "string"
+      }
+      else if(o.type == "image") {
+        rule.type = "url"
+        rule.message = o.errorMessage || "格式必须为URL"
+      }
+      else if(o.type == "date") {
+        rule.type = "string"
+      }
+    	this.formRules[o.key] = [rule]
+
+      //把在列表中显示的列  和 在展开详情中显示的列区分出来
       if(o.isDetail) {
         this.detailColumn.push(o)
       }
@@ -221,8 +241,19 @@ export default {
       if(this.isSubTable) {
         this.listQuery.search = JSON.stringify(this.$route.params)
       }
-	    this.fetchList(this.listQuery).then(response => {
-	      this.list = response.data.items
+	    this.fetchList(this.moduleName, this.listQuery).then(response => {
+        //从企业tree中点击进来，会带着query参数id
+        //此时看到的是某个id下的具体内容，所以这里做了一个list的过滤，只显示当前ID下的
+        let filterId
+        let _list = response.data.items
+        if(this.$route.query && this.$route.query.id) {
+          filterId = this.$route.query.id
+          this.list = _list.filter( (o) => { return o.id == filterId })
+        }
+        else {
+          this.list = _list
+        }
+
 	      this.total = response.data.total
 	      this.listLoading = false
 	    })
@@ -266,7 +297,7 @@ console.log("temp===")
   				return
   			}
   		})
-  		this.deleteData(param).then(() => {
+  		this.deleteData(this.moduleName, param).then(() => {
   			this.$notify({
 	        title: '成功',
 	        message: '删除成功',
@@ -282,7 +313,7 @@ console.log("temp===")
     addData() {
     	this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-        	this.insertData(this.temp).then( () => {
+        	this.insertData(this.moduleName, this.temp).then( () => {
         		this.dialogFormVisible = false;
         		this.$notify({
               title: '成功',
@@ -298,10 +329,9 @@ console.log("temp===")
     editData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-
           const tempData = Object.assign({}, this.temp)
           console.log(tempData)
-          this.updateData(tempData).then( () => {
+          this.updateData(this.moduleName, tempData).then( () => {
             this.dialogFormVisible = false;
             this.$notify({
               title: '成功',
@@ -334,6 +364,8 @@ console.log("temp===")
       this.getList()
     },
     handleSubTable(sub, row) {
+      // console.log(`${this.$route.path}`)
+      console.log(`${this.$route.path}/${row.id}/${sub.path}`)
       this.$router.push({path: `${this.$route.path}/${row.id}/${sub.path}`})
     },
     handleBack() {

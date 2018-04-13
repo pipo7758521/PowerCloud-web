@@ -1,11 +1,8 @@
 <template>
 	<cms-grid
+    :moduleName = "moduleName"
 		:column = "column"
     :subTable = "subTable"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
 	>
 	</cms-grid>
 </template>
@@ -13,32 +10,14 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-
-import { fetchList, insertData, updateData, deleteData } from '@/api/deviceGateway'
 import { stationIDList } from '@/api/common'
 export default {
 	components: {
 		"cms-grid": Grid
 	},
-  created () {
-    //与 变电所ID 相关联
-    stationIDList().then( response => {
-      let list = response.data.items;
-      let options = [];
-      list.forEach( (o,i) => {
-        options.push({value: o.electricitySubstationID})
-      })
-
-      this.column.forEach( (o,i) => {
-        if(o.key == "electricitySubstationID") {
-          o.options = options;
-        }
-      })
-
-    })
-  },
 	data () {
     return {
+      moduleName: "deviceGateway",
       column : [
         {
           key: "id",
@@ -50,66 +29,55 @@ export default {
         {
           key: "gatewayname",
           label: "网关名称",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
         {
           key: "manufacturer",
           label: "生产企业",
-          type: "text",
+          type: "string",
           // required: true,
           // errorMessage: "必填"
         },
         {
           key: "mac",
           label: "MAC地址",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
         {
           key: "subjectid",
           label: "订阅主题ID",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
-        // {
-        //   key: "electricitysubstationid",
-        //   label: "安装变电所ID",
-        //   type: "select",
-        //   required: true,
-        //   errorMessage: "必填",
-        // },
         {
           key: "gatewayusr",
           label: "网关用户名",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
         {
           key: "gatewaypsw",
           label: "网关密码",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
         {
           key: "description",
           label: "备注说明",
-          type: "text",
+          type: "string",
         }
       ],
       subTable: [{
         path: "deviceGateway_instructions",
         button: "配置网关指令"
-      }],
-      fetchList:  fetchList,
-      insertData: insertData,
-      updateData: updateData,
-      deleteData: deleteData,
+      }]
     }
 
 	}

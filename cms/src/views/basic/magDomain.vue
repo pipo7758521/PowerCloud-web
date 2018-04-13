@@ -1,11 +1,8 @@
 <template>
 	<cms-grid
+    :moduleName = "moduleName"
     :column = "column"
     :subTable = "subTable"
-    :fetchList = "fetchList"
-    :insertData = "insertData"
-    :updateData = "updateData"
-    :deleteData = "deleteData"
   >
   </cms-grid>
 </template>
@@ -13,8 +10,6 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-import { fetchList, insertData, updateData, deleteData } from '@/api/magDomain'
-
 
 export default {
 	components: {
@@ -22,6 +17,7 @@ export default {
   },
 	data () {
 		return {
+      moduleName: "magDomain",
 			column: [
     		{
     			key: "id",
@@ -33,14 +29,14 @@ export default {
     		{
     			key: "magdomain",
     			label: "管理域名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
     			key: "createrid",
     			label: "创建人",
-    			type: "text",
+    			type: "string",
     			isEdit: false,
     		},
     		{
@@ -69,12 +65,7 @@ export default {
       subTable: [{
         path: "magDomain_electricitySubstation",
         button: "配置变电所"
-      }],
-      fetchList: fetchList,
-      insertData: insertData,
-      updateData: updateData,
-      deleteData: deleteData,
-
+      }]
 		}
 	}
 }

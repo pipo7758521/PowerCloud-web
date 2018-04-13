@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+if(process.env.NODE_ENV == "development") {
+  console.log("====== development =======")
+}
 
 export function fetchList(data) {
   return request({

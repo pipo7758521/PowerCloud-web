@@ -36,7 +36,7 @@ export const constantRouterMap = [
       // path: 'dashboard',
       // component: () => import('@/views/dashboard/index')
       path: 'tree',
-      name: 'Tree',
+      name: 'Tree1',
       component: () => import('@/views/enterprise/tree'),
       meta: { title: '架构总览', icon: 'tree' }
     }
@@ -95,7 +95,7 @@ export const constantRouterMap = [
       {
         path: '',
         meta: { title: '网关指令', icon: 'network' },
-        name: 'DeviceGateway_instructions ',
+        name: 'deviceGateway_instructions ',
         component: () => import('@/views/gateway/deviceGateway_instructions'),
         hidden: true
       }
@@ -119,14 +119,64 @@ export const constantRouterMap = [
         path: 'customer',
         name: 'Customer',
         component: () => import('@/views/enterprise/customer'),
-        meta: { title: '企业信息', icon: 'enterprise' },
+        meta: { title: '企业配置', icon: 'enterprise' },
       },
       {
-        path: 'customer/:companyid/subStation',
-        name: 'SubStation',
-        component: () => import('@/views/enterprise/subStation'),
-        meta: { title: '变电所信息', icon: 'example' },
-        hidden: true
+        path: 'customer',
+        name: 'electricitySubstation',
+        component: () => import('@/views/enterprise/electricitySubstation'),
+        meta: { title: '企业配置', icon: 'example' },
+        hidden: true,
+        children: [
+          {
+            path: ':companyid/electricitySubstation',
+            name: 'electricitySubstation',
+            component: () => import('@/views/enterprise/electricitySubstation'),
+            meta: { title: '变电所信息', icon: 'example' },
+          }
+        ]
+      },
+      {
+        path: 'customer',
+        name: 'electricitySubstation_video',
+        component: () => import('@/views/enterprise/electricitySubstation_video'),
+        meta: { title: '企业配置', icon: 'example' },
+        hidden: true,
+        children: [
+          {
+            path: ':companyid/electricitySubstation',
+            name: 'electricitySubstation_video',
+            meta: { title: '变电所信息', icon: 'example' },
+            children: [
+              {
+                path: ':electricitysubstationid/electricitySubstation_video',
+                name: 'electricitySubstation_video',
+                meta: { title: '变电所视频', icon: 'example' },
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'customer',
+        name: 'electricitySubstation_pic',
+        component: () => import('@/views/enterprise/electricitySubstation_pic'),
+        meta: { title: '企业配置', icon: 'example' },
+        hidden: true,
+        children: [
+          {
+            path: ':companyid/electricitySubstation',
+            name: 'electricitySubstation_pic',
+            meta: { title: '变电所信息', icon: 'example' },
+            children: [
+              {
+                path: ':electricitysubstationid/electricitySubstation_pic',
+                name: 'electricitySubstation_pic',
+                meta: { title: '变电所图纸', icon: 'example' },
+              }
+            ]
+          }
+        ]
       },
     ]
   },
@@ -145,41 +195,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
-  /*{
-    path: '/Example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'example',
-    meta: { title: 'example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },*/
 
   { path: '*', redirect: '/404', hidden: true }
 ]

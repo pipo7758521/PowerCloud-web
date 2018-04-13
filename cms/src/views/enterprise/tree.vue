@@ -71,12 +71,15 @@ export default {
       let level = node.level
       if(level == 1) {
         path = "/Enterprise/customer"
+        this.$router.push({path: path})
       }
+      //只显示当前点击的变电所，所以加了query参数用于table过滤
       else if(level == 2) {
         let parentId = node.parent.data.id;
-        path = "/Enterprise/customer/"+parentId+"/subStation"
+        path = "/Enterprise/customer/"+parentId+"/electricitySubstation"
+        this.$router.push({path: path, query: {id:node.data.id}})
       }
-      this.$router.push({path: path})
+      // this.$router.push({path: path})
     },
   },
 

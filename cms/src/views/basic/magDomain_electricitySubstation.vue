@@ -2,12 +2,9 @@
   <!-- <div> -->
     <!-- <p>当前管理域</p> -->
     <cms-grid
+    :moduleName = "moduleName"
     :isSubTable = "true"
     :column = "column"
-    :fetchList = "fetchList"
-    :insertData = "insertData"
-    :updateData = "updateData"
-    :deleteData = "deleteData"
   >
   </cms-grid>
   <!-- </div> -->
@@ -17,7 +14,6 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-import { fetchList, insertData, updateData, deleteData } from '@/api/magDomain_electricitySubstation'
 import { stationIDList } from '@/api/common'
 
 export default {
@@ -43,6 +39,7 @@ export default {
   },
 	data () {
 		return {
+      moduleName: "magDomain_electricitySubstation",
 			column: [
     		{
           key: "id",
@@ -83,11 +80,7 @@ export default {
             }
           ]
     		}
-    	],
-      fetchList: fetchList,
-      insertData: insertData,
-      updateData: updateData,
-      deleteData: deleteData,
+    	]
 		}
 	}
 }

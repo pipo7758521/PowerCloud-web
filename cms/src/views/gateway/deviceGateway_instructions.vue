@@ -1,11 +1,8 @@
 <template>
 	<cms-grid
+    :moduleName = "moduleName"
     :isSubTable = "true"
 		:column = "column"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
 	>
 	</cms-grid>
 </template>
@@ -14,7 +11,6 @@
 
 import Grid from "@/components/grid/grid"
 
-import { fetchList, insertData, updateData, deleteData } from '@/api/deviceGateway_instructions.js'
 import { deviceElecMeterList } from '@/api/common'
 export default {
 	components: {
@@ -39,6 +35,7 @@ export default {
   },
 	data () {
     return {
+      moduleName: "deviceGateway_instructions",
       column : [
         {
           key: "id",
@@ -56,7 +53,7 @@ export default {
         {
           key: "num",
           label: "指令编号Data+i",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
@@ -70,22 +67,18 @@ export default {
         {
           key: "typedevicename",
           label: "设备类型（电表）",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         },
         {
           key: "instruction",
           label: "指令",
-          type: "text",
+          type: "string",
           required: true,
           errorMessage: "必填"
         }
-      ],
-      fetchList:  fetchList,
-      insertData: insertData,
-      updateData: updateData,
-      deleteData: deleteData,
+      ]
     }
 
 	}

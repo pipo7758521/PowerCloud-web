@@ -27,7 +27,7 @@
       "companycode": "123123-123",
       "address": "辽宁省沈阳市xxxxxx",
       "lacation": "{\"lat\":\"123.340501\",\"lng\":\"41.826984\"}",
-      "type": "箱变",
+      "type": "变电所",
       "powertype": "1",
       "voltageclass": "1",
       "diagram": "<svg></svg>",
@@ -40,4 +40,3 @@
     }]
   }
 }
-

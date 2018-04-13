@@ -1,0 +1,31 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "electricitysubstationid": 1,
+      "num": "1",
+      "pic": "http://img0.imgtn.bdimg.com/it/u=2260939283,2539893497&fm=27&gp=0.jpg"
+    },
+    {
+      "id": 2,
+      "electricitysubstationid": 1,
+      "num": "2",
+      "pic": "http://img3.imgtn.bdimg.com/it/u=3492644864,2599310975&fm=27&gp=0.jpg"
+    },
+    {
+      "id": 3,
+      "electricitysubstationid": 1,
+      "num": "2",
+      "pic": "http://asdasdasd"
+    },
+    {
+      "id": 4,
+      "electricitysubstationid": 1,
+      "num": "2",
+      "pic": "http://img2.imgtn.bdimg.com/it/u=2371469527,1814822605&fm=27&gp=0.jpg"
+    }]
+  }
+}
+

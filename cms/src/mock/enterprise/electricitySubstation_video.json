@@ -1,0 +1,21 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "electricitysubstationid": 1,
+      "num": "123",
+      "manufacturer": "海康威视",
+      "url": "http://asdasdasd"
+    },
+    {
+      "id": 2,
+      "electricitysubstationid": 1,
+      "num": "124",
+      "manufacturer": "华为",
+      "url": "http://asdasdasd"
+    }]
+  }
+}
+
