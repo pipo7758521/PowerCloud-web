@@ -20,8 +20,8 @@
 			const margin_h1 = 120; //进线柜 左-右 高度差
 			const w2 = 90; //电容柜宽度
 			const h2 = 170;
-			const margin_h2 = 80; // 配电柜-回路 高度差
-			const margin_w2 = 70 ; //配电柜的margin-left
+			const margin_h2 = 80; // 馈出柜-回路 高度差
+			const margin_w2 = 70 ; //馈出柜的margin-left
 			const w3 = 20; //回路宽度
 			const h3 = 220;
 
@@ -37,7 +37,7 @@
 				//黑色背景
 				window.draw = SVG('drawing').size('100%', '100%');
 				//标题
-				draw.text("电力系统图").move(w1+padding,padding).font({ fill: t_color, size: 40 }).addClass('s-t-title');
+				draw.text(title||"电力系统图").move(w1+padding,padding).font({ fill: t_color, size: 40 }).addClass('s-t-title');
 
 				config.forEach( (o,cabinetIndex) => {
 
@@ -62,7 +62,7 @@
 						G.add(ele);
 					}
 
-					//画配电柜
+					//画馈出柜
 					var distributing_w = w3*o.circuitNum + margin*(o.circuitNum-1) +15; //15是避免文字溢出的向左偏移量
 					for(var i = 0; i < o.distributingNum; i++) {
 						var ele = InitDistrbuting(o,i);
@@ -81,7 +81,7 @@
 				var max_w = Math.max.apply(null, total_w_arr);
 
 				//画每个线路图上面的总线(是否级联)
-				config.forEach( (o,i) => {
+				/*config.forEach( (o,i) => {
 					var _w = isConnect ? max_w : total_w_arr[i];
 					var offset = 40;
 					var start = padding+w1-offset;
@@ -90,7 +90,22 @@
 
 				if(isConnect) {
 					draw.line( padding+w1+max_w-w1+36, padding+margin_h1, padding+w1+max_w-w1+36, padding+item_h*(config.length-1)+margin_h1+4).stroke({ width: 8, color: '#fff' })
-				}
+				}*/
+
+				config.forEach( (o,i) => {
+					var _w = o.isConnect ? max_w : total_w_arr[i];
+					var offset = 40;
+					var start = padding+w1-offset;
+					draw.line(start, padding+item_h*i+margin_h1, start+_w-w1+offset+offset, padding+item_h*i+margin_h1).stroke({ width: 8, color: '#fff' })
+
+					if(o.isConnect) {
+						draw.line( padding+w1+max_w-w1+36, padding+margin_h1+item_h*i, padding+w1+max_w-w1+36, padding+item_h*(config.length-1)+margin_h1+4).stroke({ width: 8, color: '#fff' })
+					}
+
+				})
+
+
+
 
 				var svgRootDom = document.querySelector("svg");
 
@@ -176,7 +191,7 @@
 				return G;
 			}
 
-			//配电柜
+			//馈出柜
 			function InitDistrbuting(obj,index) {
 
 				var G = draw.group().addClass('s-distri');
@@ -195,7 +210,7 @@
 					G.use(S_Circuit).move((margin+w3)*i, margin_h1+margin_h2).addClass('s-circuit');
 				}
 
-				G.text((index+1)+"#配电柜").move(distributing_w/2-20,margin_h1+margin_h2/2).font({ fill: t_color, size: 20 });
+				G.text((index+1)+"#馈出柜").move(distributing_w/2-20,margin_h1+margin_h2/2).font({ fill: t_color, size: 20 });
 
 				return G
 			}
@@ -211,7 +226,7 @@
 				Symbol.circle(20).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(base_margin_left, 150);
 				Symbol.polyline([[0,0], [20,0], [10,30], [0,0]]).stroke({ width: 2, color: '#fff' }).attr({ fill: 'rgba(0,0,0,0)' }).move(base_margin_left, 300);
 
-				//配电柜 电流信息
+				//馈出柜 电流信息
 				Symbol.text(function(add) {
 				  add.tspan("Ia: ").newLine()
 				  add.tspan("Ib: ").newLine()
@@ -264,7 +279,7 @@
 						setColor(caEle,item.cabinet.status);
 					})*/
 
-					//配电柜信息
+					//馈出柜信息
 					var distributing = item.distributing
 					distributing.forEach( (d,d_i) => {
 						d.forEach( (c,c_i) => {
@@ -304,9 +319,27 @@
 				var viewBoxWidth = viewBoxVal.split(",")[2];
 			  var viewBoxHeight = viewBoxVal.split(",")[3];
 
-			  var radio = (window_w/viewBoxHeight).toFixed(2)
+
+var radio = (window_w/viewBoxHeight).toFixed(2)
+
+			  // if(+viewBoxWidth > +viewBoxHeight) {
+			  // 	console.log("wwwwwwwww")
+			  // 	var radio = (window_w/viewBoxHeight).toFixed(2)
+			  // }
+			  // else {
+			  // 	console.log("hhhhhhhhh")
+			  // 	var radio = (window_h/viewBoxWidth).toFixed(2)
+			  // }
+
+			  // var radio = (window_w/viewBoxHeight).toFixed(2)
 			  console.log(radio);
+
+			  radio  = 0.9
+
 			  svgRootDom.style.transform = "rotate(90deg) scale("+Math.max(1,radio)+")"
+			  // svgRootDom.style.transform = "rotate(90deg) scale("+radio+")"
+
+			  console.log(svgRootDom.style.transform)
 
 			}
 

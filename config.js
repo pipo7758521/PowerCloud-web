@@ -1,6 +1,6 @@
 (function () {
 	//线路总配置
-	window.config = [
+	/*window.config = [
 		{
 			capacityNum:2,
 			distributingNum:3,
@@ -10,16 +10,70 @@
 			capacityNum:3,
 			distributingNum:2,
 			circuitNum:3
-		}/*,
-		{
-			capacityNum:3,
-			distributingNum:2,
-			circuitNum:7
-		}*/
-	];
+		}
+	];*/
 	//是否级联
+	// window.isConnect = []
 	window.isConnect = true;
-	window.title = "XXXX变电所 - 电力系统图";
+	window.title = "物流园变电所 - 电力系统图";
+	window.config = [
+		{
+			capacityNum:1,
+			distributingNum:3,
+			circuitNum:1
+		},
+		{
+			capacityNum:1,
+			distributingNum:1,
+			circuitNum:1
+		}
+	]
+
+
+	window.title = "铸造厂变电所 - 电力系统图";
+	window.config = [
+		{
+			capacityNum:2,
+			distributingNum:3,
+			circuitNum:1,
+			isConnect: false
+		},
+		{
+			capacityNum:2,
+			distributingNum:11,
+			circuitNum:1,
+			isConnect: true
+		},
+		{
+			capacityNum:2,
+			distributingNum:0,
+			circuitNum:0,
+			isConnect: true
+		}
+	]
+
+
+	/*window.title = "铁西区政府 - S-变电所";
+	window.config = [
+		{
+			capacityNum:2,
+			distributingNum:3,
+			circuitNum:1
+		}
+	]
+	window.title = "铁西区政府 - X-箱变1";
+	window.config = [
+		{
+			capacityNum:1,
+			distributingNum:3,
+			circuitNum:1
+		},
+		{
+			capacityNum:1,
+			distributingNum:0,
+			circuitNum:0
+		}
+	]*/
 	window.data = [
 		{
 			vm: {
