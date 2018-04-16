@@ -4,22 +4,22 @@
     "total": 3,
     "items": [{
       "id": 1,
-      "magDomainID": 1,
-      "electricianID": 2,
+      "magdomainid": 1,
+      "electricianid": 2,
       "post": "东北大学",
       "status": 0,
       "description": "aaaaa"
     }, {
       "id": 2,
-      "magDomainID": 2,
-      "electricianID": 2,
+      "magdomainid": 2,
+      "electricianid": 2,
       "post": "东北大学",
       "status": 0,
       "description": "aaaaa"
     },{
       "id": 3,
-      "magDomainID": 1,
-      "electricianID": 2,
+      "magdomainid": 1,
+      "electricianid": 2,
       "post": "东北大学",
       "status": 0,
       "description": "aaaaa"

@@ -22,3 +22,22 @@ export function deviceTransformerList() {
     method: 'get',
   })
 }
+
+
+//管理域ID
+export function magDomainIDList(){
+  return request({
+    url: '/common/magDomainIDList.json',
+    method: 'get',
+  })
+}
+
+
+//电工ID
+export function electricianIDList(){
+  return request({
+    url: '/common/electricianIDList.json',
+    method: 'get',
+  })
+
+}
