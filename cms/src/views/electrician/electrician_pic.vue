@@ -30,7 +30,7 @@ export default {
           mainKey: true,   //主键！！！ 用于删除
         },
         {
-    			key: "electricianID",
+    			key: "electricianid",
     			label: "电工ID",
     			type: "number",
           isEdit: false,

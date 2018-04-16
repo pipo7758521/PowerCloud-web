@@ -4,13 +4,13 @@
 		"total":2,
 		"items":[{
 				"id":1,
-				"electricianID":1,
+				"electricianid":1,
 				"type":"电工证",
 				"num":11234567890,
 				"pic":"照片1"
 			},{
 				"id":2,
-				"electricianID":1,
+				"electricianid":1,
 				"type":"电工证",
 				"num":98756567890,
 				"pic":"照片2"

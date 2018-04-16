@@ -252,7 +252,7 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/Staff/electrician/:magdomainid/magDomain_electrician',
+    path: '/Staff/electrician/:electricianid/magDomain_electrician',
     component: Layout,
     redirect: '/Staff/electrician',
     name: 'magDomain_electrician',
@@ -269,7 +269,7 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/Staff/electrician/:magdomainid/electrician_pic',
+    path: '/Staff/electrician/:electricianid/electrician_pic',
     component: Layout,
     redirect: '/Staff/electrician',
     name: 'Electrician_pic',

@@ -19,7 +19,7 @@ export default {
 	},
 	data () {
 		return {
-      moduleName: "electrician",
+            moduleName: "electrician",
 			column: [
     		{
     			key: "id",
@@ -36,7 +36,7 @@ export default {
     			errorMessage: "必填"
     		},
     		{
-    			key: "companyID",
+    			key: "companyid",
     			label: "所属企业",
     			type: "number",
     			required: true,
@@ -51,7 +51,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "Tel",
+                key: "tel",
                 label: "办公电话",
                 type: "string",
                 required: true,
@@ -66,7 +66,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "positionalTitle",
+                key: "positionaltitle",
                 label: "职称",
                 type: "string",
                 required: true,
@@ -74,21 +74,21 @@ export default {
             },
 
             {
-                key: "ecType",
+                key: "ectype",
                 label: "作业类别(电工证)",
                 type: "string",
                 required: true,
                 errorMessage: "必填"
             },
             {
-                key: "scCompanyName",
+                key: "sccompanyname",
                 label: "企业名称（安全证）",
                 type: "string",
                 required: true,
                 errorMessage: "必填"
             },
             {
-                key: "scDuty",
+                key: "scduty",
                 label: "职务（安全证）主要负责人",
                 type: "string",
                 required: true,
@@ -96,7 +96,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scTechnicalTitle",
+                key: "sctechnicaltitle",
                 label: "技术职称（安全证）",
                 type: "string",
                 required: true,
@@ -119,7 +119,7 @@ export default {
                 ]
             },
             {
-                key: "identityCard",
+                key: "identitycard",
                 label: "身份证号码",
                 type: "string",
                 required: true,
@@ -135,7 +135,7 @@ export default {
                 isDetail: true
             },
              {
-                key: "ecNum",
+                key: "ecnum",
                 label: "电工证编号",
                 type: "string",
                 required: true,
@@ -143,7 +143,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "ecGrantTime",
+                key: "ecgranttime",
                 label: "授予时间(电工证)",
                 type: "string",
                 required: true,
@@ -151,7 +151,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "ecLicenseNum",
+                key: "eclicensenum",
                 label: "许可证编号(电工证)",
                 type: "string",
                 required: true,
@@ -159,7 +159,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "ecPic",
+                key: "ecpic",
                 label: "证件照片(电工证)",
                 type: "string",
                 required: true,
@@ -167,7 +167,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scNum",
+                key: "scnum",
                 label: "安全证编号",
                 type: "string",
                 required: true,
@@ -175,7 +175,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scIssueDate",
+                key: "scissuedate",
                 label: "发证日期（安全证）",
                 type: "date",
                 required: true,
@@ -183,7 +183,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scDateStart",
+                key: "scdatestart",
                 label: "有效日期起（安全证）",
                 type: "date",
                 required: true,
@@ -191,7 +191,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scDateEnd",
+                key: "scdateend",
                 label: "有效期止（安全证）",
                 type: "date",
                 required: true,
@@ -199,7 +199,7 @@ export default {
                 isDetail: true
             },
             {
-                key: "scPic",
+                key: "scpic",
                 label: "证件照片（安全证）",
                 type: "string",
                 required: true,

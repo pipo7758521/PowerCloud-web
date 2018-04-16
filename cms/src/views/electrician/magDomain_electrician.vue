@@ -11,15 +11,15 @@
 
 import Grid from "@/components/grid/grid"
 // import { fetchList, insertData, updateData, deleteData } from '@/api/magDomain_electrician'
-import { stationIDList } from '@/api/common'
+import { magDomainIDList, electricianIDList} from '@/api/common'
 
 export default {
 	components: {
 		"cms-grid": Grid
 	},
-		created () {
-		//与 电工ID 相关联
-		stationIDList().then( response => {
+	created () {
+		//与 管理域ID 相关联
+		magDomainIDList().then( response => {
 			let list = response.data.items;
 			let options = [];
 			list.forEach( (o,i) => {
@@ -27,12 +27,28 @@ export default {
 			})
 
 			this.column.forEach( (o,i) => {
-			 if(o.key == "") {
+			 if(o.key == "magdomainid") {
 					o.options = options;
 				}
 			})
 
-		})
+		}),
+
+    //与 电工ID 相关联
+    electricianIDList().then( response => {
+      let list = response.data.items;
+      let options = [];
+      list.forEach( (o,i) => {
+        options.push({value: o.id})
+      })
+      
+      this.column.forEach( (o,i) => {
+       if(o.key == "electricianid") {
+          o.options = options;
+        }
+      })
+
+    })
 	},
 	data () {
 		return {
@@ -46,16 +62,16 @@ export default {
 					mainKey: true,   //主键！！！ 用于删除
 				},
 				{
-					key: "electricianID",
+					key: "electricianid",
 					label: "电工ID",
-					type: "number",
+					type: "select",
 					required: true,
 					errorMessage: "必填"
 				},
 				{
-					key: "magDomainID",
+					key: "magdomainid",
 					label: "管理域ID",
-					type: "number",
+					type: "select",
 					required: true,
 					errorMessage: "必填"
 				},
