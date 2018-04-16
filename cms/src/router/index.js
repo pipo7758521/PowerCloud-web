@@ -239,8 +239,49 @@ export const constantRouterMap = [
       {
         path: 'electrician',
         name: 'Electrician',
-        component: () => import('@/views/basic/typeDevice'),
+        component: () => import('@/views/electrician/electrician'),
         meta: { title: '电工信息', icon: 'group_fill' },
+      },
+      // {
+      //   path: 'electrician/:magdomainid/magDomain_electrician',  //这里的参数要与数据库中的字段对应
+      //   name: 'MagDomain_electrician',
+      //   component: () => import('@/views/electrician/magDomain_electrician'),
+      //   meta: { title: '管理域-变电所关联', icon: 'example' },
+      //   hidden: true
+      // },
+    ]
+  },
+  {
+    path: '/Staff/electrician/:magdomainid/magDomain_electrician',
+    component: Layout,
+    redirect: '/Staff/electrician',
+    name: 'magDomain_electrician',
+    meta: { title: '电工信息', icon: 'network' },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        meta: { title: '电工-管理域配置', icon: 'network' },
+        name: 'MagDomain_electrician ',
+        component: () => import('@/views/electrician/magDomain_electrician'),
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/Staff/electrician/:magdomainid/electrician_pic',
+    component: Layout,
+    redirect: '/Staff/electrician',
+    name: 'Electrician_pic',
+    meta: { title: '电工信息', icon: 'network' },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        meta: { title: '电工证件照片', icon: 'network' },
+        name: 'Electrician_pic ',
+        component: () => import('@/views/electrician/electrician_pic'),
+        hidden: true
       }
     ]
   },
