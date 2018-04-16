@@ -24,7 +24,7 @@ export default {
 	components: {
 		"cms-grid": Grid
   },
-  created () {
+ /* created () {
     //与 变电所ID 相关联
     stationIDList().then( response => {
       let list = response.data.items;
@@ -40,7 +40,7 @@ export default {
       })
 
     })
-  },
+  },*/
 	data () {
 		return {
 			column: [

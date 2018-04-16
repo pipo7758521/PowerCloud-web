@@ -1,0 +1,47 @@
+{
+  "err": 0,
+  "data": {
+    "total": 3,
+    "items": [{
+      "id": 1,
+      "name": "张三",
+      "companyID": "东北大学",
+      "address": "辽宁沈阳和平",
+      "Tel": "541000",
+      "phone": "13333356699",
+      "positionalTitle": "高级电工",
+      "ecType": "电工",
+      "scCompanyName": "东软",
+      "scDuty": "王五",
+      "scTechnicalTitle": "高级",
+      "status": 1
+
+    }, {
+      "id": 2,
+      "name": "李四",
+      "companyID": "东北大学",
+      "address": "辽宁沈阳和平",
+      "Tel": "541000",
+      "phone": "13333356699",
+      "positionalTitle": "高级电工",
+      "ecType": "电工",
+      "scCompanyName": "东软",
+      "scDuty": "王五",
+      "scTechnicalTitle": "高级",
+      "status": 0
+    },{
+      "id": 3,
+      "name": "三毛",
+      "companyID": "东北大学",
+      "address": "辽宁沈阳和平",
+      "Tel": "541000",
+      "phone": "13333356699",
+      "positionalTitle": "高级电工",
+      "ecType": "电工",
+      "scCompanyName": "东软",
+      "scDuty": "王五",
+      "scTechnicalTitle": "高级",
+      "status": 1
+    }]
+  }
+}
