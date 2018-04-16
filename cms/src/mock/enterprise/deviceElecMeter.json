@@ -7,12 +7,41 @@
       	"id": 1,
       	"cabinetid": 1,
       	"cabinettype": 1,
+        "manufacturer": "asdas",
+        "manufacturercode": "QQAsdasd1123",
+        "manufacturdate": "2016-10-12",
+        "gatewaycode": "12345678912",
+        "typedeviceid": 1,
+        "num": 1,
+        "circuitname": "回路1#",
+        "circuittype": "总表"
     	},
     	{
       	"id": 2,
       	"cabinetid": 2,
       	"cabinettype": 2,
-    	}
+        "manufacturer": "asdas",
+        "manufacturercode": "QQAsdasd1123",
+        "manufacturdate": "2016-10-12",
+        "gatewaycode": "12345678912",
+        "typedeviceid": 1,
+        "num": 2,
+        "circuitname": "回路2#",
+        "circuittype": "其它"
+    	},
+      {
+        "id": 3,
+        "cabinetid": 2,
+        "cabinettype": 0,
+        "manufacturer": "asdas",
+        "manufacturercode": "QQAsdasd1123",
+        "manufacturdate": "2016-10-12",
+        "gatewaycode": "12345678912",
+        "typedeviceid": 1,
+        "num": 2,
+        "circuitname": "回路3#",
+        "circuittype": "其它"
+      }
   	]
   }
 }

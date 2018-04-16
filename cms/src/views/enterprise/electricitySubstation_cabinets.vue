@@ -154,29 +154,25 @@ export default {
           key: "manufacturercode",
           label: "生产编号",
           type: "number",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "transformermodel",
           label: "型号",
           type: "number",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "weight",
           label: "重量",
           type: "number",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "workenviorment",
           label: "使用条件",
           type: "select",
-          required: true,
-          errorMessage: "必填",
+          isDetail: true,
           options: [
             {value: "户内式", label: "户内式"},
             {value: "户外式", label: "户外式"}
@@ -186,8 +182,7 @@ export default {
           key: "worktype",
           label: "种类",
           type: "select",
-          required: true,
-          errorMessage: "必填",
+          isDetail: true,
           options: [
             {value: "干式", label: "干式"},
             {value: "油浸", label: "油浸"}
@@ -197,22 +192,19 @@ export default {
           key: "ratedvoltage",
           label: "额定电压",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "ratedfrequency",
           label: "额定频率",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "connectiongrouplabel",
           label: "连接组标号",
           type: "select",
-          required: true,
-          errorMessage: "必填",
+          isDetail: true,
           options: [
             {value: "Dyn11", label: "Dyn11"},
             {value: "Yyn0", label: "Yyn0"}
@@ -224,6 +216,7 @@ export default {
           default: "0",
           type: "select",
           default: "0",
+          isDetail: true,
           options: [
             {value: "A"},
             {value: "E"},
@@ -238,7 +231,8 @@ export default {
         {
           key: "manufacturdate",
           label: "生产日期",
-          type: "date"
+          type: "date",
+          isDetail: true
         }
       ],
       subTable1: [{
@@ -369,11 +363,6 @@ export default {
           ]
         },
         {
-          key: "manufacturdate",
-          label: "生产日期",
-          type: "date",
-        },
-        {
           key: "pic",
           label: "照片",
           type: "image",
@@ -381,39 +370,40 @@ export default {
           errorMessage: "必填"
         },
         {
+          key: "manufacturdate",
+          label: "生产日期",
+          type: "date",
+          isDetail: true
+        },
+        {
           key: "incablemodel",
           label: "进线电缆型号",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "outcablemodel",
           label: "馈出电缆型号",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "mainbusmodel",
           label: "主母排型号",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "nlinemodel",
           label: "N线型号",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "pelinemodel",
           label: "PE线型号",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          isDetail: true
         },
         {
           key: "status",

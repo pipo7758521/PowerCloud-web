@@ -32,23 +32,7 @@ export default {
 				}
 			})
 
-		}),
-
-    //与 电工ID 相关联
-    electricianIDList().then( response => {
-      let list = response.data.items;
-      let options = [];
-      list.forEach( (o,i) => {
-        options.push({value: o.id})
-      })
-      
-      this.column.forEach( (o,i) => {
-       if(o.key == "electricianid") {
-          o.options = options;
-        }
-      })
-
-    })
+		})
 	},
 	data () {
 		return {
@@ -64,9 +48,8 @@ export default {
 				{
 					key: "electricianid",
 					label: "电工ID",
-					type: "select",
-					required: true,
-					errorMessage: "必填"
+					type: "number",
+					isEdit: false
 				},
 				{
 					key: "magdomainid",

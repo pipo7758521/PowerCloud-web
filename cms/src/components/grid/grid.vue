@@ -164,10 +164,10 @@ export default {
 
     //生成 表单校验规则
     //参照： https://github.com/yiminghe/async-validator
-    this.formRules = {};
+    // this.formRules = {};
 
     this.column.forEach( (o,i) => {
-      let rule = {
+      /*let rule = {
         required: o.required,
         trigger: "blur",
         message: o.errorMessage,
@@ -175,7 +175,16 @@ export default {
       }
       if(o.type == "select") {
         rule.trigger = "blur"
-        rule.type = "string"
+        if(o.options){
+          console.log(o.options[0].value)
+        }
+        if(o.options && typeof(o.options[0].value) == "number") {
+          rule.type = "number"
+        }
+        else {
+          rule.type = "string"
+        }
+
       }
       else if(o.type == "image") {
         rule.type = "url"
@@ -184,7 +193,7 @@ export default {
       else if(o.type == "date") {
         rule.type = "string"
       }
-    	this.formRules[o.key] = [rule]
+    	this.formRules[o.key] = [rule]*/
 
       //把在列表中显示的列  和 在展开详情中显示的列区分出来
       if(o.isDetail) {
@@ -194,7 +203,7 @@ export default {
         this.listColumn.push(o)
       }
     })
-    console.log(this.formRules)
+    // console.log(this.formRules)
   },
   data() {
     return {
@@ -218,7 +227,44 @@ export default {
         update: '编辑',
         create: '新增'
       },
-      formRules: null,  //表单验证规则
+      // formRules: {},  //表单验证规则
+    }
+  },
+  computed: {
+    formRules: function() {
+      //生成 表单校验规则
+      //参照： https://github.com/yiminghe/async-validator
+      let rules = {};
+      this.column.forEach( (o,i) => {
+        let rule = {
+          required: o.required,
+          trigger: "blur",
+          message: o.errorMessage,
+          type: o.type
+        }
+        if(o.type == "select") {
+          rule.trigger = "blur"
+          if(o.options && typeof(o.options[0].value) == "number") {
+            rule.type = "number"
+          }
+          else {
+            rule.type = "string"
+          }
+        }
+        else if(o.type == "image") {
+          rule.type = "url"
+          rule.message = o.errorMessage || "格式必须为URL"
+        }
+        else if(o.type == "date") {
+          rule.type = "string"
+        }
+        rules[o.key] = [rule]
+      })
+      console.log("~~~~~~~~~~~~~~~~~")
+      console.log(this.column)
+      console.log(rules)
+
+      return rules
     }
   },
   filters: {
@@ -242,17 +288,36 @@ export default {
         this.listQuery.search = JSON.stringify(this.$route.params)
       }
 	    this.fetchList(this.moduleName, this.listQuery).then(response => {
-        //从企业tree中点击进来，会带着query参数id
-        //此时看到的是某个id下的具体内容，所以这里做了一个list的过滤，只显示当前ID下的
+        /*
+        （1）从企业tree中点击进来，会带着query参数id
+        此时看到的是某个id下的具体内容，所以这里做了一个list的过滤，只显示当前ID下的
+        （2）从 进线柜、电容柜、馈电柜点进电表表，要看到对应该柜ID和该柜类型下的电表，
+        此时route的param参数为柜id，route的query参数中带有柜类型cabinetid=X
+        */
         let filterId
         let _list = response.data.items
-        if(this.$route.query && this.$route.query.id) {
+        let routeQuery = this.$route.query
+        if(routeQuery) {
+          this.list = _list.filter( (o) => {
+            let res = true
+            for(let q in routeQuery) {
+              if(o.hasOwnProperty(q)) {
+                res &= (o[q] == routeQuery[q])
+              }
+            }
+            return res
+          })
+        }
+        else {
+          this.list = _list
+        }
+        /*if(this.$route.query && this.$route.query.id) {
           filterId = this.$route.query.id
           this.list = _list.filter( (o) => { return o.id == filterId })
         }
         else {
           this.list = _list
-        }
+        }*/
 
 	      this.total = response.data.total
 	      this.listLoading = false

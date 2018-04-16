@@ -14,10 +14,29 @@
 import Grid from "@/components/grid/grid"
 import StepWrapper from "./components/stepWrapper"
 
+import { deviceTypeList } from "@/api/common"
+
 export default {
   components: {
     "cms-grid": Grid,
     "cms-step-wrapper": StepWrapper
+  },
+  created () {
+    deviceTypeList().then( response => {
+      let list = response.data.items;
+        let options = [];
+        list.forEach( (o,i) => {
+          options.push({value: o.id, label: o.typedevicename})
+        })
+
+        this.column.forEach( (o,i) => {
+          if(o.key == "typedeviceid") {
+            o.options = options;
+            //强制更新，使得grid组件内的表单提交验证规则computed参数跟着更新！
+            this.$set(this.column, i, o)
+          }
+        })
+    })
   },
 	data () {
 		return {
@@ -27,19 +46,21 @@ export default {
           key: "id",
           label: "ID",
           type: "number",
-          idEdit: false,
+          isEdit: false,
           mainKey: true,   //主键！！！
         },
         {
           key: "cabinetid",
           label: "电表所在柜ID",
           type: "number",
-          idEdit: false
+          isEdit: false,
         },
         {
           key: "cabinettype",
           label: "柜类型",
           type: "select",
+          isEdit: false,
+          default: 0,
           options: [
             {value: 0, label: "进线柜"},
             {value: 1, label: "电容柜"},
@@ -69,9 +90,9 @@ export default {
           errorMessage: "必填"
         },
         {
-          key: "typeDeviceid",
+          key: "typedeviceid",
           label: "设备解析类型",
-          type: "number",
+          type: "select",
           required: true,
           errorMessage: "必填"
         },
@@ -80,13 +101,6 @@ export default {
           label: "回路编号",
           type: "number",
           isEdit: false
-        },
-        {
-          key: "num",
-          label: "网关码（网关内部需要，业务编号，数据传输使用）",
-          type: "number",
-          required: true,
-          errorMessage: "必填"
         },
         {
           key: "circuitname",
@@ -110,19 +124,5 @@ export default {
 		}
 	}
 }
-
-// `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-//   `cabinetID` int(11) DEFAULT NULL COMMENT '电表所在柜ID',
-//   `cabinettype` int(4) DEFAULT NULL COMMENT '柜类型0:进线柜 1:电容 2:馈电',
-//   `manufacturer` varchar(45) DEFAULT NULL COMMENT '生产企业',
-//   `manufacturerCode` varchar(45) DEFAULT NULL COMMENT '生产编号',
-//   `manufacturDate` date DEFAULT NULL COMMENT '生产日期',
-
-//   `gatewayCode` int(11) DEFAULT NULL COMMENT '网关内部需要，业务编号，数据传输使用',
-//   `typeDeviceID` int(11) DEFAULT NULL COMMENT '设备解析类型，用来对应该变压器的信息解析',
-//   `num` int(10) DEFAULT NULL COMMENT '回路编号',
-//   `circuitName` varchar(45) DEFAULT NULL COMMENT '回路名称，电表的总电量',
-//   `circuitType` varchar(5) DEFAULT NULL COMMENT '回路类型（总表|其它）',
-//   `gatewayID` int(11) DEFAULT NULL COMMENT '网关ID号',
 
 </script>

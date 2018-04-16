@@ -4,16 +4,16 @@
     "total": 2,
     "items": [{
       "id": 1,
-      "typedevicename": "设备1",
-      "functionname": "aaa",
-      "classname": "bbb",
-      "description": "aaaaa"
+      "typedevicename": "硕码电表",
+      "functionname": "parse",
+      "classname": "com.neu.cse.powercloud.util.ammeter.parser.SampleAmmeterParser",
+      "description": "硕码电表解析函数"
     }, {
       "id": 2,
-      "typedevicename": "设备2",
-      "functionname": "aaa",
-      "classname": "bbb",
-      "description": "aaaaa"
+      "typedevicename": "正麦电表",
+      "functionname": "parse",
+      "classname": "com.neu.cse.powercloud.util.ammeter.parser.ZhengMaiAmmeterParser",
+      "description": "正麦电表解析函数"
     }]
   }
 }
