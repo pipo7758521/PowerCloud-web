@@ -1,0 +1,18 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [
+    	{
+      	"id": 1,
+      	"cabinetid": 1,
+      	"cabinettype": 1,
+    	},
+    	{
+      	"id": 2,
+      	"cabinetid": 2,
+      	"cabinettype": 2,
+    	}
+  	]
+  }
+}

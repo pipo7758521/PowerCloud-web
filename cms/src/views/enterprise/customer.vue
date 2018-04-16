@@ -1,19 +1,23 @@
 <template>
-	<cms-grid
-    :moduleName = "moduleName"
-		:column = "column"
-    :subTable = "subTable"
-	>
-	</cms-grid>
+  <cms-step-wrapper :activeIndex="1">
+    <cms-grid
+      :moduleName = "moduleName"
+      :column = "column"
+      :subTable = "subTable"
+    >
+    </cms-grid>
+  </cms-step-wrapper>
 </template>
 
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
+import StepWrapper from "./components/stepWrapper"
 
 export default {
 	components: {
-		"cms-grid": Grid
+		"cms-grid": Grid,
+    "cms-step-wrapper": StepWrapper
 	},
 	data () {
 		return {

@@ -1,0 +1,20 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "electricitysubstationid": 1,
+      "num": 1,
+      "manufacturer": "HUAWEI",
+      "status": "0"
+    },
+    {
+      "id": 2,
+      "electricitysubstationid": 1,
+      "num": 2,
+      "manufacturer": "HUAWEI",
+      "status": "1"
+    }]
+  }
+}

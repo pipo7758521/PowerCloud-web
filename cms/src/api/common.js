@@ -14,3 +14,11 @@ export function deviceElecMeterList() {
     method: 'get',
   })
 }
+
+
+export function deviceTransformerList() {
+  return request({
+    url: '/common/deviceTransformerList.json',
+    method: 'get',
+  })
+}

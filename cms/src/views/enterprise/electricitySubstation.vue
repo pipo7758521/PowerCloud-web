@@ -1,20 +1,23 @@
 <template>
-	<cms-grid
-    :moduleName = "moduleName"
-		:column = "column"
-    :subTable = "subTable"
-    :isSubTable = "true"
-	>
-	</cms-grid>
+  <cms-step-wrapper :activeIndex="2">
+    <cms-grid
+      :moduleName = "moduleName"
+      :column = "column"
+      :subTable = "subTable"
+      :isSubTable = "true"
+    >
+    </cms-grid>
+  </cms-step-wrapper>
 </template>
 
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-
+import StepWrapper from "./components/stepWrapper"
 export default {
 	components: {
-		"cms-grid": Grid
+		"cms-grid": Grid,
+    "cms-step-wrapper": StepWrapper
 	},
 	data () {
 		return {
@@ -130,7 +133,7 @@ export default {
           plain: true
         },
         {
-          path:"electricitySubstation_cabinet",
+          path:"electricitySubstation_cabinets",
           button: "管理机柜"
         }
       ]

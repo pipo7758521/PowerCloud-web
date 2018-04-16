@@ -23,13 +23,15 @@ if(isDebug) {
     electricitySubstation_video: "/enterprise/electricitySubstation_video.json",
     electricitySubstation_pic: "/enterprise/electricitySubstation_pic.json",
     //进线柜 变压器
-    deviceIncomingCabinet: "/enterprise/deviceIncomingCabinet.json",
+    electricitySubstation_incomming: "/enterprise/electricitySubstation_incomming.json",
     deviceTransformer_connection: "/enterprise/deviceTransformer_connection.json",
     //电容柜
-    deviceCapacitorCabinet: "/enterprise/deviceCapacitorCabinet.json",
+    electricitySubstation_capacitor: "/enterprise/electricitySubstation_capacitor.json",
     //馈电柜
-    deviceLowCabinet: "/enterprise/deviceLowCabinet.json",
-    deviceLowCabinet_pic: "/enterprise/deviceLowCabinet_pic.json",
+    electricitySubstation_low: "/enterprise/electricitySubstation_low.json",
+    electricitySubstation_low_pic: "/enterprise/electricitySubstation_low_pic.json",
+    //电表
+    deviceElecMeter: "/enterprise/deviceElecMeter.json"
   }
 }
 
@@ -49,7 +51,7 @@ export function insertData(moduleName, data) {
   })
 }
 
-export function updateData(moduleName, data) {
+export function editData(moduleName, data) {
   return request({
     url: isDebug ? '/success.json' : `/${moduleName}/update`,
     method: 'post',

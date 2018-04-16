@@ -14,7 +14,7 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <span v-if="item.type == 'image'"><img width="60" :src="props.row[item.key]"/></span>
+              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img width="60" height="60" :src="props.row[item.key]"/></a></span>
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
@@ -33,7 +33,7 @@
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
           <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
-          <span v-else-if="item.type == 'image'"><img  :src="scope.row[item.key]"/></span>
+          <span v-else-if="item.type == 'image'"><a :href="scope.row[item.key]" target="_blank"><img class="table-image" width="100" height="60" :src="scope.row[item.key]"/></a></span>
         </template>
       </el-table-column>
 
@@ -407,5 +407,9 @@ console.log("temp===")
       width: 150px;
       color: #99a9bf;
     }
+  }
+
+  .table-image {
+    cursor: pointer;
   }
 </style>
