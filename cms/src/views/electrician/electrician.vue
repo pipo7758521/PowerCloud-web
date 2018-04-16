@@ -1,11 +1,8 @@
 <template>
 	<cms-grid
-		:column="column"
-        :subTable = "subTable"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
+    :moduleName = "moduleName"
+		:column = "column"
+    :subTable = "subTable"
 	>
 	</cms-grid>
 </template>
@@ -14,7 +11,7 @@
 
 import Grid from "@/components/grid/grid"
 
-import { fetchList, insertData, updateData, deleteData } from '@/api/electrician'
+// import { fetchList, insertData, updateData, deleteData } from '@/api/electrician'
 
 export default {
 	components: {
@@ -22,6 +19,7 @@ export default {
 	},
 	data () {
 		return {
+      moduleName: "electrician",
 			column: [
     		{
     			key: "id",
@@ -33,7 +31,7 @@ export default {
     		{
     			key: "name",
     			label: "姓名",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
@@ -47,7 +45,7 @@ export default {
             {
                 key: "address",
                 label: "住址",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -55,14 +53,14 @@ export default {
             {
                 key: "Tel",
                 label: "办公电话",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
             },
             {
                 key: "phone",
                 label: "手机号码",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -70,29 +68,29 @@ export default {
             {
                 key: "positionalTitle",
                 label: "职称",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填"
             },
-         
+
             {
                 key: "ecType",
                 label: "作业类别(电工证)",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填"
             },
             {
                 key: "scCompanyName",
                 label: "企业名称（安全证）",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填"
             },
             {
                 key: "scDuty",
                 label: "职务（安全证）主要负责人",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -100,7 +98,7 @@ export default {
             {
                 key: "scTechnicalTitle",
                 label: "技术职称（安全证）",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填"
             },
@@ -123,7 +121,7 @@ export default {
             {
                 key: "identityCard",
                 label: "身份证号码",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -131,7 +129,7 @@ export default {
             {
                 key: "pic",
                 label: "照片",
-                type: "text",
+                type: "image",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -139,7 +137,7 @@ export default {
              {
                 key: "ecNum",
                 label: "电工证编号",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -147,7 +145,7 @@ export default {
             {
                 key: "ecGrantTime",
                 label: "授予时间(电工证)",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -155,7 +153,7 @@ export default {
             {
                 key: "ecLicenseNum",
                 label: "许可证编号(电工证)",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -163,7 +161,7 @@ export default {
             {
                 key: "ecPic",
                 label: "证件照片(电工证)",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -171,7 +169,7 @@ export default {
             {
                 key: "scNum",
                 label: "安全证编号",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -179,7 +177,7 @@ export default {
             {
                 key: "scIssueDate",
                 label: "发证日期（安全证）",
-                type: "data",
+                type: "date",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -187,7 +185,7 @@ export default {
             {
                 key: "scDateStart",
                 label: "有效日期起（安全证）",
-                type: "data",
+                type: "date",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -195,7 +193,7 @@ export default {
             {
                 key: "scDateEnd",
                 label: "有效期止（安全证）",
-                type: "data",
+                type: "date",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
@@ -203,33 +201,29 @@ export default {
             {
                 key: "scPic",
                 label: "证件照片（安全证）",
-                type: "text",
+                type: "string",
                 required: true,
                 errorMessage: "必填",
                 isDetail: true
-            },  
+            },
 
             /*{
                 key: "description",
                 label: "备注说明",
-                type: "text",
+                type: "string",
             }*/
     	],
-        subTable: [
-            {
-                path: "magDomain_electrician",
-                button: "配置管理域"
-            },
-            {
-                path: "electrician_pic",
-                button: "查看照片"
-            }
-
-        ],
-    	fetchList: fetchList,
-    	insertData: insertData,
-    	updateData: updateData,
-    	deleteData: deleteData,
+      subTable: [
+          {
+              path: "electrician_pic",
+              button: "查看照片",
+              plain: true
+          },
+          {
+              path: "magDomain_electrician",
+              button: "配置管理域"
+          }
+      ],
 		}
 	}
 }

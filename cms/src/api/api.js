@@ -31,7 +31,13 @@ if(isDebug) {
     electricitySubstation_low: "/enterprise/electricitySubstation_low.json",
     electricitySubstation_low_pic: "/enterprise/electricitySubstation_low_pic.json",
     //电表
-    deviceElecMeter: "/enterprise/deviceElecMeter.json"
+    deviceElecMeter: "/enterprise/deviceElecMeter.json",
+
+    //电工
+    electrician: "/electrician/list.json",
+    electrician_pic: "/electrician/electrician_pic_list.json",
+    magDomain_electrician: "/electrician/magDomain_electrician_list.json"
+
   }
 }
 
