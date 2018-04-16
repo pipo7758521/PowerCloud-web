@@ -1,0 +1,46 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "electricitysubstationid": 1,
+      "num": 1,
+      "manufacturer": "HUAWEI",
+      "transformerid": 1,
+      "status": "0",
+      "connectiontype": "0",
+      "transformer_manufacturer": "H3C",
+      "manufacturercode": "12312313",
+      "transformermodel": "QWqwe1123123",
+      "weight": "100",
+      "workenviorment": "户内式",
+      "worktype": "干式",
+      "ratedvoltage": "100",
+      "ratedfrequency": "0",
+      "connectiongrouplabel": "Dyn11",
+      "insulationclass": "A",
+      "manufacturdate": "2017-10-12"
+    },
+    {
+      "id": 2,
+      "electricitysubstationid": 1,
+      "num": 2,
+      "manufacturer": "HUAWEI",
+      "transformerid": 1,
+      "status": "0",
+      "connectiontype": "1",
+      "transformer_manufacturer": "H3C",
+      "manufacturercode": "12312313",
+      "transformermodel": "QWqwe1123123",
+      "weight": "100",
+      "workenviorment": "户外式",
+      "worktype": "油浸",
+      "ratedvoltage": "100",
+      "ratedfrequency": "0",
+      "connectiongrouplabel": "Yyn0",
+      "insulationclass": "R",
+      "manufacturdate": "2017-10-12"
+    }]
+  }
+}

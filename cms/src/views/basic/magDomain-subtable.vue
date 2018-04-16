@@ -60,14 +60,14 @@ export default {
     		{
     			key: "magdomain",
     			label: "管理域名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
     			key: "createrid",
     			label: "创建人",
-    			type: "text",
+    			type: "string",
     			isEdit: false,
     		},
     		{

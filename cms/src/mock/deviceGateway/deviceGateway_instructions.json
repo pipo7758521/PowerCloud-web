@@ -21,7 +21,7 @@
     {
       "id": 3,
       "gatewayid": "1",
-      "deviceid": "10",
+      "deviceid": "5",
       "num": "Data10",
       "typedevicename": "ElecMeter02",
       "instruction": "instruction3"

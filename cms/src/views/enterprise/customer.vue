@@ -1,27 +1,27 @@
 <template>
-	<cms-grid
-		:column = "column"
-    :subTable = "subTable"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
-	>
-	</cms-grid>
+  <cms-step-wrapper :activeIndex="1">
+    <cms-grid
+      :moduleName = "moduleName"
+      :column = "column"
+      :subTable = "subTable"
+    >
+    </cms-grid>
+  </cms-step-wrapper>
 </template>
 
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-
-import { fetchList, insertData, updateData, deleteData } from '@/api/customer'
+import StepWrapper from "./components/stepWrapper"
 
 export default {
 	components: {
-		"cms-grid": Grid
+		"cms-grid": Grid,
+    "cms-step-wrapper": StepWrapper
 	},
 	data () {
 		return {
+      moduleName: "customer",
 			column: [
     		{
           key: "id",
@@ -33,43 +33,43 @@ export default {
     		{
           key: "shortname",
     			label: "名称简写",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
           key: "company",
     			label: "公司名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
           key: "companycode",
     			label: "组织机构代码",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
         key: "address",
   			label: "地址",
-  			type: "text",
+  			type: "string",
     		},
         {
           key: "location",
           label: "经纬度",
-          type: "text",
+          type: "string",
         },
         {
           key: "bizownername",
           label: "业务负责人姓名",
-          type: "text",
+          type: "string",
         },
         {
           key: "bizownertel",
           label: "业务负责人办公电话",
-          type: "text",
+          type: "string",
         },
         {
           key: "bizownerphone",
@@ -80,31 +80,31 @@ export default {
         {
           key: "taxpayeridentification",
           label: "开票信息",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "bank",
           label: "开户行",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "bankaccount",
           label: "银行账户",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "financechiefname",
           label: "财务负责人姓名",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "financechieftel",
           label: "财务负责人办公电话",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
@@ -128,19 +128,19 @@ export default {
         {
           key: "dataauthorityid",
           label: "数据权限ID",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "isspecialpower",
           label: "是否特殊用电企业",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "superiorunitcode",
           label: "上级单位代码",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
@@ -158,14 +158,10 @@ export default {
     	],
       subTable: [
         {
-          path:"subStation",
+          path:"electricitySubstation",  //变电所id=0，表示展示所有变电所
           button: "管理变电所"
         }
-      ],
-    	fetchList: fetchList,
-    	insertData: insertData,
-    	updateData: updateData,
-    	deleteData: deleteData,
+      ]
 		}
 	}
 }

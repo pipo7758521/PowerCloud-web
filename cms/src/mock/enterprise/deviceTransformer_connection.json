@@ -1,0 +1,18 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [
+    	{
+      	"id": 1,
+      	"transformerID_A": 1,
+      	"transformerID_B": 2
+    	},
+    	{
+      	"id": 2,
+      	"transformerID_A": 2,
+      	"transformerID_B": 3
+    	}
+  	]
+  }
+}

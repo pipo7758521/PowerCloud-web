@@ -1,11 +1,8 @@
 <template>
     <cms-grid
+      :moduleName = "moduleName"
       :isSubTable = "true"
       :column = "column"
-      :fetchList = "fetchList"
-      :insertData = "insertData"
-      :updateData = "updateData"
-      :deleteData = "deleteData"
     >
   </cms-grid>
 
@@ -14,7 +11,7 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-import { fetchList, insertData, updateData, deleteData } from '@/api/electrician_pic'
+// import { fetchList, insertData, updateData, deleteData } from '@/api/electrician_pic'
 import { stationIDList } from '@/api/common'
 
 export default {
@@ -23,6 +20,7 @@ export default {
   },
 	data () {
 		return {
+      moduleName: "electrician_pic",
 			column: [
     		{
           key: "id",
@@ -59,19 +57,14 @@ export default {
           label: "系统内证件编号",
           type: "number",
           isEdit: false,
-          isDetail: true
         },
         {
           key: "pic",
           label: "证件照片",
-          type: "text",
+          type: "image",
         },
-    		
-    	],
-      fetchList: fetchList,
-      insertData: insertData,
-      updateData: updateData,
-      deleteData: deleteData,
+
+    	]
 		}
 	}
 }

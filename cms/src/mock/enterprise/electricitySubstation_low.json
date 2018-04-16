@@ -1,0 +1,38 @@
+{
+  "err": 0,
+  "data": {
+    "total": 2,
+    "items": [{
+      "id": 1,
+      "electricitysubstationid": 1,
+      "num": 1,
+      "lowcabinettype": "电容器柜",
+      "manufacturer": "HUAWEI",
+      "lowcabinetmodel": "GGD",
+      "manufacturdate": "2017-10-12",
+      "pic": "",
+      "incablemodel": "asdads",
+      "outcablemodel": "asdasd",
+      "mainbusmodel": "123123",
+      "nlinemodel": "1232",
+      "pelinemodel": "1232",
+      "status": "0"
+    },
+    {
+      "id": 2,
+      "electricitysubstationid": 1,
+      "num": 2,
+      "lowcabinettype": "馈线柜",
+      "manufacturer": "HUAWEI",
+      "lowcabinetmodel": "MNS",
+      "manufacturdate": "2018-10-12",
+      "pic": "",
+      "incablemodel": "asdads",
+      "outcablemodel": "asdasd",
+      "mainbusmodel": "123123",
+      "nlinemodel": "1232",
+      "pelinemodel": "1232",
+      "status": "1"
+    }]
+  }
+}

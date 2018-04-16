@@ -1,28 +1,27 @@
 <template>
-	<cms-grid
-		:column = "column"
-    :subTable = "subTable"
-    :isSubTable = "true"
-		:fetchList = "fetchList"
-		:insertData = "insertData"
-		:updateData = "updateData"
-		:deleteData = "deleteData"
-	>
-	</cms-grid>
+  <cms-step-wrapper :activeIndex="2">
+    <cms-grid
+      :moduleName = "moduleName"
+      :column = "column"
+      :subTable = "subTable"
+      :isSubTable = "true"
+    >
+    </cms-grid>
+  </cms-step-wrapper>
 </template>
 
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-
-import { fetchList, insertData, updateData, deleteData } from '@/api/subStation'
-
+import StepWrapper from "./components/stepWrapper"
 export default {
 	components: {
-		"cms-grid": Grid
+		"cms-grid": Grid,
+    "cms-step-wrapper": StepWrapper
 	},
 	data () {
 		return {
+      moduleName: "electricitySubstation",
 			column: [
     		{
           key: "id",
@@ -34,31 +33,35 @@ export default {
     		{
           key: "substationname",
     			label: "变电所名称",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
           key: "companyid",
     			label: "所属企业ID",
-    			type: "text",
+    			type: "string",
     			required: true,
     			errorMessage: "必填"
     		},
     		{
         key: "address",
   			label: "地址",
-  			type: "text",
+  			type: "string",
     		},
         {
           key: "type",
           label: "变电所类型",
-          type: "text",
+          type: "select",
+          options:[
+            {label:"箱变", value:"箱变"},
+            {label:"变电所", value:"变电所"},
+          ]
         },
         {
           key: "lacation",
           label: "地图位置",
-          type: "text",
+          type: "string",
         },
         {
           key: "powertype",
@@ -82,62 +85,58 @@ export default {
         {
           key: "diagram",
           label: "系统图",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "total",
           label: "总容量",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "constructionunit",
           label: "承建单位",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "constructiontime",
           label: "建设时间",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "involtage",
           label: "入所侧电压",
-          type: "text",
+          type: "string",
           isDetail: true
         },
         {
           key: "outvoltage",
           label: "出所侧电压",
-          type: "text",
+          type: "string",
           isDetail: true
         }
     	],
       subTable: [
         {
           // title: "图纸",
-          path: "substation",
+          path: "electricitySubstation_pic",
           button: "配置图纸",
           plain: true
         },
         {
           // title: "视频",
-          path: "substation",
+          path: "electricitySubstation_video",
           button: "配置视频",
           plain: true
         },
         {
-          path:"substation",
+          path:"electricitySubstation_cabinets",
           button: "管理机柜"
         }
-      ],
-    	fetchList: fetchList,
-    	insertData: insertData,
-    	updateData: updateData,
-    	deleteData: deleteData,
+      ]
 		}
 	}
 }

@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
 
+
 export function fetchList(token) {
   return request({
     url: '/enterprise/customer.json',
