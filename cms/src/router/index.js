@@ -9,6 +9,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '../views/layout/Layout'
 
+import SysGraph from '../views/sysGraph/index'
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -232,9 +233,6 @@ export const constantRouterMap = [
   {
     path: '/Staff',
     component: Layout,
-    // redirect: '/staff/table',
-    // name: 'staff',
-    // meta: { title: '人员配置', icon: 'user' },
     children: [
       {
         path: 'electrician',
@@ -242,13 +240,6 @@ export const constantRouterMap = [
         component: () => import('@/views/electrician/electrician'),
         meta: { title: '电工信息', icon: 'group_fill' },
       },
-      // {
-      //   path: 'electrician/:magdomainid/magDomain_electrician',  //这里的参数要与数据库中的字段对应
-      //   name: 'MagDomain_electrician',
-      //   component: () => import('@/views/electrician/magDomain_electrician'),
-      //   meta: { title: '管理域-变电所关联', icon: 'example' },
-      //   hidden: true
-      // },
     ]
   },
   {
@@ -284,6 +275,15 @@ export const constantRouterMap = [
         hidden: true
       }
     ]
+  },
+
+  //系统图
+  {
+    path: '/SysGraph',
+    component: SysGraph,
+    name: 'SysGraph',
+    meta: { title: '系统图编辑', icon: 'network' },
+    hidden: true,
   },
 
   { path: '*', redirect: '/404', hidden: true }

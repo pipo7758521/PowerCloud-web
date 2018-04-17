@@ -15,6 +15,7 @@
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
               <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img max-width="60" max-height="60" :src="props.row[item.key]"/></a></span>
+              <!-- <span v-else-if="item.type == 'svg'">{{ props.row[item.key] }}</span> -->
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
@@ -23,7 +24,7 @@
 
 
       <el-table-column v-if="!item.isDetail" v-for="item in listColumn" :key="item.key" align="center" :label="item.label"
-        :width= "(item.mainKey||item.key == 'status') ? '80px' : ''">
+        :width= "(item.mainKey||item.key == 'status') ? '65px' : ''">
         <template slot-scope="scope">
           <!-- 文本 -->
           <span v-if="item.type == 'string'|| item.type == 'number'">
@@ -48,7 +49,7 @@
       </el-table-column>
 
       <!-- 操作列 -->
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="120px">
+      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="120px" fixed="right">
         <template slot-scope="scope" >
           <el-button type="primary" plain icon="el-icon-edit" circle @click="handleUpdate(scope.row)"></el-button>
            <el-button type="danger" plain icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
@@ -85,6 +86,11 @@
           <el-date-picker v-else-if="item.type == 'date'" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
           <!-- URL -->
           <el-input v-else-if="item.type == 'image'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
+          <el-input v-else-if="item.type == 'svg'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
+          <!-- <router-link target="_blank" to="/SysGraph"><el-button v-if="item.type == 'svg'">编辑</el-button></router-link> -->
+          <el-button v-if="item.type == 'svg'" @click="goToSysGraph">编辑</el-button>
+
+
 
       	</el-form-item>
       </el-form>
@@ -443,6 +449,11 @@ console.log("temp===")
         return row[item.key]
       }
 
+    },
+    goToSysGraph() {
+      let win = window.open("http://localhost:8010/#/SysGraph")
+      win.postMessage("power-cloud-message", '*');
+      // this.$router.push({path: "/SysGraph"})
     }
   }
 

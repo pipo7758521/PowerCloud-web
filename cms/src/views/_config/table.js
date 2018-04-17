@@ -452,7 +452,7 @@ export default {
       {
         key: "diagram",
         label: "系统图",
-        type: "string",
+        type: "svg",
         isDetail: true
       },
       {

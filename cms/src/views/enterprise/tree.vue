@@ -30,7 +30,7 @@
     }
   }
   .el-tree {
-    margin-right: 50px;
+    margin-right: 40px;
   }
   .table-caption {
     font-size: 24px;
@@ -42,7 +42,7 @@
 <template>
   <div class="app-container">
     <el-row justify="space-between">
-      <el-col :span="8">
+      <el-col :span="7">
         <el-tree
         :data="treeData"
         default-expand-all
@@ -61,7 +61,7 @@
       </el-tree>
       </el-col>
 
-      <el-col :span="16" v-if="moduleName">
+      <el-col :span="17" v-if="moduleName">
         <div class="table-caption">详细信息</div>
         <cms-grid
           :moduleName = "moduleName"
