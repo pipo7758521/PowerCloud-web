@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-
+import tableConfig from "@/views/_config/table"
 import { deviceElecMeterList } from '@/api/common'
 export default {
 	components: {
@@ -36,49 +36,7 @@ export default {
 	data () {
     return {
       moduleName: "deviceGateway_instructions",
-      column : [
-        {
-          key: "id",
-          label: "ID",
-          type: "number",
-          isEdit: false,
-          mainKey: true,   //主键！！！ 用于删除
-        },
-        {
-          key: "gatewayid",
-          label: "网关ID",
-          type: "number",
-          isEdit: false,
-        },
-        {
-          key: "num",
-          label: "指令编号Data+i",
-          type: "string",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "deviceid",
-          label: "设备ID",
-          type: "select",
-          required: true,
-          errorMessage: "必填",
-        },
-        {
-          key: "typedevicename",
-          label: "设备类型（电表）",
-          type: "string",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "instruction",
-          label: "指令",
-          type: "string",
-          required: true,
-          errorMessage: "必填"
-        }
-      ]
+      column: tableConfig["deviceGateway_instructions"].column,
     }
 
 	}

@@ -1,20 +1,20 @@
 <template>
 	  <div class="app-container calendar-list-container">
-    <div class="filter-container">
+    <div class="filter-container" v-if="!treeRoute.path">
       <el-button v-if="isSubTable" class="filter-item" style="margin-left: 10px;" @click="handleBack" type="primary" plain icon="el-icon-back">返回上一级</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
   	</div>
 
     <!-- 表格 -->
   	<el-table :data="list" v-loading="listLoading" border fit highlight-current-row
-      style="width: 100%">
+      style="width: 100%" :default-expand-all="treeRoute.path ? true : false">
 
       <!-- 详情展开 -->
       <el-table-column v-if="detailColumn.length" type="expand">
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img width="60" height="60" :src="props.row[item.key]"/></a></span>
+              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img max-width="60" max-height="60" :src="props.row[item.key]"/></a></span>
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
@@ -33,7 +33,7 @@
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
           <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
           <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
-          <span v-else-if="item.type == 'image'"><a :href="scope.row[item.key]" target="_blank"><img class="table-image" width="100" height="60" :src="scope.row[item.key]"/></a></span>
+          <span v-else-if="item.type == 'image'"><a :href="scope.row[item.key]" target="_blank"><img class="table-image" :src="scope.row[item.key]"/></a></span>
         </template>
       </el-table-column>
 
@@ -56,21 +56,12 @@
         </template>
       </el-table-column>
 
-
-
-      <!-- 子表 -->
-      <!-- <el-table-column v-if="subTable" type="expand">
-        <template slot-scope="props">
-          <slot></slot>
-        </template>
-      </el-table-column> -->
-
     </el-table>
 
 
 
     <!-- 分页 -->
-    <div class="pagination-container">
+    <div class="pagination-container" v-if="!treeRoute.path">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
@@ -78,22 +69,22 @@
     <!-- 编辑框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="30%" style='margin-left:50px;margin-right:50px;'>
-      	<el-form-item v-for="item in column" :key="item.key" v-if="item.isEdit !== false"
+      	<el-form-item v-for="item in column" :key="item.key"
       		:label="item.label"
       		:prop="item.key">
           <!-- 文本 -->
-      		<el-input v-if="item.type == 'string'" v-model="temp[item.key]"></el-input>
+      		<el-input v-if="item.type == 'string'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
           <!-- 数字 -->
-          <el-input v-if="item.type == 'number'" v-model.number="temp[item.key]"></el-input>
+          <el-input v-if="item.type == 'number'" :disabled="item.isEdit == false" v-model.number="temp[item.key]"></el-input>
           <!-- 下拉选择框 -->
-          <el-select v-else-if="item.type =='select'" class="filter-item" v-model="temp[item.key]" placeholder="请选择">
+          <el-select v-else-if="item.type =='select'" class="filter-item" :disabled="item.isEdit == false" v-model="temp[item.key]" placeholder="请选择">
             <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
             </el-option>
           </el-select>
           <!-- date日期选择 -->
-          <el-date-picker v-else-if="item.type == 'date'" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-else-if="item.type == 'date'" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
           <!-- URL -->
-          <el-input v-else-if="item.type == 'image'" v-model="temp[item.key]"></el-input>
+          <el-input v-else-if="item.type == 'image'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
 
       	</el-form-item>
       </el-form>
@@ -140,6 +131,19 @@ export default {
         return []
       }
     },
+    /*企业总体架构中，点击左边的树形结构，右边列表生成的查询对象
+      由于树形结构的view中不存在路由的概念
+      因此treeRoute等于原本应该存在在路由中的query和param的并集*/
+    treeRoute: {
+      type: Object,
+      default: function () {
+        return {
+          params: null,
+          query: null,
+          path: ""
+        }
+      }
+    },
     fetchList: {
       type: Function,
       default: fetchList
@@ -158,43 +162,11 @@ export default {
     },
   },
   created() {
-    console.log(this.subTable)
-    this.getList()
-    this.resetTemp()
 
-    //生成 表单校验规则
-    //参照： https://github.com/yiminghe/async-validator
-    // this.formRules = {};
+    this.resetTemp()
+    this.getList()
 
     this.column.forEach( (o,i) => {
-      /*let rule = {
-        required: o.required,
-        trigger: "blur",
-        message: o.errorMessage,
-        type: o.type
-      }
-      if(o.type == "select") {
-        rule.trigger = "blur"
-        if(o.options){
-          console.log(o.options[0].value)
-        }
-        if(o.options && typeof(o.options[0].value) == "number") {
-          rule.type = "number"
-        }
-        else {
-          rule.type = "string"
-        }
-
-      }
-      else if(o.type == "image") {
-        rule.type = "url"
-        rule.message = o.errorMessage || "格式必须为URL"
-      }
-      else if(o.type == "date") {
-        rule.type = "string"
-      }
-    	this.formRules[o.key] = [rule]*/
-
       //把在列表中显示的列  和 在展开详情中显示的列区分出来
       if(o.isDetail) {
         this.detailColumn.push(o)
@@ -203,23 +175,18 @@ export default {
         this.listColumn.push(o)
       }
     })
-    // console.log(this.formRules)
   },
   data() {
     return {
       listColumn: [],   //表格中展示的列
       detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
-    	temp: null,       //每一行数据的tmp，用于添加、编辑等传递参数
+    	temp: null,       //该表结构对应的一条数据，用于添加、编辑等传递参数
     	list: null,  //显示的列表数据
       total: null, //总条目数
       listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
-        // importance: undefined,
-        // title: undefined,
-        // type: undefined,
-        // sort: '+id'
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -227,43 +194,41 @@ export default {
         update: '编辑',
         create: '新增'
       },
-      // formRules: {},  //表单验证规则
     }
   },
   computed: {
+    //表单验证规则
     formRules: function() {
       //生成 表单校验规则
       //参照： https://github.com/yiminghe/async-validator
       let rules = {};
       this.column.forEach( (o,i) => {
-        let rule = {
-          required: o.required,
-          trigger: "blur",
-          message: o.errorMessage,
-          type: o.type
-        }
-        if(o.type == "select") {
-          rule.trigger = "blur"
-          if(o.options && typeof(o.options[0].value) == "number") {
-            rule.type = "number"
+        if(o.isEdit !== false) {
+          let rule = {
+            required: o.required,
+            trigger: "blur",
+            message: o.errorMessage,
+            type: o.type
           }
-          else {
+          if(o.type == "select") {
+            rule.trigger = "blur"
+            if(o.options && typeof(o.options[0].value) == "number") {
+              rule.type = "number"
+            }
+            else {
+              rule.type = "string"
+            }
+          }
+          else if(o.type == "image") {
+            rule.type = "url"
+            rule.message = o.errorMessage || "格式必须为URL"
+          }
+          else if(o.type == "date") {
             rule.type = "string"
           }
+          rules[o.key] = [rule]
         }
-        else if(o.type == "image") {
-          rule.type = "url"
-          rule.message = o.errorMessage || "格式必须为URL"
-        }
-        else if(o.type == "date") {
-          rule.type = "string"
-        }
-        rules[o.key] = [rule]
       })
-      console.log("~~~~~~~~~~~~~~~~~")
-      console.log(this.column)
-      console.log(rules)
-
       return rules
     }
   },
@@ -271,38 +236,60 @@ export default {
     statusFilter(status) {
       const statusMap = {
         0: 'success',
-        1: 'warning',
-        2: 'danger'
+        1: 'danger',
+        // 2: 'danger'
       }
       return statusMap[status]
-    }/*,
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }*/
+    }
   },
   methods: {
   	getList() {
   		this.listLoading = true
       //如果是子表，则路由中的参数就是对应的父表的ID
       if(this.isSubTable) {
-        this.listQuery.search = JSON.stringify(this.$route.params)
+        let searchParams = {} //需要向后台传的过滤搜索字段
+        //如果是树形结构点击出现的详情，则取树形结构模拟的route参数
+        let routeParams = this.treeRoute.params || this.$route.params
+        /*
+        注意:该子表的父表可能还有父表，所以路由中的params有多个父表id
+          例如：
+          一级表->企业
+          二级表->变电所(关联父表ID：companyid)
+          三级表->变电所图纸(关联父表ID：electricitysubstationid)
+          此时路由为：/Enterprise/customer/:companyid/electricitySubstation/:electricitysubstationid/electricitySubstation_pic
+          此时 this.$route.params = {companyid: "1", electricitysubstationid: "1"}
+          但由于electricitySubstation_pic中只直接关联二级表，并没有直接关联一级表
+          因此，需要将electricitySubstation_pic表中真实存在的字段，和路由中的参数取交集
+          此时，真正传给后台的search参数里，只有electricitysubstationid，并不需要传companyid
+          心累T_T....
+        */
+        for(var p in routeParams) {
+          if(this.temp.hasOwnProperty(p)) {
+            searchParams[p] = routeParams[p]  //取交集
+          }
+        }
+        //fetchList根据listQuery中的search参数传给后台，后台取出对应数据
+        this.listQuery.search = JSON.stringify(searchParams)
       }
-	    this.fetchList(this.moduleName, this.listQuery).then(response => {
+
+	    this.fetchList(this.moduleName, this.listQuery ).then(response => {
         /*
         （1）从企业tree中点击进来，会带着query参数id
         此时看到的是某个id下的具体内容，所以这里做了一个list的过滤，只显示当前ID下的
         （2）从 进线柜、电容柜、馈电柜点进电表表，要看到对应该柜ID和该柜类型下的电表，
-        此时route的param参数为柜id，route的query参数中带有柜类型cabinetid=X
+        此时route的param参数为柜id，route的query参数中带有柜类型cabinetid=X，此时路由字段为
+        /Enterprise/customer/:companyid/electricitySubstation/:electricitysubstationid/electricitySubstation_cabinets/:cabinetid/deviceElecMeter?cabinettype=0
         */
         let filterId
         let _list = response.data.items
-        let routeQuery = this.$route.query
+        //如果是树形结构点击出现的详情，则取树形结构模拟的query参数
+        let routeQuery = this.treeRoute.query || this.$route.query
         if(routeQuery) {
-          this.list = _list.filter( (o) => {
+          this.list = _list.filter( item => {
             let res = true
             for(let q in routeQuery) {
-              if(o.hasOwnProperty(q)) {
-                res &= (o[q] == routeQuery[q])
+              if(item.hasOwnProperty(q)) {
+                res &= (item[q] == routeQuery[q])
               }
             }
             return res
@@ -311,14 +298,6 @@ export default {
         else {
           this.list = _list
         }
-        /*if(this.$route.query && this.$route.query.id) {
-          filterId = this.$route.query.id
-          this.list = _list.filter( (o) => { return o.id == filterId })
-        }
-        else {
-          this.list = _list
-        }*/
-
 	      this.total = response.data.total
 	      this.listLoading = false
 	    })
@@ -326,15 +305,27 @@ export default {
   	//清空 tmp数据
   	resetTemp() {
 			this.temp = {}
+      //合并路由中的参数
+      let params = Object.assign({}, this.treeRoute.query || this.$route.query, this.treeRoute.params || this.$route.params)
+      // console.log(params)
 	    this.column.forEach( (o,i) => {
-        //太恶心了 双向绑定的，要这么赋值
-        this.$set(this.temp, o.key, o.default || "")
+        /*赋值时，要查看当前的路由params和query,按照里面的特定参数
+          把temp值填充完整，这些参数在添加时自动填充，且编辑时不可修改*/
+        if(params.hasOwnProperty(o.key)) {
+          this.$set(this.temp, o.key, +params[o.key]) //太恶心了 双向绑定的，要这么赋值
+        }
+        //没有特定值的，赋值为空
+        else {
+          this.$set(this.temp, o.key, o.default || "")
+        }
 	    })
-	    console.log(this.temp)
+
+	    console.log(JSON.stringify(this.temp))
   	},
   	//点击 添加
   	handleAdd() {
       this.resetTemp()
+
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -430,8 +421,8 @@ console.log("temp===")
     },
     handleSubTable(sub, row) {
       // console.log(`${this.$route.path}`)
-      console.log(`${this.$route.path}/${row.id}/${sub.path}`)
-      this.$router.push({path: `${this.$route.path}/${row.id}/${sub.path}`})
+      // console.log(`${this.$route.path}/${row.id}/${sub.path}`)
+      this.$router.push({path: `${this.treeRoute.path || this.$route.path}/${row.id}/${sub.path}`})
     },
     handleBack() {
       this.$router.back(-1)
@@ -476,5 +467,7 @@ console.log("temp===")
 
   .table-image {
     cursor: pointer;
+    max-width: 100px;
+    max-height: 60px;
   }
 </style>

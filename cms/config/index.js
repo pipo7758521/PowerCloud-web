@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {},
     proxyTable: {
       '/api': {
-        target: 'http://localhost:9528/src/mock/',
+        target: 'http://localhost:8010/src/mock/',
         changeOrigin: true,
         pathRewrite(path, option) {
             option.method = 'GET';
@@ -24,7 +24,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8010, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: false,

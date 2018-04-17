@@ -1,20 +1,17 @@
 <template>
-  <!-- <div> -->
-    <!-- <p>当前管理域</p> -->
     <cms-grid
     :moduleName = "moduleName"
     :isSubTable = "true"
     :column = "column"
   >
   </cms-grid>
-  <!-- </div> -->
-
 </template>
 
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
 import { stationIDList } from '@/api/common'
+import tableConfig from "@/views/_config/table"
 
 export default {
 	components: {
@@ -32,6 +29,7 @@ export default {
       this.column.forEach( (o,i) => {
         if(o.key == "electricitysubstationid") {
           o.options = options;
+          this.$set(this.column, i, o)
         }
       })
 
@@ -40,47 +38,7 @@ export default {
 	data () {
 		return {
       moduleName: "magDomain_electricitySubstation",
-			column: [
-    		{
-          key: "id",
-          label: "ID",
-          type: "number",
-          isEdit: false,
-          mainKey: true,   //主键！！！ 用于删除
-        },
-        {
-    			key: "magdomainid",
-    			label: "管理域ID",
-    			type: "number",
-          isEdit: false,
-          // isVisible: false,
-    			required: true,
-          errorMessage: "必填"
-    		},
-        {
-          key: "electricitysubstationid",
-          label: "变电所ID",
-          type: "select",
-          required: true,
-          errorMessage: "必填"
-        },
-    		{
-    			key: "status",
-    			label: "状态",
-    			type: "select",
-          default: "0",
-          options: [
-            {
-              value: "0",
-              label: "正常"
-            },
-            {
-              value: "1",
-              label: "停用"
-            }
-          ]
-    		}
-    	]
+			column: tableConfig["magDomain_electricitySubstation"].column,
 		}
 	}
 }

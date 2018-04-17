@@ -13,10 +13,11 @@
 						{
 							"id": 1,
 							"status": 0,
-							"type": "进线柜",
+							"cabinettype": 0,
 							"children": [
 								{
 									"id": 1,
+									"cabinettype": 0,
 									"circuitname": "进线柜总表"
 								}
 							]
@@ -24,23 +25,26 @@
 						{
 							"id": 1,
 							"status": 0,
-							"type": "电容柜"
+							"cabinettype": 1
 						},
 						{
 							"id": 1,
 							"status": 0,
-							"type": "馈电柜",
+							"cabinettype": 2,
 							"children": [
 								{
 									"id": 2,
+									"cabinettype": 2,
 									"circuitname": "馈电柜表1#"
 								},
 								{
 									"id": 3,
+									"cabinettype": 2,
 									"circuitname": "馈电柜表1#"
 								},
 								{
 									"id": 4,
+									"cabinettype": 2,
 									"circuitname": "馈电柜表1#"
 								}
 							]
@@ -55,7 +59,7 @@
 						{
 							"id": 1,
 							"status": 0,
-							"type": "进线柜",
+							"cabinettype": 0,
 							"children": [
 								{
 									"id": 1,
@@ -66,12 +70,12 @@
 						{
 							"id": 1,
 							"status": 0,
-							"type": "电容柜"
+							"cabinettype": 1
 						},
 						{
 							"id": 1,
 							"status": 0,
-							"type": "馈电柜",
+							"cabinettype": 2,
 							"children": [
 								{
 									"id": 2,

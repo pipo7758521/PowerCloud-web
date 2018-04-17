@@ -23,7 +23,7 @@ if(isDebug) {
     electricitySubstation_video: "/enterprise/electricitySubstation_video.json",
     electricitySubstation_pic: "/enterprise/electricitySubstation_pic.json",
     //进线柜 变压器
-    electricitySubstation_incomming: "/enterprise/electricitySubstation_incomming.json",
+    electricitySubstation_incoming: "/enterprise/electricitySubstation_incoming.json",
     deviceTransformer_connection: "/enterprise/deviceTransformer_connection.json",
     //电容柜
     electricitySubstation_capacitor: "/enterprise/electricitySubstation_capacitor.json",

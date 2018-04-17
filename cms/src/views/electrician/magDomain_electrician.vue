@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 import Grid from "@/components/grid/grid"
-// import { fetchList, insertData, updateData, deleteData } from '@/api/magDomain_electrician'
+import tableConfig from "@/views/_config/table"
 import { magDomainIDList, electricianIDList} from '@/api/common'
 
 export default {
@@ -37,56 +37,7 @@ export default {
 	data () {
 		return {
 			moduleName: "magDomain_electrician",
-			column: [
-				{
-					key: "id",
-					label: "ID",
-					type: "number",
-					isEdit: false,
-					mainKey: true,   //主键！！！ 用于删除
-				},
-				{
-					key: "electricianid",
-					label: "电工ID",
-					type: "number",
-					isEdit: false
-				},
-				{
-					key: "magdomainid",
-					label: "管理域ID",
-					type: "select",
-					required: true,
-					errorMessage: "必填"
-				},
-				{
-					key: "post",
-					label: "位置",
-					type: "string",
-					required: false,
-					errorMessage: "必填"
-				},
-				{
-					key: "status",
-					label: "状态",
-					type: "select",
-					default: "0",
-					options: [
-						{
-							value: "0",
-							label: "正常"
-						},
-						{
-							value: "1",
-							label: "停用"
-						}
-					]
-				},
-				{
-					key: "description",
-					label: "备注说明",
-					type: "string",
-				}
-			]
+			column: tableConfig["magDomain_electrician"].column,
 		}
 	}
 }
