@@ -9,6 +9,7 @@ if(isDebug) {
   API_URL = {
     //设备类型
     typeDevice: "/typeDevice/list.json",
+
     //管理域
     magDomain: "/magDomain/list.json",
     magDomain_electricitySubstation: "/magDomain/magDomain_electricitySubstation.json",
@@ -36,14 +37,27 @@ if(isDebug) {
     //电工
     electrician: "/electrician/list.json",
     electrician_pic: "/electrician/electrician_pic_list.json",
-    magDomain_electrician: "/electrician/magDomain_electrician_list.json"
+    magDomain_electrician: "/electrician/magDomain_electrician_list.json",
+
+
+    typeDevice: "typeDevice",
+
+    magDomain: "magDomain",
+
+    deviceGateway: "gateWay",
+
+    electrician: "electrician",
+    magDomain_electrician: "magDomainElectrician",
+
+    customer: "customer",
+
 
   }
 }
 
 export function fetchList(moduleName, data) {
   return request({
-    url: API_URL[moduleName],
+    url: "/cms/"+API_URL[moduleName]+"/list",
     method: 'get',
     params: data
   })
@@ -51,7 +65,8 @@ export function fetchList(moduleName, data) {
 
 export function insertData(moduleName, data) {
   return request({
-    url: isDebug ? '/success.json' : `/${moduleName}/insert`,
+    url: "/cms/"+API_URL[moduleName]+"/add",
+    // url: isDebug ? '/success.json' : `/${moduleName}/insert`,
     method: 'post',
     data
   })
@@ -59,7 +74,8 @@ export function insertData(moduleName, data) {
 
 export function editData(moduleName, data) {
   return request({
-    url: isDebug ? '/success.json' : `/${moduleName}/update`,
+    url: "/cms/"+API_URL[moduleName]+"/update",
+    // url: isDebug ? '/success.json' : `/${moduleName}/update`,
     method: 'post',
     data
   })
@@ -67,7 +83,8 @@ export function editData(moduleName, data) {
 
 export function deleteData(moduleName, data) {
   return request({
-    url: isDebug ? '/success.json' : `/${moduleName}/delete`,
+    url: "/cms/"+API_URL[moduleName]+"/del",
+    // url: isDebug ? '/success.json' : `/${moduleName}/delete`,
     method: 'post',
     data
   })

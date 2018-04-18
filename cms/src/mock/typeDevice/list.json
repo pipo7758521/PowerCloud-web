@@ -5,13 +5,13 @@
     "items": [{
       "id": 1,
       "typedevicename": "硕码电表",
-      "functionname": "parse",
+      "functionname": "parseparse",
       "classname": "com.neu.cse.powercloud.util.ammeter.parser.SampleAmmeterParser",
       "description": "硕码电表解析函数"
     }, {
       "id": 2,
       "typedevicename": "正麦电表",
-      "functionname": "parse",
+      "functionname": "parseparse",
       "classname": "com.neu.cse.powercloud.util.ammeter.parser.ZhengMaiAmmeterParser",
       "description": "正麦电表解析函数"
     }]

@@ -30,6 +30,10 @@
 		background: #272822;
 		height: 50vh;
 	}
+
+	.connect-wrapper {
+		margin: 0 0 15px 0;
+	}
 </style>
 <template>
 	<el-container>
@@ -73,6 +77,9 @@
   									<el-button class="btn" type="danger" plain icon="el-icon-delete" circle  @click="onDelete(index)"></el-button>
 							    </el-col>
 							  </el-row>
+							  <el-row v-if="index !== (config.length-1)" class="connect-wrapper">
+							  	<el-col :span="1"><el-checkbox v-model="item.connectNext">母联</el-checkbox></el-col>
+							  </el-row>
 					    </el-form>
 
 			  		</li>
@@ -81,8 +88,8 @@
 			</el-row>
 
 			<p align="center" style="position:relative;z-index:100">
-				<el-button type="primary" plain @click="onPreview">预览</el-button>
-				<el-button type="primary" @click="onSubmit">创建</el-button>
+				<el-button type="primary" icon="el-icon-search"  @click="onPreview">预览</el-button>
+				<el-button type="primary" @click="onSubmit" plain>确定</el-button>
 				<el-button type="info" plain @click="onClear">重置</el-button>
 			</p>
 
@@ -91,6 +98,7 @@
 					<div id="drawing"></div>
 				</el-col>
 			</el-row>
+
 	  </el-main>
 	</el-container>
 </template>
@@ -119,35 +127,31 @@ const item_h = 550; //每一个电路图的总高度
 let t_color = "#e9af00";
 let margin_text = 20; //文字离电路图的top距离
 
+let winParent
+let key
+//监听父窗口的消息
 window.addEventListener("message", function(event) {
-			this.winParent = event.source
-			console.log(event.data)
-		}, false);
+	if(event.data && event.data.title == "powerCloudCMS-message") {
+		winParent = event.source
+		key = event.data.key
+	}
+}, false)
 
 export default {
 	name: 'sysGraph',
 	data() {
 		return {
-			isConnect: true,
 			title: "电力系统图",
 			config: [
 				{
-					capacityNum:1,
-					distributingNum:3,
-					circuitNum:1
-				},
-				{
-					capacityNum:1,
-					distributingNum:1,
-					circuitNum:1
+					capacityNum:0,
+					distributingNum:0,
+					circuitNum:0,
+					connectNext:false
 				}
 			],
 			svgRootDom: null,
-			winParent: null
 		}
-	},
-	mounted() {
-
 	},
 	methods: {
 		init() {
@@ -198,65 +202,59 @@ export default {
 
 			var max_w = Math.max.apply(null, total_w_arr);
 
-			//画每个线路图上面的总线(是否级联)
-			/*config.forEach( (o,i) => {
-				var _w = isConnect ? max_w : total_w_arr[i];
-				var offset = 40;
-				var start = padding+w1-offset;
-				draw.line(start, padding+item_h*i+margin_h1, start+_w-w1+offset+offset, padding+item_h*i+margin_h1).stroke({ width: 8, color: '#fff' })
-			})
-
-			if(isConnect) {
-				draw.line( padding+w1+max_w-w1+36, padding+margin_h1, padding+w1+max_w-w1+36, padding+item_h*(config.length-1)+margin_h1+4).stroke({ width: 8, color: '#fff' })
-			}*/
-
 			this.config.forEach( (o,i) => {
-				var _w = o.isConnect ? max_w : total_w_arr[i];
-				var offset = 40;
-				var start = padding+w1-offset;
-				draw.line(start, padding+item_h*i+margin_h1, start+_w-w1+offset+offset, padding+item_h*i+margin_h1).stroke({ width: 8, color: '#fff' })
-
-				if(o.isConnect) {
-					draw.line( padding+w1+max_w-w1+36, padding+margin_h1+item_h*i, padding+w1+max_w-w1+36, padding+item_h*(this.config.length-1)+margin_h1+4).stroke({ width: 8, color: '#fff' })
+				//当前柜最上方横线的的总长度
+				var _w;
+				// 如果母联到下一级，或者上一级，则宽度要取【最大宽度】
+				if(o.connectNext || (i>0 && this.config[i-1].connectNext) ) {
+					_w = max_w
+				}
+				else {
+					_w = total_w_arr[i]
 				}
 
+				var offset = 40;
+				var start = padding+w1-offset;
+				draw.line(start, padding+item_h*i+margin_h1, start+_w-w1+offset+offset, padding+item_h*i+margin_h1).stroke({ width: 8, color: '#fff' })
+
+				//画母联的线
+				if(o.connectNext) {
+					let start_x = padding+w1+max_w-w1+36;
+					let start_y = padding+margin_h1+item_h*i;
+					let end_x = start_x;
+					let end_y = start_y + item_h+4;
+					draw.line(start_x,start_y,end_x,end_y).stroke({ width: 8, color: '#fff' })
+				}
 			})
-
-
-
 
 			this.svgRootDom = document.querySelectorAll("svg")[1];
 			this.svgRootDom.setAttribute("viewBox","0,0,"+(padding*2+max_w)+","+(padding*2+item_h*this.config.length));
+
+			//实际在APP里要显示时，要做如下操作
 			this.svgRootDom.setAttribute("id","my-svg");
 
+			//实际在APP里要显示时，要做如下操作!!!!
+/*
 			let window_w = document.documentElement.clientWidth;
 			let window_h = document.documentElement.clientHeight;
 
-			let viewBoxVal = svgRootDom.getAttribute("viewBox");
+			let viewBoxVal = this.svgRootDom.getAttribute("viewBox");
 			let viewBoxWidth = viewBoxVal.split(",")[2];
 		  let viewBoxHeight = viewBoxVal.split(",")[3];
 
+			// 因为之前已经设置了viewbox
+			// 所以该SVG图已经根据屏幕大小适配，相当于已经产生过了一次 拉伸/缩小
+			let radio_before = (window_w/viewBoxWidth).toFixed(2)
+
+
+			// 此时再做一个旋转，SVG图的高，要适配当前屏幕的宽，
+			// 因此还有一次 拉伸/缩小
 			let radio = (window_w/viewBoxHeight).toFixed(2)
 
-		  // if(+viewBoxWidth > +viewBoxHeight) {
-		  // 	console.log("wwwwwwwww")
-		  // 	let radio = (window_w/viewBoxHeight).toFixed(2)
-		  // }
-		  // else {
-		  // 	console.log("hhhhhhhhh")
-		  // 	var radio = (window_h/viewBoxWidth).toFixed(2)
-		  // }
+		 	//因此最终的拉伸或者缩小，抵消掉第一次的变形
+			let radio_final = radio / radio_before
 
-		  // var radio = (window_w/viewBoxHeight).toFixed(2)
-		  // console.log(radio);
-
-		  // radio  = 0.9
-
-		  // svgRootDom.style.transform = "rotate(90deg) scale("+Math.max(1,radio)+")"
-		  // svgRootDom.style.transform = "rotate(90deg) scale("+radio+")"
-
-		  console.log(svgRootDom.style.transform)
-
+		  this.svgRootDom.style.transform = "rotate(90deg) scale("+radio_final+")"*/
 
 		},
 		//进线柜
@@ -382,14 +380,17 @@ export default {
 			this.config.splice(index+1, 0, {
 				capacityNum: 0,
 				distributingNum: 0,
-				circuitNum: 0})
+				circuitNum: 0,
+				connectNext: false
+			})
 		},
 		onDelete(index) {
 			if(this.config.length == 1) {
 				this.config = [{
 					capacityNum: 0,
 					distributingNum: 0,
-					circuitNum: 0
+					circuitNum: 0,
+					connectNext: false
 				}]
 			}
 			else {
@@ -398,13 +399,11 @@ export default {
 
 		},
 		onSubmit() {
-			var str = ''
-		  if (this.winParent) {
-		    str = document.getElementById("my-svg").innerHTML
-		    console.log(str.length)
-		    this.winParent.postMessage(str, '*');
+			var str = document.querySelector("#drawing").innerHTML
+		  if (winParent && str.length) {
+		    winParent.postMessage({title:"powerCloudCMS-message", key:key, svg:str}, '*')
+		    window.close()
 		  }
-		  window.close();
 		},
 		onPreview() {
 			document.querySelector("#drawing").innerHTML = ""

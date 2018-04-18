@@ -86,9 +86,16 @@
           <el-date-picker v-else-if="item.type == 'date'" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
           <!-- URL -->
           <el-input v-else-if="item.type == 'image'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
-          <el-input v-else-if="item.type == 'svg'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
-          <!-- <router-link target="_blank" to="/SysGraph"><el-button v-if="item.type == 'svg'">编辑</el-button></router-link> -->
-          <el-button v-if="item.type == 'svg'" @click="goToSysGraph">编辑</el-button>
+          <!-- 系统SVG图 -->
+          <el-row v-else-if="item.type == 'svg'">
+            <el-col :span="18">
+              <el-input  :disabled="item.isEdit == false" v-model="temp[item.key]" width="80%"></el-input>
+            </el-col>
+            <el-col :span="1">&nbsp;</el-col>
+            <el-col :span="5">
+              <el-button  @click="goToSysGraph(item.key)" type="primary" plain>编辑</el-button>
+            </el-col>
+          </el-row>
 
 
 
@@ -109,6 +116,9 @@
 import { parseTime } from '@/utils'
 import { fetchList, insertData, editData, deleteData } from '@/api/api'
 import request from '@/utils/request'
+
+
+
 
 export default {
   name: 'grid',
@@ -181,6 +191,16 @@ export default {
         this.listColumn.push(o)
       }
     })
+
+    //用于监听系统图配置页面传来的参数
+    let _self = this
+    window.addEventListener("message", function(event) {
+      if(event.data && event.data.title == "powerCloudCMS-message") {
+        //event.data.key是该系统图数据库字段的名称
+        _self.temp[event.data.key] = event.data.svg
+      }
+    }, false);
+
   },
   data() {
     return {
@@ -232,6 +252,9 @@ export default {
           else if(o.type == "date") {
             rule.type = "string"
           }
+          else {
+            rule.type = "string"
+          }
           rules[o.key] = [rule]
         }
       })
@@ -243,9 +266,8 @@ export default {
       const statusMap = {
         0: 'success',
         1: 'danger',
-        // 2: 'danger'
       }
-      return statusMap[status]
+      return statusMap[status] || 'danger'
     }
   },
   methods: {
@@ -359,15 +381,26 @@ console.log("temp===")
   				return
   			}
   		})
-  		this.deleteData(this.moduleName, param).then(() => {
-  			this.$notify({
-	        title: '成功',
-	        message: '删除成功',
-	        type: 'success',
-	        duration: 2000
-	      })
-	      const index = this.list.indexOf(row)
-      	this.list.splice(index, 1)
+  		this.deleteData(this.moduleName, param).then((res) => {
+  			if(res.ok) {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
+        }
+        else {
+          this.$notify({
+            title: '失败',
+            message: res.data,
+            type: 'error',
+            duration: 2000
+          })
+        }
+
 	      // this.getList();
   		})
     },
@@ -375,15 +408,25 @@ console.log("temp===")
     addData() {
     	this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-        	this.insertData(this.moduleName, this.temp).then( () => {
+        	this.insertData(this.moduleName, this.temp).then( (res) => {
         		this.dialogFormVisible = false;
-        		this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList();
+        		if(res.ok) {
+              this.$notify({
+                title: '成功',
+                message: '新增成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getList();
+            }
+            else {
+              this.$notify({
+                title: '失败',
+                message: res.data,
+                type: 'error',
+                duration: 2000
+              })
+            }
         	})
         }
       })
@@ -393,15 +436,25 @@ console.log("temp===")
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           console.log(tempData)
-          this.updateData(this.moduleName, tempData).then( () => {
+          this.updateData(this.moduleName, tempData).then( (res) => {
             this.dialogFormVisible = false;
-            this.$notify({
-              title: '成功',
-              message: '编辑成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList();
+            if(res.ok) {
+              this.$notify({
+                title: '成功',
+                message: '编辑成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getList();
+            }
+            else {
+              this.$notify({
+                title: '失败',
+                message: res.data,
+                type: 'error',
+                duration: 2000
+              })
+            }
           })
             /*for (const v of this.list) {
               if (v.id === this.temp.id) {
@@ -450,10 +503,12 @@ console.log("temp===")
       }
 
     },
-    goToSysGraph() {
+    goToSysGraph(key) {
       let win = window.open("http://localhost:8010/#/SysGraph")
-      win.postMessage("power-cloud-message", '*');
-      // this.$router.push({path: "/SysGraph"})
+      setTimeout( () => {
+         win.postMessage({title:"powerCloudCMS-message", key: key}, '*');
+         // this.$router.push({path: "/SysGraph"})
+      }, 1000)
     }
   }
 

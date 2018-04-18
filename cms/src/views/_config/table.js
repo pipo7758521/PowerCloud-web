@@ -74,6 +74,8 @@ export default {
   			key: "status",
   			label: "状态",
   			type: "select",
+        required: true,
+        errorMessage: "必填",
         default: "0",
         options: [
           {
