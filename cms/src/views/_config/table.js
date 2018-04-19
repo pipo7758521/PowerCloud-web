@@ -168,13 +168,13 @@ export default {
         required: true,
         errorMessage: "必填"
       },
-      {
+      /*{                    //这个不要了
         key: "subjectid",
         label: "订阅主题ID",
         type: "string",
         required: true,
         errorMessage: "必填"
-      },
+      },*/
       {
         key: "gatewayusr",
         label: "网关用户名",
@@ -273,8 +273,8 @@ export default {
         key: "companycode",
   			label: "组织机构代码",
   			type: "string",
-  			required: true,
-  			errorMessage: "必填"
+  			// required: true,
+  			// errorMessage: "必填"
   		},
   		{
       key: "address",
@@ -285,6 +285,7 @@ export default {
         key: "location",
         label: "经纬度",
         type: "string",
+
       },
       {
         key: "pic",
@@ -306,8 +307,8 @@ export default {
       {
         key: "bizownerphone",
         label: "业务负责人移动电话",
-        type: "number",
-        errorMessage: "电话格式错误",
+        type: "string",
+        // errorMessage: "电话格式错误",
         isDetail: true
       },
       {
@@ -343,9 +344,9 @@ export default {
       {
         key: "financechiefphone",
         label: "财务负责人移动电话",
-        type: "number",
+        type: "string",
         isDetail: true,
-        errorMessage: "电话格式错误"
+        // errorMessage: "电话格式错误"
       },
       {
         key: "companytypecode",
@@ -367,13 +368,18 @@ export default {
       {
         key: "isspecialpower",
         label: "是否特殊用电企业",
-        type: "string",
+        type: "select",
+        default: 0,
+        options: [
+          {value:0, label:"否"},
+          {value:1, label:"是"}
+        ],
         isDetail: true
       },
       {
         key: "superiorunitcode",
         label: "上级单位代码",
-        type: "string",
+        type: "number",
         isDetail: true
       },
       {
@@ -392,6 +398,14 @@ export default {
 	},
 	electricitySubstation: {
 		column: [
+      {
+        key: "companyid",
+        label: "所属企业",
+        type: "select",
+        isEdit: false,
+        required: true,
+        errorMessage: "必填"
+      },
   		{
         key: "id",
   			label: "ID",
@@ -402,13 +416,6 @@ export default {
   		{
         key: "substationname",
   			label: "变电所名称",
-  			type: "string",
-  			required: true,
-  			errorMessage: "必填"
-  		},
-  		{
-        key: "companyid",
-  			label: "所属企业ID",
   			type: "string",
   			required: true,
   			errorMessage: "必填"
@@ -579,17 +586,17 @@ export default {
 	electricitySubstation_incoming: {
 		column: [
       {
+        key: "electricitysubstationid",
+        label: "所属变电所",
+        type: "select",
+        isEdit: false
+      },
+      {
         key: "id",
         label: "ID",
         type: "number",
         isEdit: false,
         mainKey: true,   //主键！！！
-      },
-      {
-        key: "electricitysubstationid",
-        label: "变电所ID",
-        type: "number",
-        isEdit: false
       },
       {
         key: "num",
@@ -753,17 +760,17 @@ export default {
 	electricitySubstation_capacitor: {
 		column: [
       {
+        key: "electricitysubstationid",
+        label: "所属变电所",
+        type: "select",
+        isEdit: false
+      },
+      {
         key: "id",
         label: "ID",
         type: "number",
         isEdit: false,
         mainKey: true,   //主键！！！
-      },
-      {
-        key: "electricitysubstationid",
-        label: "变电所ID",
-        type: "number",
-        isEdit: false
       },
       {
         key: "num",
@@ -801,17 +808,17 @@ export default {
 	electricitySubstation_low: {
 		column: [
       {
+        key: "electricitysubstationid",
+        label: "所属变电所",
+        type: "select",
+        isEdit: false
+      },
+      {
         key: "id",
         label: "馈电柜ID",
         type: "number",
         isEdit: false,
         mainKey: true,   //主键！！！
-      },
-      {
-        key: "electricitysubstationid",
-        label: "变电所ID",
-        type: "number",
-        isEdit: false
       },
       {
         key: "num",
@@ -1017,7 +1024,7 @@ export default {
   		{
   			key: "companyid",
   			label: "所属企业",
-  			type: "number",
+  			type: "select",
   			required: true,
   			errorMessage: "必填"
   		},
@@ -1025,8 +1032,8 @@ export default {
           key: "address",
           label: "住址",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
@@ -1051,35 +1058,35 @@ export default {
           required: true,
           errorMessage: "必填"
       },
-
       {
           key: "ectype",
           label: "作业类别(电工证)",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          // required: true,
+          // errorMessage: "必填"
+          isDetail: true
       },
       {
           key: "sccompanyname",
           label: "企业名称（安全证）",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          // required: true,
+          // errorMessage: "必填"
       },
       {
           key: "scduty",
           label: "职务（安全证）主要负责人",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "sctechnicaltitle",
           label: "技术职称（安全证）",
           type: "string",
-          required: true,
-          errorMessage: "必填"
+          // required: true,
+          // errorMessage: "必填"
       },
       {
           key: "status",
@@ -1101,88 +1108,104 @@ export default {
           key: "identitycard",
           label: "身份证号码",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
+          isDetail: true
+      },
+      {
+          key: "birthday",
+          label: "生日",
+          type: "date",
+          // required: true,
+          // errorMessage: "必填",
+          isDetail: true
+      },
+      {
+          key: "password",
+          label: "登录密码",
+          type: "string",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "pic",
           label: "照片",
           type: "image",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
        {
           key: "ecnum",
           label: "电工证编号",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "ecgranttime",
           label: "授予时间(电工证)",
-          type: "string",
-          required: true,
-          errorMessage: "必填",
+          type: "date",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "eclicensenum",
           label: "许可证编号(电工证)",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "ecpic",
           label: "证件照片(电工证)",
-          type: "string",
-          required: true,
-          errorMessage: "必填",
+          type: "image",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "scnum",
           label: "安全证编号",
           type: "string",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "scissuedate",
           label: "发证日期（安全证）",
           type: "date",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "scdatestart",
           label: "有效日期起（安全证）",
           type: "date",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "scdateend",
           label: "有效期止（安全证）",
           type: "date",
-          required: true,
-          errorMessage: "必填",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       },
       {
           key: "scpic",
           label: "证件照片（安全证）",
-          type: "string",
-          required: true,
-          errorMessage: "必填",
+          type: "image",
+          // required: true,
+          // errorMessage: "必填",
           isDetail: true
       }
   	],
@@ -1264,14 +1287,19 @@ export default {
 				label: "管理域ID",
 				type: "select",
 				required: true,
-				errorMessage: "必填"
+				// errorMessage: "必填"
 			},
 			{
 				key: "post",
-				label: "位置",
-				type: "string",
-				required: false,
-				errorMessage: "必填"
+				label: "岗位代码",
+				type: "select",
+        default: 3,
+        options: [
+          {value:1, label: "经理"},
+          {value:2, label: "组长"},
+          {value:3, label: "组员"}
+        ]
+				// errorMessage: "必填"
 			},
 			{
 				key: "status",
@@ -1288,11 +1316,6 @@ export default {
 						label: "停用"
 					}
 				]
-			},
-			{
-				key: "description",
-				label: "备注说明",
-				type: "string",
 			}
 		]
 	},

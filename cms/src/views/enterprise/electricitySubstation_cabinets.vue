@@ -75,6 +75,10 @@ import StepWrapper from "./components/stepWrapper"
 import { deviceTransformerList } from "@/api/common"
 import tableConfig from "@/views/_config/table"
 
+
+import { fetchList } from "@/api/api"
+
+
 export default {
   components: {
     "cms-grid": Grid,
@@ -83,6 +87,34 @@ export default {
   created () {
     //变压器母联
     this.initDeviceTransformerConnectionColumn()
+
+    //关联变电所ID
+    fetchList("electricitySubstation").then( response => {
+      let list = response.data.items;
+      let options = [];
+      list.forEach( (o,i) => {
+        options.push({value: o.id, label: o.substationname})
+      })
+
+      this.column1.forEach( (o,i) => {
+        if(o.key == "electricitysubstationid") {
+          o.options = options;
+          this.$set(this.column1, i, o)
+        }
+      })
+      this.column3.forEach( (o,i) => {
+        if(o.key == "electricitysubstationid") {
+          o.options = options;
+          this.$set(this.column3, i, o)
+        }
+      })
+      this.column4.forEach( (o,i) => {
+        if(o.key == "electricitysubstationid") {
+          o.options = options;
+          this.$set(this.column4, i, o)
+        }
+      })
+    })
 
   },
 	data () {
@@ -108,7 +140,7 @@ export default {
   methods: {
     //变压器母联表 - 获取变压器ID
     initDeviceTransformerConnectionColumn () {
-      deviceTransformerList().then( response => {
+      fetchList("electricitySubstation_transformer").then( response => {
         let list = response.data.items;
         let options = [];
         list.forEach( (o,i) => {
@@ -118,6 +150,7 @@ export default {
         this.column2.forEach( (o,i) => {
           if(o.key == "transformerID_A" || o.key == "transformerID_B") {
             o.options = options;
+            this.$set(this.column, i, o)
           }
         })
 

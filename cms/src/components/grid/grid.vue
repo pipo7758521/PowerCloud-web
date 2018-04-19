@@ -14,8 +14,9 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img max-width="60" max-height="60" :src="props.row[item.key]"/></a></span>
-              <!-- <span v-else-if="item.type == 'svg'">{{ props.row[item.key] }}</span> -->
+              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="props.row[item.key]"/><i v-else>无</i></a></span>
+              <div v-else-if="item.type == 'svg'" :v-html="props.row[item.key]"></div>
+              <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
@@ -30,11 +31,16 @@
           <span v-if="item.type == 'string'|| item.type == 'number'">
             {{scope.row[item.key]}}
           </span>
-          <!-- 选项 -->
+          <!-- 状态 -->
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
-          <span v-else-if="item.type == 'date'">{{scope.row[item.key]}}</span>
+          <!-- 时间 -->
+          <span v-else-if="item.type == 'date'">{{scope.row[item.key] | dateFilter}}</span>
+          <!-- 选项 -->
           <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
+          <!-- 图片 -->
           <span v-else-if="item.type == 'image'"><a :href="scope.row[item.key]" target="_blank"><img class="table-image" :src="scope.row[item.key]"/></a></span>
+          <!-- 坐标 -->
+          <!-- <span v-else-if="item.type == 'location'">{{scope.row[item.key] | locationFilter}}</span> -->
         </template>
       </el-table-column>
 
@@ -83,19 +89,29 @@
             </el-option>
           </el-select>
           <!-- date日期选择 -->
-          <el-date-picker v-else-if="item.type == 'date'" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-else-if="item.type == 'date'" value-format="timestamp" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
           <!-- URL -->
           <el-input v-else-if="item.type == 'image'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
           <!-- 系统SVG图 -->
           <el-row v-else-if="item.type == 'svg'">
             <el-col :span="18">
-              <el-input  :disabled="item.isEdit == false" v-model="temp[item.key]" width="80%"></el-input>
+              <el-input v-model="temp[item.key]" width="80%"></el-input>
             </el-col>
             <el-col :span="1">&nbsp;</el-col>
             <el-col :span="5">
               <el-button  @click="goToSysGraph(item.key)" type="primary" plain>编辑</el-button>
             </el-col>
           </el-row>
+          <!-- 坐标 -->
+          <!-- <el-row v-else-if="item.type == 'location'">
+            <el-col :span="11">
+              <el-input placeholder="经度" v-model="temp[item.key]"></el-input>
+            </el-col>
+            <el-col :span="2">&nbsp;</el-col>
+            <el-col :span="11">
+              <el-input placeholder="纬度" v-model="temp[item.key]"></el-input>
+            </el-col>
+          </el-row> -->
 
 
 
@@ -182,7 +198,7 @@ export default {
     this.resetTemp()
     this.getList()
 
-    this.column.forEach( (o,i) => {
+    /*this.column.forEach( (o,i) => {
       //把在列表中显示的列  和 在展开详情中显示的列区分出来
       if(o.isDetail) {
         this.detailColumn.push(o)
@@ -190,7 +206,7 @@ export default {
       else {
         this.listColumn.push(o)
       }
-    })
+    })*/
 
     //用于监听系统图配置页面传来的参数
     let _self = this
@@ -204,8 +220,8 @@ export default {
   },
   data() {
     return {
-      listColumn: [],   //表格中展示的列
-      detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
+      // listColumn: [],   //表格中展示的列
+      // detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
     	temp: null,       //该表结构对应的一条数据，用于添加、编辑等传递参数
     	list: null,  //显示的列表数据
       total: null, //总条目数
@@ -239,6 +255,7 @@ export default {
           if(o.type == "select") {
             rule.trigger = "blur"
             if(o.options && typeof(o.options[0].value) == "number") {
+
               rule.type = "number"
             }
             else {
@@ -246,11 +263,11 @@ export default {
             }
           }
           else if(o.type == "image") {
-            rule.type = "url"
+            rule.type = "string"
             rule.message = o.errorMessage || "格式必须为URL"
           }
-          else if(o.type == "date") {
-            rule.type = "string"
+          else if(o.type == "date" || o.type == "number") {
+            rule.type = "number"
           }
           else {
             rule.type = "string"
@@ -259,6 +276,28 @@ export default {
         }
       })
       return rules
+    },
+    //表格中展示的列
+    listColumn: function() {
+      let arr = [];
+      this.column.forEach( (o,i) => {
+        //把在列表中显示的列  和 在展开详情中显示的列区分出来
+        if(!o.isDetail) {
+          arr.push(o)
+        }
+      })
+      return arr
+    },
+    //点击展开，展示的详细信息，对应column中，isDetail:true的列
+    detailColumn: function() {
+      let arr = [];
+      this.column.forEach( (o,i) => {
+        //把在列表中显示的列  和 在展开详情中显示的列区分出来
+        if(o.isDetail) {
+          arr.push(o)
+        }
+      })
+      return arr
     }
   },
   filters: {
@@ -268,6 +307,24 @@ export default {
         1: 'danger',
       }
       return statusMap[status] || 'danger'
+    },
+    locationFilter(location) {
+      try {
+        let o = JSON.parse(location)
+        return `经度：${o.longitude},纬度：${o.latitude}`
+      }
+      catch(e) {
+        return location
+      }
+      console.log(location)
+    },
+    dateFilter(timestamp) {
+      let now = new Date(timestamp);
+      return [now.getFullYear(),format(now.getMonth()+1),format(now.getDate())].join("-");
+
+      function format(v){
+        return v < 10 ? "0"+v : v;
+      }
     }
   },
   methods: {
@@ -344,7 +401,7 @@ export default {
         }
         //没有特定值的，赋值为空
         else {
-          this.$set(this.temp, o.key, o.default || "")
+          this.$set(this.temp, o.key, typeof(o.default) == "undefined" ? null : o.default)
         }
 	    })
 
@@ -445,7 +502,16 @@ console.log("temp===")
                 type: 'success',
                 duration: 2000
               })
-              this.getList();
+              // this.getList();
+
+              for (const v of this.list) {
+                if (v.id === this.temp.id) {
+                  const index = this.list.indexOf(v)
+                  this.list.splice(index, 1, this.temp)
+                  break
+                }
+              }
+
             }
             else {
               this.$notify({
@@ -456,13 +522,7 @@ console.log("temp===")
               })
             }
           })
-            /*for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }*/
+
         }
       })
     },

@@ -7,7 +7,7 @@ let isDebug = process.env.NODE_ENV == "development";
 //moduleName规则： 主表用驼峰法命名，子表用_连接
 if(isDebug) {
   API_URL = {
-    //设备类型
+    /*//设备类型
     typeDevice: "/typeDevice/list.json",
 
     //管理域
@@ -37,27 +37,52 @@ if(isDebug) {
     //电工
     electrician: "/electrician/list.json",
     electrician_pic: "/electrician/electrician_pic_list.json",
-    magDomain_electrician: "/electrician/magDomain_electrician_list.json",
+    magDomain_electrician: "/electrician/magDomain_electrician_list.json",*/
 
-
+    //设备类型
     typeDevice: "typeDevice",
 
+    //管理域
     magDomain: "magDomain",
-
+    // magDomain_electricitySubstation: "/magDomain/magDomain_electricitySubstation.json",
+    //网关
     deviceGateway: "gateWay",
-
-    electrician: "electrician",
-    magDomain_electrician: "magDomainElectrician",
-
+    // deviceGateway_instructions: "/deviceGateway/deviceGateway_instructions.json",
+    //企业
     customer: "customer",
+    // customer: "/enterprise/customer.json",
+    //变电所
+    electricitySubstation: "electricitySubstation",
+    electricitySubstation_video: "electricitysubstationVideo",
+    // electricitySubstation_pic: "/enterprise/electricitySubstation_pic.json",
+    //变压器(用于查询变压器母联表)
+    electricitySubstation_transformer: "transformer",
+    //进线柜
+    // electricitySubstation_incoming: "/enterprise/electricitySubstation_incoming.json",
+    // deviceTransformer_connection: "/enterprise/deviceTransformer_connection.json",
+    //电容柜
+    electricitySubstation_capacitor: "capacitorCabinet",
+    //馈电柜
+    electricitySubstation_low: "lowCabinet",
+    // electricitySubstation_low_pic: "/enterprise/electricitySubstation_low_pic.json",
+    //电表
+    deviceElecMeter: "elecmeter",
 
+    //电工
+    electrician: "electrician",
+    // electrician_pic: "/electrician/electrician_pic_list.json",
+    magDomain_electrician: "magDomainElectrician",
 
   }
 }
 
 export function fetchList(moduleName, data) {
+  if(!data) {
+    data = {page:1, limit:10000}
+  }
   return request({
-    url: "/cms/"+API_URL[moduleName]+"/list",
+    url: API_URL[moduleName]+"/list",
+    // url: API_URL[moduleName],
     method: 'get',
     params: data
   })
@@ -65,7 +90,7 @@ export function fetchList(moduleName, data) {
 
 export function insertData(moduleName, data) {
   return request({
-    url: "/cms/"+API_URL[moduleName]+"/add",
+    url: API_URL[moduleName]+"/add",
     // url: isDebug ? '/success.json' : `/${moduleName}/insert`,
     method: 'post',
     data
@@ -74,7 +99,7 @@ export function insertData(moduleName, data) {
 
 export function editData(moduleName, data) {
   return request({
-    url: "/cms/"+API_URL[moduleName]+"/update",
+    url: API_URL[moduleName]+"/update",
     // url: isDebug ? '/success.json' : `/${moduleName}/update`,
     method: 'post',
     data
@@ -83,7 +108,7 @@ export function editData(moduleName, data) {
 
 export function deleteData(moduleName, data) {
   return request({
-    url: "/cms/"+API_URL[moduleName]+"/del",
+    url: API_URL[moduleName]+"/del",
     // url: isDebug ? '/success.json' : `/${moduleName}/delete`,
     method: 'post',
     data
