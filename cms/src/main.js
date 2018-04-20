@@ -14,7 +14,9 @@ import store from './store'
 
 import i18n from './lang' // Internationalization
 import '@/icons' // icon
-import '@/permission' // permission control
+
+// 登录鉴权
+// import '@/permission' // permission control
 
 // Vue.use(ElementUI, { locale })
 

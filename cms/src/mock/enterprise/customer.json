@@ -24,7 +24,30 @@
       "superiorunitcode": "",
       "endtime": "2020-04-10",
       "pic": "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1945343878,3655021699&fm=58"
-    }]
+    },
+    {
+        "id": 2,
+        "shortname": "物流园",
+        "company": "沈阳物流园",
+        "companycode": "123123-123",
+        "address": "辽宁省沈阳市XXXXXX",
+        "location": "{\"latitude\":\"123.340501\",\"longitude\":\"41.826984\"}",
+        "bizownername": "孙小虎",
+        "bizownertel": "024-12345678",
+        "bizownerphone": "1aa3521324234",
+        "taxpayeridentification": "工商银行",
+        "bank": "东北大学分行",
+        "bankaccount": "622112345656788",
+        "financechiefname": "王哈哈",
+        "financechieftel": "024-12345678",
+        "financechiefphone": "13521324234",
+        "companytypecode": "01",
+        "dataauthorityid": "123",
+        "isspecialpower": "0",
+        "superiorunitcode": "",
+        "endtime": "2020-04-10",
+        "pic": "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1945343878,3655021699&fm=58"
+      }]
   }
 }
 

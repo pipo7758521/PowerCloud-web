@@ -13,6 +13,7 @@
 
 import Grid from "@/components/grid/grid"
 import StepWrapper from "./components/stepWrapper"
+import tableConfig from "@/views/_config/table"
 
 export default {
   components: {
@@ -22,42 +23,7 @@ export default {
 	data () {
 		return {
       moduleName: "electricitySubstation_video",
-			column: [
-        {
-          key: "id",
-          label: "ID",
-          type: "number",
-          mainKey: true,   //主键！！！
-        },
-        {
-          key: "electricitysubstationid",
-          label: "变电所ID",
-          type: "number",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "num",
-          label: "视频编号",
-          type: "number",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "manufacturer",
-          label: "生产企业",
-          type: "string",
-          required: true,
-          errorMessage: "必填"
-        },
-        {
-          key: "url",
-          label: "视频URL",
-          type: "string",
-          required: true,
-          errorMessage: "必填"
-        }
-      ]
+      column: tableConfig["electricitySubstation_video"].column,
 		}
 	}
 }
