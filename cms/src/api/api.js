@@ -58,7 +58,7 @@ if(isDebug) {
     //变压器(用于查询变压器母联表)
     electricitySubstation_transformer: "transformer",
     //进线柜
-    // electricitySubstation_incoming: "",
+     electricitySubstation_incoming: "incomingCabinet",
     // deviceTransformer_connection: "",
     //电容柜
     electricitySubstation_capacitor: "capacitorCabinet",
