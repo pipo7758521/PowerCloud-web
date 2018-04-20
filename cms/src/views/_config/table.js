@@ -493,6 +493,18 @@ export default {
         label: "出所侧电压",
         type: "string",
         isDetail: true
+      },
+      {
+        key: "pic",
+        label: "图纸",
+        type: "string",
+        isDetail: true
+      },
+      {
+        key: "status",
+        label: "状态",
+        type: "string",
+        isDetail: true
       }
   	],
     subTable: [
@@ -587,7 +599,7 @@ export default {
 		column: [
       {
         key: "electricitysubstationid",
-        label: "所属变电所",
+        label: "所属变电所ID",
         type: "select",
         isEdit: false
       },
@@ -640,7 +652,8 @@ export default {
         ]
       },
       {
-        key: "transformer_manufacturer",
+        // key: "transformer_manufacturer",
+        key: "manufacturer",
         label: "变压器生产企业",
         type: "string",
         required: true,
@@ -761,7 +774,7 @@ export default {
 		column: [
       {
         key: "electricitysubstationid",
-        label: "所属变电所",
+        label: "所属变电所ID",
         type: "select",
         isEdit: false
       },
@@ -809,7 +822,7 @@ export default {
 		column: [
       {
         key: "electricitysubstationid",
-        label: "所属变电所",
+        label: "所属变电所ID",
         type: "select",
         isEdit: false
       },
@@ -901,6 +914,12 @@ export default {
         isDetail: true
       },
       {
+        key: "specifications",
+        label: "规格",
+        type: "string",
+        isDetail: true
+      },
+      {
         key: "status",
         label: "状态",
         type: "select",
@@ -975,6 +994,7 @@ export default {
         key: "typedeviceid",
         label: "设备解析类型",
         type: "select",
+        // type:"string",
         required: true,
         errorMessage: "必填"
       },
@@ -1000,6 +1020,12 @@ export default {
           {value: "总表", label: "总表"},
           {value: "其它", label: "其它"},
         ]
+      },
+      {
+        key: "gatewayid",
+        label: "网关ID号",
+        type: "number",
+        isEdit: false
       },
       // gatewayID
     ]
