@@ -4,6 +4,7 @@
       :moduleName = "moduleName"
   		:column = "column"
       :isSubTable = "true"
+      :connectModule = "connectModule"
   	>
   	</cms-grid>
   </cms-step-wrapper>
@@ -14,34 +15,23 @@
 import Grid from "@/components/grid/grid"
 import StepWrapper from "./components/stepWrapper"
 import tableConfig from "@/views/_config/table"
-import { deviceTypeList } from "@/api/common"
 
 export default {
   components: {
     "cms-grid": Grid,
     "cms-step-wrapper": StepWrapper
   },
-  created () {
-    deviceTypeList().then( response => {
-      let list = response.data.items;
-        let options = [];
-        list.forEach( (o,i) => {
-          options.push({value: o.id, label: o.typedevicename})
-        })
-
-        this.column.forEach( (o,i) => {
-          if(o.key == "typedeviceid") {
-            o.options = options;
-            //强制更新，使得grid组件内的表单提交验证规则computed参数跟着更新！
-            this.$set(this.column, i, o)
-          }
-        })
-    })
-  },
 	data () {
 		return {
       moduleName: "deviceElecMeter",
-			column: tableConfig["deviceElecMeter"].column
+			column: tableConfig["deviceElecMeter"].column,
+      //与 设备类型 相关联
+      connectModule: [{
+        moduleName: "typeDevice",  //相关联的模块名
+        myKey: "typedeviceid",         //本模块中关联的数据库字段
+        connectKey: "id",           //关联的模块中的对应数据库字段
+        displayKey: "typedevicename",         //显示在前端的字段
+      }]
 		}
 	}
 }

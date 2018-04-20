@@ -5,6 +5,7 @@
       :column = "column"
       :subTable = "subTable"
       :isSubTable = "true"
+      :connectModule = "connectModule"
     >
     </cms-grid>
   </cms-step-wrapper>
@@ -16,36 +17,24 @@ import Grid from "@/components/grid/grid"
 import StepWrapper from "./components/stepWrapper"
 import tableConfig from "@/views/_config/table"
 
-import { fetchList } from '@/api/api'
 
 export default {
 	components: {
 		"cms-grid": Grid,
     "cms-step-wrapper": StepWrapper
 	},
-  created () {
-    //与 管理域ID 相关联
-    fetchList("customer").then( response => {
-      let list = response.data.items;
-      let options = [];
-      list.forEach( (o,i) => {
-        options.push({value: o.id, label: o.company})
-      })
-
-      this.column.forEach( (o,i) => {
-       if(o.key == "companyid") {
-          o.options = options;
-          this.$set(this.column, i, o)
-        }
-      })
-
-    })
-  },
 	data () {
 		return {
       moduleName: "electricitySubstation",
 			column: tableConfig["electricitySubstation"].column,
-      subTable: tableConfig["electricitySubstation"].subTable
+      subTable: tableConfig["electricitySubstation"].subTable,
+      //与企业相关联
+      connectModule: [{
+        moduleName: "customer",  //相关联的模块名
+        myKey: "companyid",         //本模块中关联的数据库字段
+        connectKey: "id",           //关联的模块中的对应数据库字段
+        displayKey: "company",         //显示在前端的字段
+      }]
 		}
 	}
 }

@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     message() {
-      return '特朗普说这个页面你不能进......'
+      return '这个页面你不能进......'
     }
   }
 }

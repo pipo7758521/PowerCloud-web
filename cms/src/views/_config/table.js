@@ -61,7 +61,7 @@ export default {
   		{
   			key: "createrid",
   			label: "创建人",
-  			type: "string",
+  			type: "select",
   			isEdit: false,
   		},
   		{
@@ -186,6 +186,13 @@ export default {
         key: "gatewaypsw",
         label: "网关密码",
         type: "string",
+        required: true,
+        errorMessage: "必填"
+      },
+      {
+        key: "electricitysubstationid",
+        label: "关联变电所",
+        type: "select",
         required: true,
         errorMessage: "必填"
       },
@@ -536,8 +543,9 @@ export default {
       },
       {
         key: "electricitysubstationid",
-        label: "变电所ID",
-        type: "number",
+        label: "变电所",
+        type: "select",
+        isEdit: false,
         required: true,
         errorMessage: "必填"
       },
@@ -563,12 +571,14 @@ export default {
         key: "id",
         label: "ID",
         type: "number",
+        isEdit: false,
         mainKey: true,   //主键！！！
       },
       {
         key: "electricitysubstationid",
-        label: "变电所ID",
-        type: "number",
+        label: "变电所",
+        type: "select",
+        isEdit: false,
         required: true,
         errorMessage: "必填"
       },
@@ -1304,13 +1314,13 @@ export default {
 			},
 			{
 				key: "electricianid",
-				label: "电工ID",
-				type: "number",
+				label: "电工",
+				type: "select",
 				isEdit: false
 			},
 			{
 				key: "magdomainid",
-				label: "管理域ID",
+				label: "管理域",
 				type: "select",
 				required: true,
 				// errorMessage: "必填"

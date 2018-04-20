@@ -1,9 +1,10 @@
 <template>
-  <cms-step-wrapper :activeIndex="2">
+  <cms-step-wrapper :activeIndex="2" >
     <cms-grid
       :moduleName = "moduleName"
       :column = "column"
       :isSubTable = "true"
+      :connectModule = "connectModule"
     >
     </cms-grid>
   </cms-step-wrapper>
@@ -22,8 +23,16 @@ export default {
   },
 	data () {
 		return {
+      isRender: false,
       moduleName: "electricitySubstation_video",
       column: tableConfig["electricitySubstation_video"].column,
+      //与变电所相关联
+      connectModule: [{
+        moduleName: "electricitySubstation",  //相关联的模块名
+        myKey: "electricitysubstationid",         //本模块中关联的数据库字段
+        connectKey: "id",           //关联的模块中的对应数据库字段
+        displayKey: "substationname",         //显示在前端的字段
+      }]
 		}
 	}
 }

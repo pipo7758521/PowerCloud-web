@@ -5,6 +5,7 @@ const user = {
   state: {
     token: getToken(),
     name: '',
+    account: '',
     avatar: '',
     roles: []
   },
@@ -15,6 +16,9 @@ const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_ACCOUNT: (state, account) => {
+      state.account = account
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -31,8 +35,11 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
+          const now = Date.now()
+          setToken(now)
+          commit('SET_TOKEN', now)
+          /*setToken(data.token)
+          commit('SET_TOKEN', data.token)*/
           resolve()
         }).catch(error => {
           reject(error)
@@ -44,10 +51,11 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response.data
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          const data = JSON.parse(response.data)
+          // commit('SET_ROLES', data.roles)     //权限 TODO!
+          commit('SET_NAME', data.name)          //用户的名称
+          commit('SET_ACCOUNT', data.account)    //用户的账号
+          // commit('SET_AVATAR', data.avatar)
           resolve(response)
         }).catch(error => {
           reject(error)

@@ -4,7 +4,8 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
+        <span class="user-name">{{name}}</span>
+        <img class="user-avatar" :src="img_avatar">
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -26,15 +27,22 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
+import img_avatar from '@/assets/avatar.png'
+
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      img_avatar,
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'name'
     ])
   },
   methods: {
@@ -76,6 +84,11 @@ export default {
       cursor: pointer;
       margin-top: 5px;
       position: relative;
+      display: flex;
+      .user-name {
+        padding-right: 10px;
+        line-height: 40px;
+      }
       .user-avatar {
         width: 40px;
         height: 40px;

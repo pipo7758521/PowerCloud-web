@@ -2,6 +2,7 @@
 	<cms-grid
     :moduleName = "moduleName"
     :column = "column"
+    :connectModule = "connectModule"
     :subTable = "subTable"
   >
   </cms-grid>
@@ -20,7 +21,13 @@ export default {
 		return {
       moduleName: "magDomain",
 			column: tableConfig["magDomain"].column,
-      subTable: tableConfig["magDomain"].subTable
+      subTable: tableConfig["magDomain"].subTable,
+      connectModule: [{
+      	moduleName: "electrician",  //相关联的模块名
+      	myKey: "createrid",         //本模块中关联的数据库字段
+      	connectKey: "id",           //关联的模块中的对应数据库字段
+      	displayKey: "name",         //显示在前端的字段
+      }]
 		}
 	}
 }

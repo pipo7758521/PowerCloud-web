@@ -2,6 +2,7 @@
 	<cms-grid
     :moduleName = "moduleName"
 		:column = "column"
+		:connectModule = "connectModule"
     :subTable = "subTable"
 	>
 	</cms-grid>
@@ -11,35 +12,22 @@
 
 import Grid from "@/components/grid/grid"
 import tableConfig from "@/views/_config/table"
-import { fetchList } from '@/api/api'
 
 export default {
 	components: {
 		"cms-grid": Grid
 	},
-	created () {
-		//与 管理域ID 相关联
-		fetchList("customer").then( response => {
-			let list = response.data.items;
-			let options = [];
-			list.forEach( (o,i) => {
-				options.push({value: o.id, label:o.company})
-			})
-
-			this.column.forEach( (o,i) => {
-			 if(o.key == "companyid") {
-					o.options = options;
-					this.$set(this.column, i, o)
-				}
-			})
-
-		})
-	},
 	data () {
 		return {
       moduleName: "electrician",
 			column: tableConfig["electrician"].column,
-      subTable: tableConfig["electrician"].subTable
+      subTable: tableConfig["electrician"].subTable,
+      connectModule: [{
+      	moduleName: "customer",  //相关联的模块名
+      	myKey: "companyid",         //本模块中关联的数据库字段
+      	connectKey: "id",           //关联的模块中的对应数据库字段
+      	displayKey: "company",         //显示在前端的字段
+      }]
 		}
 	}
 }

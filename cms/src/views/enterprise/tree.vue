@@ -111,7 +111,7 @@ export default {
       this.treeData = response.data
     })
     deviceTypeList().then( response => {
-      let list = response.data.items;
+      let list = response.data.items || [];
         let options = [];
         list.forEach( (o,i) => {
           options.push({value: o.id, label: o.typedevicename})

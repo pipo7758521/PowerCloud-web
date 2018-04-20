@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
-      <h3 class="title">vue-element-admin</h3>
+      <h3 class="title">工业物联网云电力CMS</h3>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
@@ -22,10 +22,10 @@
           Sign in
         </el-button>
       </el-form-item>
-      <div class="tips">
+     <!--  <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: admin</span>
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
@@ -36,7 +36,7 @@ import { isvalidUsername } from '@/utils/validate'
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
+    /*const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
         callback(new Error('请输入正确的用户名'))
       } else {
@@ -49,15 +49,17 @@ export default {
       } else {
         callback()
       }
-    }
+    }*/
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: 'lipan',
+        password: '000000'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+/*        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }]*/
+        username: [{ required: true, trigger: 'blur', message: "必填"}],
+        password: [{ required: true, trigger: 'blur', message: "必填"}]
       },
       loading: false,
       pwdType: 'password'
@@ -82,7 +84,7 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.log('提交错误!')
           return false
         }
       })

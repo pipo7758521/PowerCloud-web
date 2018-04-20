@@ -90,7 +90,7 @@ export default {
 
     //关联变电所ID
     fetchList("electricitySubstation").then( response => {
-      let list = response.data.items;
+      let list = response.data.items || [];
       let options = [];
       list.forEach( (o,i) => {
         options.push({value: o.id, label: o.substationname})
@@ -141,7 +141,7 @@ export default {
     //变压器母联表 - 获取变压器ID
     initDeviceTransformerConnectionColumn () {
       fetchList("electricitySubstation_transformer").then( response => {
-        let list = response.data.items;
+        let list = response.data.items || [];
         let options = [];
         list.forEach( (o,i) => {
           options.push({value: o.id})
