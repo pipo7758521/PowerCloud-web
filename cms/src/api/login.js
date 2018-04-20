@@ -2,22 +2,22 @@ import request from '@/utils/request'
 
 export function login(username, password) {
   return request({
-    url: '/user/login',
+    url: '/user/login?account='+username+'&password='+password,
     // url: '/userlogin.json',
     method: 'post',
-    data: {
+    /*data: {
       username,
       password
-    }
+    }*/
   })
 }
 
 export function getInfo(token) {
   return request({
-    // url: '/user/info',
-    url: '/userinfo.json',
-    method: 'get',
-    params: { token }
+    url: '/user/getUserInfo',
+    // url: '/userinfo.json',
+    method: 'post',
+    // params: { token }
   })
 }
 

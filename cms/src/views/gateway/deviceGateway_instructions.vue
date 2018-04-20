@@ -1,5 +1,5 @@
 <template>
-	<cms-grid
+	<cms-grid v-if="isRender"
     :moduleName = "moduleName"
     :isSubTable = "true"
 		:column = "column"
@@ -17,9 +17,9 @@ export default {
 		"cms-grid": Grid
 	},
   created () {
-    //与 变电所ID 相关联
+    //与 设备ID 相关联
     deviceElecMeterList().then( response => {
-      let list = response.data.items;
+      let list = response.data.items || [];
       let options = [];
       list.forEach( (o,i) => {
         options.push({value: o.id})
@@ -28,13 +28,16 @@ export default {
       this.column.forEach( (o,i) => {
         if(o.key == "deviceid") {
           o.options = options;
+          this.$set(this.column, i, o)
+          return
         }
       })
-
+      this.isRender = true
     })
   },
 	data () {
     return {
+      isRender: false,
       moduleName: "deviceGateway_instructions",
       column: tableConfig["deviceGateway_instructions"].column,
     }

@@ -5,13 +5,13 @@
     "items": [{
       "id": 1,
       "magdomain": "管理域1",
-      "createrid": "aaa",
+      "createrid": 1,
       "createtime": "2018-04-10",
       "status": "0"
     }, {
       "id": 2,
       "magdomain": "管理域2",
-      "createrid": "aaa",
+      "createrid": 2,
       "createtime": "2018-04-12",
       "status": "1"
     }]

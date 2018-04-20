@@ -6,7 +6,7 @@
   	</div>
 
     <!-- 表格 -->
-  	<el-table :data="list" v-loading="listLoading" border fit highlight-current-row
+  	<el-table v-if="isRender" :data="list" v-loading="listLoading" border fit highlight-current-row
       style="width: 100%" :default-expand-all="treeRoute.path ? true : false">
 
       <!-- 详情展开 -->
@@ -14,7 +14,7 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="props.row[item.key]"/><i v-else>无</i></a></span>
+              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="props.row[item.key]"/><i style="font-style: normal;" v-else>无</i></a></span>
               <div v-else-if="item.type == 'svg'" :v-html="props.row[item.key]"></div>
               <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
               <span v-else>{{ props.row[item.key] }}</span>
@@ -157,6 +157,20 @@ export default {
         return []
       }
     },
+    connectModule: {
+      type: Array,
+      /*结构应为：
+        [{
+          moduleName: "electrician",  //相关联的模块名
+          myKey: "createrid",         //本模块中关联的数据库字段
+          connectKey: "id",           //关联的模块中的对应数据库字段
+          displayKey: "name",         //显示在前端的字段
+        }]
+      */
+      default: function () {
+        return []
+      }
+    },
     subTable: {  //当前表格是否含有子表
       type: Array,
       default: function () {
@@ -195,6 +209,14 @@ export default {
   },
   created() {
 
+    //初始化时，要看看有没有关联的模块，如果有的话
+    //需要将关联模块的数据和本模块的数据关联起来
+    //不能让用户填写，需要让用户选择，这样才可以避免出错
+    if(this.connectModule.length) {
+      this.isRender = false
+      this.initConnectModuleColumn()
+    }
+
     this.resetTemp()
     this.getList()
 
@@ -220,6 +242,7 @@ export default {
   },
   data() {
     return {
+      isRender: true,
       // listColumn: [],   //表格中展示的列
       // detailColumn: [], //点击展开，展示的详细信息，对应column中，isDetail:true的列
     	temp: null,       //该表结构对应的一条数据，用于添加、编辑等传递参数
@@ -236,6 +259,7 @@ export default {
         update: '编辑',
         create: '新增'
       },
+      // formRules: {}
     }
   },
   computed: {
@@ -325,6 +349,9 @@ export default {
       function format(v){
         return v < 10 ? "0"+v : v;
       }
+    // },
+    // selectOptionsFilter() {
+
     }
   },
   methods: {
@@ -366,7 +393,7 @@ export default {
         /Enterprise/customer/:companyid/electricitySubstation/:electricitysubstationid/electricitySubstation_cabinets/:cabinetid/deviceElecMeter?cabinettype=0
         */
         let filterId
-        let _list = response.data.items
+        let _list = response.data.items || []
         //如果是树形结构点击出现的详情，则取树形结构模拟的query参数
         let routeQuery = this.treeRoute.query || this.$route.query
         if(routeQuery) {
@@ -407,6 +434,36 @@ export default {
 
 	    console.log(JSON.stringify(this.temp))
   	},
+    //生成关联模块的column
+    initConnectModuleColumn() {
+      var function_arr = []
+      this.connectModule.forEach( (o,i) => {
+        if(o.moduleName && o.myKey && o.connectKey && o.displayKey) {
+          function_arr.push(fetchList(o.moduleName))
+        }
+      })
+      Promise.all(function_arr).then( response_arr => {
+        response_arr.forEach( (response,i) => {
+          let cm = this.connectModule[i]; //目前处理的关联模块
+          let list = response.data.items || [];
+          let options = [];
+          list.forEach( (item,i) => {
+            options.push({value: item[cm.connectKey], label: item[cm.displayKey]})
+          })
+          //赋值： 关联列的select的options
+          this.column.forEach( (col,_i) => {
+           if(col.key == cm.myKey) {
+              col.type = "select"
+              col.options = options;
+              this.$set(this.column, _i, col)
+              return
+            }
+          })
+        })
+
+        this.isRender = true
+      })
+    },
   	//点击 添加
   	handleAdd() {
       this.resetTemp()
@@ -420,7 +477,6 @@ export default {
     //点击 编辑
     handleUpdate(row) {
   		this.temp = Object.assign({}, row) // copy obj
-console.log("temp===")
       console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -561,7 +617,6 @@ console.log("temp===")
       else {
         return row[item.key]
       }
-
     },
     goToSysGraph(key) {
       let win = window.open("http://localhost:8010/#/SysGraph")

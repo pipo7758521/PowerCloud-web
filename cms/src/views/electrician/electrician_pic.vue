@@ -3,6 +3,7 @@
       :moduleName = "moduleName"
       :isSubTable = "true"
       :column = "column"
+      :connectModule = "connectModule"
     >
   </cms-grid>
 
@@ -12,7 +13,6 @@
 
 import Grid from "@/components/grid/grid"
 import tableConfig from "@/views/_config/table"
-import { stationIDList } from '@/api/common'
 
 export default {
 	components: {
@@ -22,6 +22,12 @@ export default {
 		return {
       moduleName: "electrician_pic",
 			column: tableConfig["electrician_pic"].column,
+      connectModule: [{
+        moduleName: "electrician",  //相关联的模块名
+        myKey: "electricianid",         //本模块中关联的数据库字段
+        connectKey: "id",           //关联的模块中的对应数据库字段
+        displayKey: "name",         //显示在前端的字段
+      }]
 		}
 	}
 }
