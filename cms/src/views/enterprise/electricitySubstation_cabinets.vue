@@ -4,7 +4,7 @@
       <el-tabs type="border-card" @tab-click="handleClick">
         <el-tab-pane label="进线柜信息">
           <el-row>
-            <el-col :span="24" class="table-caption"><i class="el-icon-document"></i>进线柜（变压器）信息</el-col>
+            <!-- <el-col :span="24" class="table-caption"><i class="el-icon-document"></i>进线柜（变压器）信息</el-col> -->
             <el-col :span="24">
               <cms-grid  v-if="tabClickStatus[0] == true"
                 :moduleName = "moduleName1"

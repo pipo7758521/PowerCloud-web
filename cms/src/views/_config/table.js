@@ -540,13 +540,11 @@ export default {
   	],
     subTable: [
       {
-        // title: "图纸",
         path: "electricitySubstation_pic",
         button: "配置图纸",
         plain: true
       },
       {
-        // title: "视频",
         path: "electricitySubstation_video",
         button: "配置视频",
         plain: true
@@ -1062,8 +1060,16 @@ export default {
         default: "总表",
         options: [
           {value: "总表", label: "总表"},
+          {value: "回路表", label: "回路表"},
           {value: "其它", label: "其它"},
         ]
+      },
+      {
+        key: "typedeviceid",
+        label: "设备类型",
+        type: "select",
+        required: true,
+        errorMessage: "必填"
       },
       {
         key: "manufacturer",
@@ -1086,21 +1092,14 @@ export default {
         type: "number",
         required: true,
         errorMessage: "必填"
-      },
-      {
-        key: "typedeviceid",
-        label: "设备解析类型",
-        type: "select",
-        // type:"string",
-        required: true,
-        errorMessage: "必填"
-      },
+      }
+      /*,
       {
         key: "gatewayid",
         label: "网关ID号",
         type: "number",
         isEdit: false
-      },
+      },*/
       // gatewayID
     ]
 	},
@@ -1317,7 +1316,7 @@ export default {
       },
       {
         path: "magDomain_electrician",
-        button: "配置管理域"
+        button: "配管理域"
       }
     ]
 	},
@@ -1391,7 +1390,7 @@ export default {
 			},
 			{
 				key: "post",
-				label: "岗位代码",
+				label: "岗位",
 				type: "select",
         default: 3,
         options: [

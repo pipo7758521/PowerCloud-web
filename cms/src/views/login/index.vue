@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          Sign in
+          登录
         </el-button>
       </el-form-item>
      <!--  <div class="tips">
@@ -52,8 +52,8 @@ export default {
     }*/
     return {
       loginForm: {
-        username: 'lipan',
-        password: '000000'
+        username: '',
+        password: ''
       },
       loginRules: {
 /*        username: [{ required: true, trigger: 'blur', validator: validateUsername }],

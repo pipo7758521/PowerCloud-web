@@ -58,7 +58,7 @@ export default {
       &.left {
         width: 80px;
         top: 17px;
-        left: 220px;
+        left: 180px;
         opacity: 0;
         animation-name: cloudLeft;
         animation-duration: 2s;

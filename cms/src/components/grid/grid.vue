@@ -2,7 +2,7 @@
 	  <div class="app-container calendar-list-container">
     <div class="filter-container" v-if="!treeRoute.path">
       <el-button v-if="isSubTable" class="filter-item" style="margin-left: 10px;" @click="handleBack" type="primary" plain icon="el-icon-back">返回上一级</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit-outline">{{$t('table.add')}}</el-button>
   	</div>
 
     <!-- 表格 -->
@@ -20,6 +20,7 @@
               <span v-else-if="item.type == 'svg'">
                 <el-button  size="mini" type="text" icon="el-icon-search" @click="handleViewSysGraph(props.row[item.key])">查看系统图</el-button>
               </span>
+              <!-- 日期 -->
               <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
               <!-- 选项 -->
               <span v-else-if="item.type == 'select'">{{filterOptionLabel(props.row, item)}}</span>
@@ -39,7 +40,7 @@
           </span>
           <!-- 状态 -->
           <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : (scope.row.status == "2" ? "维修中" : "停用")}}</el-tag>
-          <!-- 时间 -->
+          <!-- 日期 -->
           <span v-else-if="item.type == 'date'">{{scope.row[item.key] | dateFilter}}</span>
           <!-- 选项 -->
           <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
@@ -51,12 +52,16 @@
       </el-table-column>
 
     <!-- 进入子列表 -->
-     <el-table-column v-if="subTable.length" v-for="sub in subTable" :key="sub.path" align="center" :label="sub.title || '详情'" class-name="small-padding fixed-width" >
-      <template slot-scope="scope">
-        <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
-        </el-button>
-        <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
-        </el-button>
+     <el-table-column v-if="subTable && subTable.length"  align="center" label="详情" class-name="small-padding fixed-width" min-width="100px">
+      <template slot-scope="scope" >
+        <div class="subTable-column">
+        <template  v-for="sub in subTable" >
+          <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          </el-button>
+          <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
+          </el-button>
+        </template>
+        </div>
       </template>
     </el-table-column>
       <!-- <el-table-column v-if="subTable.length" align="center" label="详情" class-name="small-padding fixed-width" >
@@ -376,6 +381,7 @@ export default {
       // console.log(location)
     },
     dateFilter(timestamp) {
+      if(!timestamp) return ""
       let now = new Date(timestamp);
       return [now.getFullYear(),format(now.getMonth()+1),format(now.getDate())].join("-");
 
@@ -683,5 +689,17 @@ export default {
     cursor: pointer;
     max-width: 100px;
     max-height: 60px;
+  }
+
+  .subTable-column {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+
+    button {
+      margin: 0!important;
+      margin: 5px!important;
+    }
+
   }
 </style>
