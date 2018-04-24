@@ -8,7 +8,7 @@
     padding-right: 8px;
   }
   .el-tree-node__content{
-    margin: 5px 0;
+    margin: 6px 0;
   }
   .tree-level-1 {
     font-weight:bold;
@@ -16,6 +16,10 @@
     line-height: 30px;
   }
   .tree-level-2 {
+    font-weight:bold;
+    font-size:18px;
+  }
+  .tree-level-3 {
     font-weight:bold;
     font-size:16px;
   }
@@ -42,7 +46,7 @@
 <template>
   <div class="app-container">
     <el-row justify="space-between">
-      <el-col :span="7">
+      <el-col :span="7" min-width="400">
         <el-tree
         :data="treeData"
         default-expand-all
@@ -50,9 +54,9 @@
         :highlight-current="true"
         @node-click="showDetail">
         <span :class="['custom-tree-node','tree-level-'+node.level]" slot-scope="{ node, data }">
-          <span v-if="node.level == 1">企业 - {{node.data.company}}</span>
-          <span v-else-if="node.level == 2"> 变电所 - {{node.data.substationname}}(类型：{{node.data.type}})</span>
-          <span v-else-if="node.level == 3">柜 - {{node.data.cabinettype | cabinetTypeFilter}}</span>
+          <span v-if="node.level == 1"><svg-icon icon-class="enterprise"></svg-icon>&nbsp;&nbsp;企业 - {{node.data.company}}</span>
+          <span v-else-if="node.level == 2"><svg-icon icon-class="substation"></svg-icon>&nbsp;&nbsp;{{node.data.type}} - {{node.data.substation}}</span>
+          <span v-else-if="node.level == 3"><svg-icon icon-class="cabinet"></svg-icon>&nbsp;&nbsp;柜 - {{node.data.cabinettype | cabinetTypeFilter}}</span>
           <span v-else-if="node.level == 4">电表 - {{node.data.circuitname}}</span>
           <span class="tree-item-btn-bar">
            <el-button size="mini" type="text">详情>></el-button>
@@ -79,8 +83,8 @@
 
 import Grid from "@/components/grid/grid"
 import tableConfig from '@/views/_config/table'
-import { treeList } from '@/api/enterpriseTree'
-import { deviceTypeList } from "@/api/common"
+import { fetchList, fetchTreeList } from '@/api/api'
+// import { fetchList } from "@/api/common"
 
 export default {
   components: {
@@ -106,11 +110,11 @@ export default {
     }
   },
   created () {
-    treeList().then( response => {
+    fetchTreeList().then( response => {
       let data = response.data
       this.treeData = response.data
     })
-    deviceTypeList().then( response => {
+    fetchList("typeDevice").then( response => {
       let list = response.data.items || [];
         let options = [];
         list.forEach( (o,i) => {
@@ -140,24 +144,20 @@ export default {
         if(level == 1) {
           this.setTableConfig("customer")
           this.treeRoute = {
-            params: null,
-            query: {id: data.id},
-            path: "/Enterprise/customer"
+            params: {id: data.id},
+            // query: {id: data.id},
+            path: "/Enterprise/customer"    //进入子列表时要用
           }
-          // path = "/Enterprise/customer"
-          // this.$router.push({path: path, query: {id:data.id, from:"tree"}})
         }
         //只显示当前点击的变电所，所以加了query参数用于table过滤
         else if(level == 2) {
           this.setTableConfig("electricitySubstation")
           let parentId = node.parent.data.id;
           this.treeRoute = {
-            params: {companyid: parentId},
-            query: {id: data.id},
+            params: {companyid: parentId, id: data.id},
+            // query: {id: data.id},
             path: "/Enterprise/customer/"+parentId+"/electricitySubstation"
           }
-          // path = "/Enterprise/customer/"+parentId+"/electricitySubstation"
-          // this.$router.push({path: path, query: {id:data.id, from:"tree"}})
         }
         else if(level == 3) {
           let arr = ["electricitySubstation_incoming", "electricitySubstation_capacitor", "electricitySubstation_low"]
@@ -168,14 +168,12 @@ export default {
           this.treeRoute = {
             params: {
               companyid: node.parent.parent.data.id,
-              electricitysubstationid: node.parent.data.id
+              electricitysubstationid: node.parent.data.id,
+              id: data.id
             },
-            query: {id: data.id},
+            // query: {id: data.id},
             path: `/Enterprise/customer/${node.parent.parent.data.id}/electricitySubstation/${node.parent.data.id}/electricitySubstation_cabinets`
           }
-          /*let parentId = node.parent.data.id;
-          path = "/Enterprise/customer/"+parentId+"/electricitySubstation"
-          this.$router.push({path: path, query: {id:data.id, from:"tree"}})*/
         }
         else if(level == 4) {
           this.setTableConfig("deviceElecMeter")
@@ -193,12 +191,13 @@ export default {
             params: {
               companyid: node.parent.parent.parent.data.id,
               electricitysubstationid: node.parent.parent.data.id,
-              cabinetid: node.parent.data.id
+              cabinetid: node.parent.data.id,
+              cabinettype: node.data.cabinettype,
+              id: data.id
             },
-            query: {id:data.id, cabinettype:data.cabinettype},
-            path: `/Enterprise/customer/${node.parent.parent.parent.data.id}/electricitySubstation/${node.parent.parent.data.id}/electricitySubstation_cabinets/${node.parent.data.id}/deviceElecMeter`
+            // query: {id:data.id},
+            path: `/Enterprise/customer/${node.parent.parent.parent.data.id}/electricitySubstation/${node.parent.parent.data.id}/electricitySubstation_cabinets/${node.parent.data.id}/deviceElecMeter/${node.data.cabinettype}`
           }
-          // this.$router.push({path: path, query: {id:node.data.id, cabinettype:node.data.cabinettype, from:"tree"}})
         }
       })
     },

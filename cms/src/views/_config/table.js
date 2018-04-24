@@ -168,13 +168,11 @@ export default {
         required: true,
         errorMessage: "必填"
       },
-      /*{                    //这个不要了
+      {                    //这个不要了
         key: "subjectid",
         label: "订阅主题ID",
         type: "string",
-        required: true,
-        errorMessage: "必填"
-      },*/
+      },
       {
         key: "gatewayusr",
         label: "网关用户名",
@@ -218,7 +216,7 @@ export default {
       },
       {
         key: "gatewayid",
-        label: "网关ID",
+        label: "网关",
         type: "number",
         isEdit: false,
       },
@@ -231,7 +229,7 @@ export default {
       },
       {
         key: "deviceid",
-        label: "设备ID",
+        label: "设备",
         type: "select",
         required: true,
         errorMessage: "必填",
@@ -280,8 +278,8 @@ export default {
         key: "companycode",
   			label: "组织机构代码",
   			type: "string",
-  			// required: true,
-  			// errorMessage: "必填"
+  			required: true,
+  			errorMessage: "必填"
   		},
   		{
       key: "address",
@@ -309,12 +307,16 @@ export default {
         key: "bizownertel",
         label: "业务负责人办公电话",
         type: "string",
-        isDetail: true
+        isDetail: true,
+        required: true,
+        errorMessage: "必填"
       },
       {
         key: "bizownerphone",
         label: "业务负责人移动电话",
         type: "string",
+        required: true,
+        errorMessage: "必填",
         // errorMessage: "电话格式错误",
         isDetail: true
       },
@@ -322,18 +324,24 @@ export default {
         key: "taxpayeridentification",
         label: "开票信息",
         type: "string",
+        required: true,
+        errorMessage: "必填",
         isDetail: true
       },
       {
         key: "bank",
         label: "开户行",
         type: "string",
+        required: true,
+        errorMessage: "必填",
         isDetail: true
       },
       {
         key: "bankaccount",
         label: "银行账户",
         type: "string",
+        required: true,
+        errorMessage: "必填",
         isDetail: true
       },
       {
@@ -346,11 +354,15 @@ export default {
         key: "financechieftel",
         label: "财务负责人办公电话",
         type: "string",
+        required: true,
+        errorMessage: "必填",
         isDetail: true
       },
       {
         key: "financechiefphone",
         label: "财务负责人移动电话",
+        required: true,
+        errorMessage: "必填",
         type: "string",
         isDetail: true,
         // errorMessage: "电话格式错误"
@@ -359,6 +371,7 @@ export default {
         key: "companytypecode",
         label: "企业类型代码",
         type: "select",
+        default: "01",
         options: [
           {label:"工业",value:"01"},
           {label:"商业",value:"02"},
@@ -387,6 +400,9 @@ export default {
         key: "superiorunitcode",
         label: "上级单位代码",
         type: "number",
+        default: 0,
+        required: true,
+        errorMessage: "必填",
         isDetail: true
       },
       {
@@ -428,14 +444,15 @@ export default {
   			errorMessage: "必填"
   		},
   		{
-      key: "address",
-			label: "地址",
-			type: "string",
-  		},
+        key: "address",
+  			label: "地址",
+  			type: "string",
+    		},
       {
         key: "type",
         label: "变电所类型",
         type: "select",
+        default: "变电所",
         options:[
           {label:"箱变", value:"箱变"},
           {label:"变电所", value:"变电所"},
@@ -450,6 +467,7 @@ export default {
         key: "powertype",
         label: "电压状态",
         type: "select",
+        default: "0",
         options:[
           {label:"单电源", value:"0"},
           {label:"双电源", value:"1"},
@@ -459,6 +477,7 @@ export default {
         key: "voltageclass",
         label: "电压等级",
         type: "select",
+        default: "0",
         options:[
           {label:"220V", value:"0"},
           {label:"380V", value:"1"},
@@ -474,7 +493,7 @@ export default {
       {
         key: "total",
         label: "总容量",
-        type: "string",
+        type: "number",
         isDetail: true
       },
       {
@@ -486,7 +505,7 @@ export default {
       {
         key: "constructiontime",
         label: "建设时间",
-        type: "string",
+        type: "date",
         isDetail: true
       },
       {
@@ -510,8 +529,13 @@ export default {
       {
         key: "status",
         label: "状态",
-        type: "string",
-        isDetail: true
+        default: "0",
+        type: "select",
+        options: [
+          {value: "0", label: "正常"},
+          {value: "1", label: "停用"},
+          {value: "2", label: "维修中"}
+        ]
       }
   	],
     subTable: [
@@ -539,6 +563,7 @@ export default {
         key: "id",
         label: "ID",
         type: "number",
+        isEdit: false,
         mainKey: true,   //主键！！！
       },
       {
@@ -554,7 +579,7 @@ export default {
         label: "图纸编号",
         type: "number",
         required: true,
-        errorMessage: "必填"
+        errorMessage: "必填且应为数字"
       },
       {
         key: "pic",
@@ -624,11 +649,11 @@ export default {
         key: "num",
         label: "所内编号",
         type: "number",
-        isEdit: false
+        // isEdit: false
       },
       {
         key: "manufacturer",
-        label: "生产企业",
+        label: "进线柜生产企业",
         type: "string",
         required: true,
         errorMessage: "必填"
@@ -638,13 +663,16 @@ export default {
         label: "变压器ID",
         type: "string",
         required: true,
-        errorMessage: "必填"
+        errorMessage: "必填",
+        isEdit: false,
+        isDetail: true
       },
       {
         key: "status",
         label: "状态",
         default: "0",
         type: "select",
+        default: "0",
         options: [
           {value: "0", label: "正常"},
           {value: "1", label: "停用"}
@@ -654,16 +682,17 @@ export default {
         key: "connectiontype",
         label: "连接类型",
         type: "select",
+        default: 1,
         required: true,
         errorMessage: "必填",
         options: [
-          {value: "0", label: "母连"},
-          {value: "1", label: "独体"}
+          {value: 1, label: "母连"},
+          {value: 2, label: "独体"}
         ]
       },
       {
-        // key: "transformer_manufacturer",
-        key: "manufacturer",
+        key: "transformer_manufacturer",
+        // key: "manufacturer",
         label: "变压器生产企业",
         type: "string",
         required: true,
@@ -672,18 +701,18 @@ export default {
       {
         key: "manufacturercode",
         label: "生产编号",
-        type: "number",
+        type: "string",
         isDetail: true
       },
       {
         key: "transformermodel",
         label: "型号",
-        type: "number",
+        type: "string",
         isDetail: true
       },
       {
         key: "weight",
-        label: "重量",
+        label: "重量(kg)",
         type: "number",
         isDetail: true
       },
@@ -734,7 +763,6 @@ export default {
         label: "绝缘耐热等级",
         default: "0",
         type: "select",
-        default: "0",
         isDetail: true,
         options: [
           {value: "A"},
@@ -755,7 +783,7 @@ export default {
       }
     ],
     subTable: [{
-      path: "deviceElecMeter?cabinettype=0",  //进线柜下的电表
+      path: "deviceElecMeter/0",  //进线柜下的电表
       button: "配置电表"
     }]
 	},
@@ -799,7 +827,7 @@ export default {
         key: "num",
         label: "所内编号",
         type: "number",
-        isEdit: false
+        // isEdit: false
       },
       {
         key: "manufacturer",
@@ -824,7 +852,7 @@ export default {
       }
     ],
     subTable: [{
-      path: "deviceElecMeter?cabinettype=1",  //电容柜下的电表
+      path: "deviceElecMeter/1",  //电容柜下的电表
       button: "配置电表"
     }]
 	},
@@ -947,10 +975,46 @@ export default {
       }
     ],
     subTable: [{
-      path: "deviceElecMeter?cabinettype=2",  //馈电柜下的电表
+      path: "electricitySubstation_low_pic",  //馈电柜下的电表
+      plain: true,
+      button: "配置图纸"
+    },
+    {
+      path: "deviceElecMeter/2",  //馈电柜下的电表
       button: "配置电表"
     }]
 	},
+  electricitySubstation_low_pic: {
+    column: [
+      {
+        key: "id",
+        label: "ID",
+        type: "number",
+        isEdit: false,
+        mainKey: true,   //主键！！！
+      },
+      {
+        key: "lowcabinetid",
+        label: "电表所在柜ID",
+        type: "number",
+        isEdit: false,
+      },
+      {
+        key: "num",
+        label: "图纸编号",
+        type: "number",
+        required: true,
+        errorMessage: "必填且应为数字"
+      },
+      {
+        key: "pic",
+        label: "图纸",
+        type: "image",
+        required: true,
+        errorMessage: "必填"
+      },
+    ]
+  },
 	deviceElecMeter: {
 		column: [
       {
@@ -976,6 +1040,29 @@ export default {
           {value: 0, label: "进线柜"},
           {value: 1, label: "电容柜"},
           {value: 2, label: "馈电柜"},
+        ]
+      },
+      {
+        key: "num",
+        label: "回路编号",
+        type: "number",
+        isEdit: false
+      },
+      {
+        key: "circuitname",
+        label: "回路名称",
+        type: "string",
+        required: true,
+        errorMessage: "必填"
+      },
+      {
+        key: "circuittype",
+        label: "回路类型",
+        type: "select",
+        default: "总表",
+        options: [
+          {value: "总表", label: "总表"},
+          {value: "其它", label: "其它"},
         ]
       },
       {
@@ -1007,29 +1094,6 @@ export default {
         // type:"string",
         required: true,
         errorMessage: "必填"
-      },
-      {
-        key: "num",
-        label: "回路编号",
-        type: "number",
-        isEdit: false
-      },
-      {
-        key: "circuitname",
-        label: "回路名称",
-        type: "string",
-        required: true,
-        errorMessage: "必填"
-      },
-      {
-        key: "circuittype",
-        label: "回路类型",
-        type: "select",
-        default: "总表",
-        options: [
-          {value: "总表", label: "总表"},
-          {value: "其它", label: "其它"},
-        ]
       },
       {
         key: "gatewayid",

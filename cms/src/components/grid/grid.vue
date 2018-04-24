@@ -14,9 +14,15 @@
         <template  slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
             <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <span v-if="item.type == 'image'"><a :href="props.row[item.key]" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="props.row[item.key]"/><i style="font-style: normal;" v-else>无</i></a></span>
-              <div v-else-if="item.type == 'svg'" :v-html="props.row[item.key]"></div>
+              <!-- 图片 -->
+              <span v-if="item.type == 'image'"><a :href="filterImageUrl(props.row[item.key])" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="filterImageUrl(props.row[item.key])"/><i style="font-style: normal;" v-else>无</i></a></span>
+              <!-- SVG系统图 -->
+              <span v-else-if="item.type == 'svg'">
+                <el-button  size="mini" type="text" icon="el-icon-search" @click="handleViewSysGraph(props.row[item.key])">查看系统图</el-button>
+              </span>
               <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
+              <!-- 选项 -->
+              <span v-else-if="item.type == 'select'">{{filterOptionLabel(props.row, item)}}</span>
               <span v-else>{{ props.row[item.key] }}</span>
             </el-form-item>
           </el-form>
@@ -25,34 +31,44 @@
 
 
       <el-table-column v-if="!item.isDetail" v-for="item in listColumn" :key="item.key" align="center" :label="item.label"
-        :width= "(item.mainKey||item.key == 'status') ? '65px' : ''">
+        :width= "(item.mainKey ? '60px' : (item.key == 'status' ? '80px' : ''))">
         <template slot-scope="scope">
           <!-- 文本 -->
           <span v-if="item.type == 'string'|| item.type == 'number'">
             {{scope.row[item.key]}}
           </span>
           <!-- 状态 -->
-          <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : "停用"}}</el-tag>
+          <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : (scope.row.status == "2" ? "维修中" : "停用")}}</el-tag>
           <!-- 时间 -->
           <span v-else-if="item.type == 'date'">{{scope.row[item.key] | dateFilter}}</span>
           <!-- 选项 -->
           <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
           <!-- 图片 -->
-          <span v-else-if="item.type == 'image'"><a :href="scope.row[item.key]" target="_blank"><img class="table-image" :src="scope.row[item.key]"/></a></span>
+          <span v-else-if="item.type == 'image'"><a :href="filterImageUrl(scope.row[item.key])" target="_blank"><img class="table-image" :src="filterImageUrl(scope.row[item.key])"/></a></span>
           <!-- 坐标 -->
           <!-- <span v-else-if="item.type == 'location'">{{scope.row[item.key] | locationFilter}}</span> -->
         </template>
       </el-table-column>
 
-    <!-- 进入字列表 -->
+    <!-- 进入子列表 -->
      <el-table-column v-if="subTable.length" v-for="sub in subTable" :key="sub.path" align="center" :label="sub.title || '详情'" class-name="small-padding fixed-width" >
+      <template slot-scope="scope">
+        <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+        </el-button>
+        <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
+        </el-button>
+      </template>
+    </el-table-column>
+      <!-- <el-table-column v-if="subTable.length" align="center" label="详情" class-name="small-padding fixed-width" >
         <template slot-scope="scope">
-          <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
-          </el-button>
-          <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
-          </el-button>
+          <template  v-for="sub in subTable">
+            <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
+            </el-button>
+            <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
+            </el-button>
+          </template>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <!-- 操作列 -->
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="120px" fixed="right">
@@ -90,8 +106,21 @@
           </el-select>
           <!-- date日期选择 -->
           <el-date-picker v-else-if="item.type == 'date'" value-format="timestamp" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
-          <!-- URL -->
-          <el-input v-else-if="item.type == 'image'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
+          <!-- image URL -->
+          <el-row v-else-if="item.type == 'image'">
+            <el-col :span="12">
+              <el-input v-model="temp[item.key]" type="text"></el-input>
+            </el-col>
+            <el-col :span="1">&nbsp;</el-col>
+            <el-col :span="11">
+              <cms-upload
+                :module-name = "moduleName"
+                :img-src = "temp[item.key]"
+                :item-key = "item.key"
+                @on-src-change = "onImgSrcChange">
+              </cms-upload>
+            </el-col>
+          </el-row>
           <!-- 系统SVG图 -->
           <el-row v-else-if="item.type == 'svg'">
             <el-col :span="18">
@@ -133,7 +162,7 @@ import { parseTime } from '@/utils'
 import { fetchList, insertData, editData, deleteData } from '@/api/api'
 import request from '@/utils/request'
 
-
+import Upload from '@/components/Upload/uploadImage.vue'
 
 
 export default {
@@ -206,6 +235,9 @@ export default {
       type: Function,
       default: deleteData
     },
+  },
+  components: {
+    'cms-upload': Upload,
   },
   created() {
 
@@ -329,6 +361,7 @@ export default {
       const statusMap = {
         0: 'success',
         1: 'danger',
+        2: 'warning',
       }
       return statusMap[status] || 'danger'
     },
@@ -340,7 +373,7 @@ export default {
       catch(e) {
         return location
       }
-      console.log(location)
+      // console.log(location)
     },
     dateFilter(timestamp) {
       let now = new Date(timestamp);
@@ -349,16 +382,14 @@ export default {
       function format(v){
         return v < 10 ? "0"+v : v;
       }
-    // },
-    // selectOptionsFilter() {
+    },
 
-    }
   },
   methods: {
   	getList() {
   		this.listLoading = true
       //如果是子表，则路由中的参数就是对应的父表的ID
-      if(this.isSubTable) {
+      if(this.isSubTable || this.treeRoute.params) {
         let searchParams = {} //需要向后台传的过滤搜索字段
         //如果是树形结构点击出现的详情，则取树形结构模拟的route参数
         let routeParams = this.treeRoute.params || this.$route.params
@@ -377,7 +408,7 @@ export default {
         */
         for(var p in routeParams) {
           if(this.temp.hasOwnProperty(p)) {
-            searchParams[p] = routeParams[p]  //取交集
+            searchParams[p] = /id$/.test(p) ? (+routeParams[p]) : routeParams[p]  //取交集
           }
         }
         //fetchList根据listQuery中的search参数传给后台，后台取出对应数据
@@ -385,31 +416,7 @@ export default {
       }
 
 	    this.fetchList(this.moduleName, this.listQuery ).then(response => {
-        /*
-        （1）从企业tree中点击进来，会带着query参数id
-        此时看到的是某个id下的具体内容，所以这里做了一个list的过滤，只显示当前ID下的
-        （2）从 进线柜、电容柜、馈电柜点进电表表，要看到对应该柜ID和该柜类型下的电表，
-        此时route的param参数为柜id，route的query参数中带有柜类型cabinetid=X，此时路由字段为
-        /Enterprise/customer/:companyid/electricitySubstation/:electricitysubstationid/electricitySubstation_cabinets/:cabinetid/deviceElecMeter?cabinettype=0
-        */
-        let filterId
-        let _list = response.data.items || []
-        //如果是树形结构点击出现的详情，则取树形结构模拟的query参数
-        let routeQuery = this.treeRoute.query || this.$route.query
-        if(routeQuery) {
-          this.list = _list.filter( item => {
-            let res = true
-            for(let q in routeQuery) {
-              if(item.hasOwnProperty(q)) {
-                res &= (item[q] == routeQuery[q])
-              }
-            }
-            return res
-          })
-        }
-        else {
-          this.list = _list
-        }
+        this.list = response.data.items || []
 	      this.total = response.data.total
 	      this.listLoading = false
 	    })
@@ -432,7 +439,7 @@ export default {
         }
 	    })
 
-	    console.log(JSON.stringify(this.temp))
+	    // console.log(JSON.stringify(this.temp))
   	},
     //生成关联模块的column
     initConnectModuleColumn() {
@@ -477,7 +484,7 @@ export default {
     //点击 编辑
     handleUpdate(row) {
   		this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
+      // console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -548,7 +555,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          console.log(tempData)
+          // console.log(tempData)
           this.updateData(this.moduleName, tempData).then( (res) => {
             this.dialogFormVisible = false;
             if(res.ok) {
@@ -595,8 +602,6 @@ export default {
       this.getList()
     },
     handleSubTable(sub, row) {
-      // console.log(`${this.$route.path}`)
-      // console.log(`${this.$route.path}/${row.id}/${sub.path}`)
       this.$router.push({path: `${this.treeRoute.path || this.$route.path}/${row.id}/${sub.path}`})
     },
     handleBack() {
@@ -618,12 +623,40 @@ export default {
         return row[item.key]
       }
     },
+    //显示图片
+    filterImageUrl(filename) {
+      let path = process.env.UPLOAD_URL + "img/";
+      switch(this.moduleName) {
+        case "customer":
+          path += "customer/"
+          break
+        case "electrician":
+        case "electrician_pic":
+          path += "electrician/"
+          break
+        case "electricitySubstation_pic":
+          path += "substation/"
+          break
+        case "electricitySubstation_low_pic":
+          path += "cabinet/"
+        break
+      }
+      return path + filename
+    },
     goToSysGraph(key) {
       let win = window.open("http://localhost:8010/#/SysGraph")
       setTimeout( () => {
          win.postMessage({title:"powerCloudCMS-message", key: key}, '*');
          // this.$router.push({path: "/SysGraph"})
       }, 1000)
+    },
+    handleViewSysGraph(html) {
+      this.$alert(`<div style="background:#272822;padding:20px">${html}</div>`, '系统图', {
+        dangerouslyUseHTMLString: true
+      });
+    },
+    onImgSrcChange(val, key) {
+      this.temp[key] = val
     }
   }
 

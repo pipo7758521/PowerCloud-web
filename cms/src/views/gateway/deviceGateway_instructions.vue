@@ -1,8 +1,9 @@
 <template>
-	<cms-grid v-if="isRender"
+	<cms-grid
     :moduleName = "moduleName"
     :isSubTable = "true"
 		:column = "column"
+    :connectModule = "connectModule"
 	>
 	</cms-grid>
 </template>
@@ -11,12 +12,12 @@
 
 import Grid from "@/components/grid/grid"
 import tableConfig from "@/views/_config/table"
-import { deviceElecMeterList } from '@/api/common'
+// import { deviceElecMeterList } from '@/api/common'
 export default {
 	components: {
 		"cms-grid": Grid
 	},
-  created () {
+  /*created () {
     //与 设备ID 相关联
     deviceElecMeterList().then( response => {
       let list = response.data.items || [];
@@ -34,12 +35,24 @@ export default {
       })
       this.isRender = true
     })
-  },
+  },*/
 	data () {
     return {
-      isRender: false,
       moduleName: "deviceGateway_instructions",
       column: tableConfig["deviceGateway_instructions"].column,
+      //与管理域 变电所 相关联
+      connectModule: [{
+        moduleName: "deviceGateway",
+        myKey: "gatewayid",
+        connectKey: "id",
+        displayKey: "gatewayname",
+      },
+      {
+        moduleName: "deviceElecMeter",
+        myKey: "deviceid",
+        connectKey: "id",
+        displayKey: "circuitname",
+      }]
     }
 
 	}

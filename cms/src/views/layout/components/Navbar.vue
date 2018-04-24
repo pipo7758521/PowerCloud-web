@@ -4,7 +4,7 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <span class="user-name">{{name}}</span>
+        <span class="user-name">您好，{{name}}</span>
         <img class="user-avatar" :src="img_avatar">
         <i class="el-icon-caret-bottom"></i>
       </div>

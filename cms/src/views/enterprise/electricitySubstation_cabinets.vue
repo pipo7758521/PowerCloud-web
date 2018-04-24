@@ -1,46 +1,49 @@
 <template>
   <cms-step-wrapper :activeIndex="3">
     <div class="tab-container">
-      <el-tabs type="border-card">
+      <el-tabs type="border-card" @tab-click="handleClick">
         <el-tab-pane label="进线柜信息">
           <el-row>
             <el-col :span="24" class="table-caption"><i class="el-icon-document"></i>进线柜（变压器）信息</el-col>
             <el-col :span="24">
-              <cms-grid
+              <cms-grid  v-if="tabClickStatus[0] == true"
                 :moduleName = "moduleName1"
                 :column = "column1"
                 :isSubTable = "true"
                 :subTable = "subTable1"
+                :connectModule = "connectModule"
               >
               </cms-grid>
             </el-col>
-            <el-col :span="24" class="table-caption table-caption-2"><i class="el-icon-share"></i>变压器母联情况</el-col>
+           <!--  <el-col :span="24" class="table-caption table-caption-2"><i class="el-icon-share"></i>变压器母联情况</el-col>
             <el-col :span="24">
               <cms-grid
                 :moduleName = "moduleName2"
                 :column = "column2"
               >
               </cms-grid>
-            </el-col>
+            </el-col> -->
           </el-row>
 
 
         </el-tab-pane>
         <el-tab-pane label="电容柜信息">
-          <cms-grid
+          <cms-grid v-if="tabClickStatus[1] == true"
             :moduleName = "moduleName3"
             :column = "column3"
             :isSubTable = "true"
             :subTable = "subTable3"
+            :connectModule = "connectModule"
           >
           </cms-grid>
         </el-tab-pane>
         <el-tab-pane label="馈电柜信息">
-          <cms-grid
+          <cms-grid v-if="tabClickStatus[2] == true"
             :moduleName = "moduleName4"
             :column = "column4"
             :isSubTable = "true"
             :subTable = "subTable4"
+            :connectModule = "connectModule"
           >
           </cms-grid>
         </el-tab-pane>
@@ -72,11 +75,11 @@
 
 import Grid from "@/components/grid/grid"
 import StepWrapper from "./components/stepWrapper"
-import { deviceTransformerList } from "@/api/common"
+// import { deviceTransformerList } from "@/api/common"
 import tableConfig from "@/views/_config/table"
 
 
-import { fetchList } from "@/api/api"
+// import { fetchList } from "@/api/api"
 
 
 export default {
@@ -85,11 +88,12 @@ export default {
     "cms-step-wrapper": StepWrapper
   },
   created () {
+    this.handleClick({index:0})
     //变压器母联
-    this.initDeviceTransformerConnectionColumn()
+    // this.initDeviceTransformerConnectionColumn()
 
     //关联变电所ID
-    fetchList("electricitySubstation").then( response => {
+    /*fetchList("electricitySubstation").then( response => {
       let list = response.data.items || [];
       let options = [];
       list.forEach( (o,i) => {
@@ -114,15 +118,26 @@ export default {
           this.$set(this.column4, i, o)
         }
       })
-    })
+    })*/
 
   },
 	data () {
 		return {
+      tabClickStatus: [false, false, false],
+      //与 变电所 相关联
+      connectModule: [{
+        moduleName: "electricitySubstation",
+        myKey: "electricitysubstationid",
+        connectKey: "id",
+        displayKey: "substationname",
+      }],
+
       //进线柜
       moduleName1: "electricitySubstation_incoming",
 			column1: tableConfig["electricitySubstation_incoming"].column,
       subTable1: tableConfig["electricitySubstation_incoming"].subTable,
+
+
       //变压器母联情况
       moduleName2: "deviceTransformer_connection",
       column2: tableConfig["deviceTransformer_connection"].column,
@@ -138,8 +153,12 @@ export default {
 		}
 	},
   methods: {
+    handleClick (tab) {
+      this.$set(this.tabClickStatus, tab.index, true)
+      // console.log(tab.index);
+    },
     //变压器母联表 - 获取变压器ID
-    initDeviceTransformerConnectionColumn () {
+    /*initDeviceTransformerConnectionColumn () {
       fetchList("electricitySubstation_transformer").then( response => {
         let list = response.data.items || [];
         let options = [];
@@ -155,7 +174,7 @@ export default {
         })
 
       })
-    },
+    },*/
   }
 }
 

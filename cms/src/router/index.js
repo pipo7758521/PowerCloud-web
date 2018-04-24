@@ -202,6 +202,34 @@ export const constantRouterMap = [
       },
       {
         path: 'customer',
+        name: 'electricitySubstation_low_pic',
+        component: () => import('@/views/enterprise/electricitySubstation_low_pic'),
+        meta: { title: '企业配置', icon: 'example' },
+        hidden: true,
+        children: [
+          {
+            path: ':companyid/electricitySubstation',
+            name: 'electricitySubstation_pic',
+            meta: { title: '变电所信息', icon: 'example' },
+            children: [
+              {
+                path: ':electricitysubstationid/electricitySubstation_cabinets',
+                name: 'deviceElecMeter',
+                meta: { title: '机柜配置', icon: 'example' },
+                children: [
+                  {
+                    path: ':lowcabinetid/electricitySubstation_low_pic',
+                    name: 'deviceElecMeter',
+                    meta: { title: '馈电柜图纸配置', icon: 'example' },
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'customer',
         name: 'deviceElecMeter',
         component: () => import('@/views/enterprise/deviceElecMeter'),
         meta: { title: '企业配置', icon: 'example' },
@@ -218,7 +246,7 @@ export const constantRouterMap = [
                 meta: { title: '机柜配置', icon: 'example' },
                 children: [
                   {
-                    path: ':cabinetid/deviceElecMeter',
+                    path: ':cabinetid/deviceElecMeter/:cabinettype',
                     name: 'deviceElecMeter',
                     meta: { title: '电表配置', icon: 'example' },
                   }
