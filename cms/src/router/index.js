@@ -304,7 +304,36 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  //权限配置
+  {
+    path: '/Permission',
+    component: Layout,
+    children: [
+      {
+        path: 'role',
+        name: 'Role',
+        component: () => import('@/views/permission/role'),
+        meta: { title: '权限配置', icon: 'lock' },
+      }
+    ]
+  },
+  {
+    path: '/Permission/role/:roleid/role_permission',
+    component: Layout,
+    redirect: '/Permission/role',
+    name: 'Role_permission',
+    meta: { title: '权限配置', icon: 'lock' },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        meta: { title: '功能权限配置', icon: 'network' },
+        name: 'role_permission ',
+        component: () => import('@/views/permission/role_permission.vue'),
+        hidden: true
+      }
+    ]
+  },
   //系统图
   {
     path: '/SysGraph',

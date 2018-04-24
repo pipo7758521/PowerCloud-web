@@ -168,7 +168,7 @@ import { fetchList, insertData, editData, deleteData } from '@/api/api'
 import request from '@/utils/request'
 
 import Upload from '@/components/Upload/uploadImage.vue'
-
+import { Message, MessageBox } from 'element-ui'
 
 export default {
   name: 'grid',
@@ -499,33 +499,41 @@ export default {
   	},
   	//点击 删除
   	handleDelete(row) {
-  		let param = null;
-  		this.column.forEach( (o,i) => {
-  			if(o.mainKey && row[o.key]) {
-  				param = {};
-  				param[o.key] = row[o.key]
-  				return
-  			}
-  		})
-  		this.deleteData(this.moduleName, param).then((res) => {
-  			if(res.ok) {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          const index = this.list.indexOf(row)
-          this.list.splice(index, 1)
-        }
-        else {
-          this.$notify({
-            title: '失败',
-            message: res.data,
-            type: 'error',
-            duration: 2000
-          })
-        }
+      MessageBox.confirm('确定要删除吗？', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'danger'
+      }).then(() => {
+        let param = null;
+        this.column.forEach( (o,i) => {
+          if(o.mainKey && row[o.key]) {
+            param = {};
+            param[o.key] = row[o.key]
+            return
+          }
+        })
+        this.deleteData(this.moduleName, param).then((res) => {
+          if(res.ok) {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            const index = this.list.indexOf(row)
+            this.list.splice(index, 1)
+          }
+          else {
+            this.$notify({
+              title: '失败',
+              message: res.data,
+              type: 'error',
+              duration: 2000
+            })
+          }
+      })
+
+
 
 	      // this.getList();
   		})
@@ -650,7 +658,7 @@ export default {
       return path + filename
     },
     goToSysGraph(key) {
-      let win = window.open("http://localhost:8010/#/SysGraph")
+      let win = window.open("/PowerCloud/#/sysGraph")
       setTimeout( () => {
          win.postMessage({title:"powerCloudCMS-message", key: key}, '*');
          // this.$router.push({path: "/SysGraph"})

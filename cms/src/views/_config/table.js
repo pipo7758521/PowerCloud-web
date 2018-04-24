@@ -1418,4 +1418,52 @@ export default {
 			}
 		]
 	},
+  //权限配置
+  role: {
+    column: [
+      {
+        key: "id",
+        label: "ID",
+        type: "number",
+        isEdit: false,
+        mainKey: true,   //主键！！！ 用于删除
+      },
+      {
+        key: "name",
+        label: "角色名",
+        type: "string",
+        required: true,
+        errorMessage: "必填"
+      }
+    ],
+    subTable: [{
+      path: "role_permission",
+      button: "配置模块权限"
+    }]
+  },
+  role_permission: {
+    column: [
+      {
+        key: "id",
+        label: "ID",
+        type: "number",
+        isEdit: false,
+        mainKey: true,   //主键！！！ 用于删除
+      },
+      {
+        key: "name",
+        label: "角色",
+        type: "string",
+        required: true,
+        errorMessage: "必填"
+      },
+      {
+        key: "name",
+        label: "功能模块",
+        type: "string",
+        required: true,
+        errorMessage: "必填"
+      }
+    ]
+  }
 }

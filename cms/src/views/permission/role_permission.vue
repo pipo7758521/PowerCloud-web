@@ -19,17 +19,17 @@ export default {
 	},
 	data () {
     return {
-      moduleName: "deviceGateway_instructions",
-      column: tableConfig["deviceGateway_instructions"].column,
-      //与管理域 变电所 相关联
+      moduleName: "role_permission",
+      column: tableConfig["role_permission"].column,
+      //与 角色表、功能表 相关联
       connectModule: [{
-        moduleName: "deviceGateway",
-        myKey: "gatewayid",
+        moduleName: "role",
+        myKey: "roleid",
         connectKey: "id",
-        displayKey: "gatewayname",
+        displayKey: "name",
       },
       {
-        moduleName: "deviceElecMeter",
+        moduleName: "function",
         myKey: "deviceid",
         connectKey: "id",
         displayKey: "circuitname",
