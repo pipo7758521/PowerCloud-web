@@ -18,7 +18,6 @@ export default {
 	},
 	data () {
     return {
-    	isRender: false,
       moduleName: "role",
       column: tableConfig["role"].column,
       subTable: tableConfig["role"].subTable,

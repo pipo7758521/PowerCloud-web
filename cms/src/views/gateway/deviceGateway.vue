@@ -19,7 +19,6 @@ export default {
 	},
 	data () {
     return {
-    	isRender: false,
       moduleName: "deviceGateway",
       column: tableConfig["deviceGateway"].column,
       subTable: tableConfig["deviceGateway"].subTable,

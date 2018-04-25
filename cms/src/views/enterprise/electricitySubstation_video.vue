@@ -23,7 +23,6 @@ export default {
   },
 	data () {
 		return {
-      isRender: false,
       moduleName: "electricitySubstation_video",
       column: tableConfig["electricitySubstation_video"].column,
       //与变电所相关联

@@ -19,20 +19,20 @@ export default {
 	},
 	data () {
     return {
-      moduleName: "role_permission",
-      column: tableConfig["role_permission"].column,
+      moduleName: "role_function",
+      column: tableConfig["role_function"].column,
       //与 角色表、功能表 相关联
       connectModule: [{
         moduleName: "role",
         myKey: "roleid",
         connectKey: "id",
-        displayKey: "name",
+        displayKey: "rolename",
       },
       {
         moduleName: "function",
-        myKey: "deviceid",
+        myKey: "functionid",
         connectKey: "id",
-        displayKey: "circuitname",
+        displayKey: "functionurl",
       }]
     }
 

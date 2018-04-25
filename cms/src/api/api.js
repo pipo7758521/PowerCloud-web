@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
-let API_URL = {};
+//前端模块 和 后台接口名称 的映射关系
+export let API_URL = {};
 
 let isDebug = process.env.NODE_ENV == "development";
 
@@ -75,7 +76,13 @@ if(true || isDebug) {
     //电工
     electrician: "electrician",
     electrician_pic: "electricianPic",
+    electrician_role: "sysElectricianRole",
     magDomain_electrician: "magDomainElectrician",
+
+    //权限
+    function: "sysFunction",
+    role: "sysRole",
+    role_function: "sysRoleFunction"
 
   }
 }

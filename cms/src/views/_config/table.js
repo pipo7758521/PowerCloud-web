@@ -289,7 +289,7 @@ export default {
       {
         key: "location",
         label: "经纬度",
-        type: "string",
+        type: "location",
 
       },
       {
@@ -460,8 +460,8 @@ export default {
       },
       {
         key: "lacation",
-        label: "地图位置",
-        type: "string",
+        label: "经纬度",
+        type: "location",
       },
       {
         key: "powertype",
@@ -1315,6 +1315,11 @@ export default {
         plain: true
       },
       {
+        path: "electrician_role",
+        button: "配置角色",
+        plain: true
+      },
+      {
         path: "magDomain_electrician",
         button: "配管理域"
       }
@@ -1366,6 +1371,45 @@ export default {
 
   	]
 	},
+  electrician_role: {
+    column: [
+      {
+        key: "id",
+        label: "ID",
+        type: "number",
+        isEdit: false,
+        mainKey: true,   //主键！！！ 用于删除
+      },
+      {
+        key: "userid",
+        label: "电工",
+        type: "select",
+      },
+      {
+        key: "roleid",
+        label: "角色",
+        type: "select",
+        required: true,
+        errorMessage: "必填"
+      },
+      {
+        key: "status",
+        label: "状态",
+        type: "select",
+        default: "0",
+        options: [
+          {
+            value: "0",
+            label: "正常"
+          },
+          {
+            value: "1",
+            label: "停用"
+          }
+        ]
+      }
+    ]
+  },
 	magDomain_electrician: {
 		column: [
 			{
@@ -1429,19 +1473,36 @@ export default {
         mainKey: true,   //主键！！！ 用于删除
       },
       {
-        key: "name",
+        key: "rolename",
         label: "角色名",
         type: "string",
         required: true,
         errorMessage: "必填"
+      },
+      {
+        key: "status",
+        label: "状态",
+        type: "select",
+        required: true,
+        default: "0",
+        options: [
+          {
+            value: "0",
+            label: "正常"
+          },
+          {
+            value: "1",
+            label: "停用"
+          }
+        ]
       }
     ],
     subTable: [{
-      path: "role_permission",
+      path: "role_function",
       button: "配置模块权限"
     }]
   },
-  role_permission: {
+  role_function: {
     column: [
       {
         key: "id",
@@ -1451,18 +1512,100 @@ export default {
         mainKey: true,   //主键！！！ 用于删除
       },
       {
-        key: "name",
+        key: "roleid",
         label: "角色",
-        type: "string",
+        type: "number",
+        isEdit: false,
         required: true,
         errorMessage: "必填"
       },
       {
-        key: "name",
-        label: "功能模块",
-        type: "string",
+        key: "functionid",
+        label: "功能",
+        type: "number",
+        isEdit: false,
         required: true,
         errorMessage: "必填"
+      },
+      {
+        key: "selectfunction",
+        label: "查看数据",
+        type: "select",
+        default: 0,
+        options: [
+          {
+            value: 0,
+            label: "是"
+          },
+          {
+            value: 1,
+            label: "否"
+          }
+        ]
+      },
+      {
+        key: "addfunction",
+        label: "添加数据",
+        type: "select",
+        default: 0,
+        options: [
+          {
+            value: 0,
+            label: "是"
+          },
+          {
+            value: 1,
+            label: "否"
+          }
+        ]
+      },
+      {
+        key: "deletefunction",
+        label: "删除数据",
+        type: "select",
+        default: 0,
+        options: [
+          {
+            value: 0,
+            label: "是"
+          },
+          {
+            value: 1,
+            label: "否"
+          }
+        ]
+      },
+      {
+        key: "updatefunction",
+        label: "修改数据",
+        type: "select",
+        default: 0,
+        options: [
+          {
+            value: 0,
+            label: "是"
+          },
+          {
+            value: 1,
+            label: "否"
+          }
+        ]
+      },
+      {
+        key: "status",
+        label: "状态",
+        type: "select",
+        default: "0",
+        options: [
+          {
+            value: "0",
+            label: "正常"
+          },
+          {
+            value: "1",
+            label: "停用"
+          }
+        ]
       }
     ]
   }

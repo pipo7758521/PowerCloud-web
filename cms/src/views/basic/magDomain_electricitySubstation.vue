@@ -19,7 +19,6 @@ export default {
   },
 	data () {
 		return {
-      isRender: false,
       moduleName: "magDomain_electricitySubstation",
 			column: tableConfig["magDomain_electricitySubstation"].column,
       //与管理域 变电所 相关联

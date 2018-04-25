@@ -2,173 +2,177 @@
 	  <div class="app-container calendar-list-container">
     <div class="filter-container" v-if="!treeRoute.path">
       <el-button v-if="isSubTable" class="filter-item" style="margin-left: 10px;" @click="handleBack" type="primary" plain icon="el-icon-back">返回上一级</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit-outline">{{$t('table.add')}}</el-button>
-  	</div>
+      <!-- 添加按钮 -->
+      <el-button v-if="allowed.add" class="filter-item" style="margin-left: 10px;" @click="handleAdd" type="primary" icon="el-icon-edit-outline">{{$t('table.add')}}</el-button>
+    </div>
+    <el-alert v-if="!allowed.list"
+      title="Sorry，您没有权限访问该模块T_T"
+      type="warning"
+      center
+      show-icon
+      :closable="false">
+    </el-alert>
+    <template v-else>
+      <!-- 表格 -->
+      <el-table v-if="isRender" :data="list" v-loading="listLoading" border fit highlight-current-row
+        style="width: 100%" :default-expand-all="treeRoute.path ? true : false">
 
-    <!-- 表格 -->
-  	<el-table v-if="isRender" :data="list" v-loading="listLoading" border fit highlight-current-row
-      style="width: 100%" :default-expand-all="treeRoute.path ? true : false">
-
-      <!-- 详情展开 -->
-      <el-table-column v-if="detailColumn.length" type="expand">
-        <template  slot-scope="props">
-          <el-form label-position="left" inline class="table-expand">
-            <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
-              <!-- 图片 -->
-              <span v-if="item.type == 'image'"><a :href="filterImageUrl(props.row[item.key])" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="filterImageUrl(props.row[item.key])"/><i style="font-style: normal;" v-else>无</i></a></span>
-              <!-- SVG系统图 -->
-              <span v-else-if="item.type == 'svg'">
-                <el-button  size="mini" type="text" icon="el-icon-search" @click="handleViewSysGraph(props.row[item.key])">查看系统图</el-button>
-              </span>
-              <!-- 日期 -->
-              <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
-              <!-- 选项 -->
-              <span v-else-if="item.type == 'select'">{{filterOptionLabel(props.row, item)}}</span>
-              <span v-else>{{ props.row[item.key] }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
+        <!-- 详情展开 -->
+        <el-table-column v-if="detailColumn.length" type="expand">
+          <template  slot-scope="props">
+            <el-form label-position="left" inline class="table-expand">
+              <el-form-item  v-for="item in detailColumn" :label="item.label" :key="item.key" >
+                <!-- 图片 -->
+                <span v-if="item.type == 'image'"><a :href="filterImageUrl(props.row[item.key])" target="_blank"><img v-if="props.row[item.key]" max-width="60" max-height="60" :src="filterImageUrl(props.row[item.key])"/><i style="font-style: normal;" v-else>无</i></a></span>
+                <!-- SVG系统图 -->
+                <span v-else-if="item.type == 'svg'">
+                  <el-button  size="mini" type="text" icon="el-icon-search" @click="handleViewSysGraph(props.row[item.key])">查看系统图</el-button>
+                </span>
+                <!-- 日期 -->
+                <span v-else-if="item.type == 'date'">{{props.row[item.key] | dateFilter}}</span>
+                <!-- 选项 -->
+                <span v-else-if="item.type == 'select'">{{filterOptionLabel(props.row, item)}}</span>
+                <span v-else>{{ props.row[item.key] }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
 
 
-      <el-table-column v-if="!item.isDetail" v-for="item in listColumn" :key="item.key" align="center" :label="item.label"
-        :width= "(item.mainKey ? '60px' : (item.key == 'status' ? '80px' : ''))">
-        <template slot-scope="scope">
-          <!-- 文本 -->
-          <span v-if="item.type == 'string'|| item.type == 'number'">
-            {{scope.row[item.key]}}
-          </span>
-          <!-- 状态 -->
-          <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : (scope.row.status == "2" ? "维修中" : "停用")}}</el-tag>
-          <!-- 日期 -->
-          <span v-else-if="item.type == 'date'">{{scope.row[item.key] | dateFilter}}</span>
-          <!-- 选项 -->
-          <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
-          <!-- 图片 -->
-          <span v-else-if="item.type == 'image'"><a :href="filterImageUrl(scope.row[item.key])" target="_blank"><img class="table-image" :src="filterImageUrl(scope.row[item.key])"/></a></span>
-          <!-- 坐标 -->
-          <!-- <span v-else-if="item.type == 'location'">{{scope.row[item.key] | locationFilter}}</span> -->
-        </template>
-      </el-table-column>
+        <el-table-column v-if="!item.isDetail" v-for="item in listColumn" :key="item.key" align="center" :label="item.label"
+          :width= "(item.mainKey ? '60px' : (item.key == 'status' ? '80px' : ''))">
+          <template slot-scope="scope">
+            <!-- 文本 -->
+            <span v-if="item.type == 'string'|| item.type == 'number'">
+              {{scope.row[item.key]}}
+            </span>
+            <!-- 状态 -->
+            <el-tag v-else-if="item.key == 'status'" :type="scope.row[item.key] | statusFilter">{{scope.row.status == "0" ? "正常" : (scope.row.status == "2" ? "维修中" : "停用")}}</el-tag>
+            <!-- 日期 -->
+            <span v-else-if="item.type == 'date'">{{scope.row[item.key] | dateFilter}}</span>
+            <!-- 选项 -->
+            <span v-else-if="item.type == 'select'">{{filterOptionLabel(scope.row, item)}}</span>
+            <!-- 图片 -->
+            <span v-else-if="item.type == 'image'"><a :href="filterImageUrl(scope.row[item.key])" target="_blank"><img class="table-image" :src="filterImageUrl(scope.row[item.key])"/></a></span>
+            <!-- 坐标 -->
+            <span v-else-if="item.type == 'location'">{{scope.row[item.key] | locationFilter}}</span>
+          </template>
+        </el-table-column>
 
-    <!-- 进入子列表 -->
-     <el-table-column v-if="subTable && subTable.length"  align="center" label="详情" class-name="small-padding fixed-width" min-width="100px">
-      <template slot-scope="scope" >
-        <div class="subTable-column">
-        <template  v-for="sub in subTable" >
-          <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
-          </el-button>
-          <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
-          </el-button>
-        </template>
-        </div>
-      </template>
-    </el-table-column>
-      <!-- <el-table-column v-if="subTable.length" align="center" label="详情" class-name="small-padding fixed-width" >
-        <template slot-scope="scope">
-          <template  v-for="sub in subTable">
+      <!-- 进入子列表 -->
+       <el-table-column v-if="subTable && subTable.length"  align="center" label="详情" class-name="small-padding fixed-width" min-width="100px">
+        <template slot-scope="scope" >
+          <div class="subTable-column">
+          <template  v-for="sub in subTable" >
             <el-button v-if="sub.plain"  size="mini" type="primary" plain @click="handleSubTable(sub, scope.row)">{{sub.button}}
             </el-button>
             <el-button v-else  size="mini" type="primary" @click="handleSubTable(sub, scope.row)">{{sub.button}}
             </el-button>
           </template>
-        </template>
-      </el-table-column> -->
-
-      <!-- 操作列 -->
-      <el-table-column align="center" label="操作" class-name="small-padding fixed-width" min-width="120px" fixed="right">
-        <template slot-scope="scope" >
-          <el-button type="primary" plain icon="el-icon-edit" circle @click="handleUpdate(scope.row)"></el-button>
-           <el-button type="danger" plain icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
-          </el-button>
+          </div>
         </template>
       </el-table-column>
 
-    </el-table>
+        <!-- 操作列 -->
+        <el-table-column v-if="allowed.update||allowed.del" align="center" label="操作" class-name="small-padding fixed-width" min-width="120px" fixed="right">
+          <template slot-scope="scope" >
+            <!-- 编辑 -->
+            <el-button v-if="allowed.update" type="primary" plain icon="el-icon-edit" circle @click="handleUpdate(scope.row)"></el-button>
+            <!-- 删除 -->
+             <el-button v-if="allowed.del" type="danger" plain icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
+            </el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
 
 
 
-    <!-- 分页 -->
-    <div class="pagination-container" v-if="!treeRoute.path">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
-    </div>
-
-    <!-- 编辑框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="30%" style='margin-left:50px;margin-right:50px;'>
-      	<el-form-item v-for="item in column" :key="item.key"
-      		:label="item.label"
-      		:prop="item.key">
-          <!-- 文本 -->
-      		<el-input v-if="item.type == 'string'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
-          <!-- 数字 -->
-          <el-input v-if="item.type == 'number'" :disabled="item.isEdit == false" v-model.number="temp[item.key]"></el-input>
-          <!-- 下拉选择框 -->
-          <el-select v-else-if="item.type =='select'" class="filter-item" :disabled="item.isEdit == false" v-model="temp[item.key]" placeholder="请选择">
-            <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
-            </el-option>
-          </el-select>
-          <!-- date日期选择 -->
-          <el-date-picker v-else-if="item.type == 'date'" value-format="timestamp" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
-          <!-- image URL -->
-          <el-row v-else-if="item.type == 'image'">
-            <el-col :span="12">
-              <el-input v-model="temp[item.key]" type="text"></el-input>
-            </el-col>
-            <el-col :span="1">&nbsp;</el-col>
-            <el-col :span="11">
-              <cms-upload
-                :module-name = "moduleName"
-                :img-src = "temp[item.key]"
-                :item-key = "item.key"
-                @on-src-change = "onImgSrcChange">
-              </cms-upload>
-            </el-col>
-          </el-row>
-          <!-- 系统SVG图 -->
-          <el-row v-else-if="item.type == 'svg'">
-            <el-col :span="18">
-              <el-input v-model="temp[item.key]" width="80%"></el-input>
-            </el-col>
-            <el-col :span="1">&nbsp;</el-col>
-            <el-col :span="5">
-              <el-button  @click="goToSysGraph(item.key)" type="primary" plain>编辑</el-button>
-            </el-col>
-          </el-row>
-          <!-- 坐标 -->
-          <!-- <el-row v-else-if="item.type == 'location'">
-            <el-col :span="11">
-              <el-input placeholder="经度" v-model="temp[item.key]"></el-input>
-            </el-col>
-            <el-col :span="2">&nbsp;</el-col>
-            <el-col :span="11">
-              <el-input placeholder="纬度" v-model="temp[item.key]"></el-input>
-            </el-col>
-          </el-row> -->
-
-
-
-      	</el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="addData">确定</el-button>
-        <el-button v-else type="primary" @click="editData">确定</el-button>
+      <!-- 分页 -->
+      <div class="pagination-container" v-if="!treeRoute.path">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
       </div>
-    </el-dialog>
+
+      <!-- 编辑框 -->
+      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+        <el-form :rules="formRules" ref="dataForm" :model="temp" label-position="left" label-width="30%" style='margin-left:50px;margin-right:50px;'>
+          <el-form-item v-for="item in column" :key="item.key"
+            :label="item.label"
+            :prop="item.key">
+            <!-- 文本 -->
+            <el-input v-if="item.type == 'string'" :disabled="item.isEdit == false" v-model="temp[item.key]"></el-input>
+            <!-- 数字 -->
+            <el-input v-if="item.type == 'number'" :disabled="item.isEdit == false" v-model.number="temp[item.key]"></el-input>
+            <!-- 下拉选择框 -->
+            <el-select v-else-if="item.type =='select'" class="filter-item" :disabled="item.isEdit == false" v-model="temp[item.key]" placeholder="请选择">
+              <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" >
+              </el-option>
+            </el-select>
+            <!-- date日期选择 -->
+            <el-date-picker v-else-if="item.type == 'date'" value-format="timestamp" :disabled="item.isEdit == false" v-model="temp[item.key]" type="date" placeholder="选择日期"></el-date-picker>
+            <!-- image URL -->
+            <el-row v-else-if="item.type == 'image'">
+              <el-col :span="12">
+                <el-input v-model="temp[item.key]" type="text"></el-input>
+              </el-col>
+              <el-col :span="1">&nbsp;</el-col>
+              <el-col :span="11">
+                <cms-upload
+                  :module-name = "moduleName"
+                  :img-src = "temp[item.key]"
+                  :item-key = "item.key"
+                  @on-src-change = "onImgSrcChange">
+                </cms-upload>
+              </el-col>
+            </el-row>
+            <!-- 系统SVG图 -->
+            <el-row v-else-if="item.type == 'svg'">
+              <el-col :span="18">
+                <el-input v-model="temp[item.key]" width="80%"></el-input>
+              </el-col>
+              <el-col :span="1">&nbsp;</el-col>
+              <el-col :span="5">
+                <el-button  @click="goToSysGraph(item.key)" type="primary" plain>编辑</el-button>
+              </el-col>
+            </el-row>
+            <!-- 坐标 -->
+            <el-row v-else-if="item.type == 'location'">
+              <el-col :span="18">
+                <el-input v-model="temp[item.key]" width="80%"></el-input>
+              </el-col>
+              <el-col :span="1">&nbsp;</el-col>
+              <el-col :span="5">
+                <el-button  @click="goToLocateMap(item.key)" type="primary" plain>定位</el-button>
+              </el-col>
+            </el-row>
+
+
+
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogStatus=='create'" type="primary" @click="addData">确定</el-button>
+          <el-button v-else type="primary" @click="editData">确定</el-button>
+        </div>
+      </el-dialog>
+
+    </template>
 
  	</div>
 </template>
 
 
 <script>
+import { Message, MessageBox } from 'element-ui'
 import { parseTime } from '@/utils'
-import { fetchList, insertData, editData, deleteData } from '@/api/api'
+import { API_URL, fetchList, insertData, editData, deleteData } from '@/api/api'
 import request from '@/utils/request'
 
 import Upload from '@/components/Upload/uploadImage.vue'
-import { Message, MessageBox } from 'element-ui'
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'grid',
@@ -246,26 +250,29 @@ export default {
   },
   created() {
 
+    if(Array.isArray(this.permissions)) {
+      this.permissions.forEach( (permission,i) => {
+        if(permission.functionname == API_URL[this.moduleName]) {
+          this.allowed.list = permission.selectfunction == 0
+          this.allowed.add = permission.addfunction == 0
+          this.allowed.update = permission.updatefunction == 0
+          this.allowed.del = permission.deletefunction == 0
+          return
+        }
+      })
+    }
+
     //初始化时，要看看有没有关联的模块，如果有的话
     //需要将关联模块的数据和本模块的数据关联起来
     //不能让用户填写，需要让用户选择，这样才可以避免出错
     if(this.connectModule.length) {
+      //这时候不能渲染表格，需要等取到关联数据生成映射之后，才能渲染表格
       this.isRender = false
       this.initConnectModuleColumn()
     }
 
     this.resetTemp()
     this.getList()
-
-    /*this.column.forEach( (o,i) => {
-      //把在列表中显示的列  和 在展开详情中显示的列区分出来
-      if(o.isDetail) {
-        this.detailColumn.push(o)
-      }
-      else {
-        this.listColumn.push(o)
-      }
-    })*/
 
     //用于监听系统图配置页面传来的参数
     let _self = this
@@ -274,8 +281,11 @@ export default {
         //event.data.key是该系统图数据库字段的名称
         _self.temp[event.data.key] = event.data.svg
       }
+      if(event.data && event.data.title == "powerCloudCMS-message-location") {
+        //event.data.key是该系统图数据库字段的名称
+        _self.temp[event.data.key] = event.data.str
+      }
     }, false);
-
   },
   data() {
     return {
@@ -297,6 +307,12 @@ export default {
         create: '新增'
       },
       // formRules: {}
+      allowed: {   //当前模块的权限
+        list: false,
+        add: false,
+        update: false,
+        del: false
+      }
     }
   },
   computed: {
@@ -359,7 +375,10 @@ export default {
         }
       })
       return arr
-    }
+    },
+    ...mapGetters([
+      'permissions'
+    ])
   },
   filters: {
     statusFilter(status) {
@@ -373,7 +392,7 @@ export default {
     locationFilter(location) {
       try {
         let o = JSON.parse(location)
-        return `经度：${o.longitude},纬度：${o.latitude}`
+        return `(${o.longitude}, ${o.latitude})`
       }
       catch(e) {
         return location
@@ -393,6 +412,13 @@ export default {
   },
   methods: {
   	getList() {
+      //如果不允许查询，则列表为空
+      if(!this.allowed.list){
+        this.list = []
+        this.total = 0
+        this.listLoading = false
+        return
+      }
   		this.listLoading = true
       //如果是子表，则路由中的参数就是对应的父表的ID
       if(this.isSubTable || this.treeRoute.params) {
@@ -416,6 +442,7 @@ export default {
           if(this.temp.hasOwnProperty(p)) {
             searchParams[p] = /id$/.test(p) ? (+routeParams[p]) : routeParams[p]  //取交集
           }
+
         }
         //fetchList根据listQuery中的search参数传给后台，后台取出对应数据
         this.listQuery.search = JSON.stringify(searchParams)
@@ -661,13 +688,18 @@ export default {
       let win = window.open("/PowerCloud/#/sysGraph")
       setTimeout( () => {
          win.postMessage({title:"powerCloudCMS-message", key: key}, '*');
-         // this.$router.push({path: "/SysGraph"})
       }, 1000)
     },
     handleViewSysGraph(html) {
       this.$alert(`<div style="background:#272822;padding:20px">${html}</div>`, '系统图', {
         dangerouslyUseHTMLString: true
       });
+    },
+    goToLocateMap(key) {
+      let win = window.open("/PowerCloud/cms/mapLocation/index.html")
+      setTimeout( () => {
+         win.postMessage({title:"powerCloudCMS-message-location", key: key}, '*');
+      }, 1000)
     },
     onImgSrcChange(val, key) {
       this.temp[key] = val

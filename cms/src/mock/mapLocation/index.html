@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=786b58359b1b87405c8d94ef045bb13a"></script>
+  <link rel="stylesheet" type="text/css" href="reset.css">
+	<title>地图位置配置</title>
+</head>
+<body>
+	<header style="height: 60px;"><i class="fa fa-map-marker"></i></i>地图位置配置</header>
+	<main id="main">
+		<div class="wrapper">
+		<p class="search-bar">
+			<input id="searchInput" />
+			<a href="javascript:void(0)" class="btn" onclick="onSearch()"><i class="fa fa-search"></i>搜索</a>
+		</p>
+		<div class="map-wrapper">
+			<div id="allmap">
+
+			</div>
+			<div id="search-result">
+				<div id="tip">
+					<p>使用说明:</p>
+					<ul>
+						<li>1、输入关键字，点击“搜索”按钮</li>
+						<li>2、从右侧的列表中选取并点击正确地址</li>
+						<li>3、点击页面下方“确定”按钮，配置完成</li>
+					</ul>
+				</div>
+				<div id="r-result">搜索中...</div>
+			</div>
+		</div>
+			<!-- <iframe id="myframe" src="http://api.map.baidu.com/lbsapi/getpoint/index.html"></iframe> -->
+			<p class="bottom-bar">
+				<span id="locationText">当前坐标：</span>
+				<a href="javascript:void(0)" class="btn" onclick="onSubmit()">确定</a>
+			</p>
+		</div>
+	</main>
+</body>
+
+<script type="text/javascript">
+	let winParent
+	let key
+	let currentLocation
+
+	let map
+	let local
+	let tempMarker_arr
+
+	let mainEle = document.querySelector("#main")
+	let searchInputEle = document.querySelector("#searchInput")
+	let frameEle = document.querySelector("#myframe")
+	let pointInputEle;
+
+	window.onload = function () {
+		// http://api.map.baidu.com/lbsapi/getpoint/index.html
+		initMap()
+		bindEvent()
+	}
+
+	function initMap() {
+		map = new BMap.Map("allmap");    // 创建Map实例
+
+    map.centerAndZoom(new BMap.Point(123.4, 41.8), 14);  // 初始化地图,设置中心点坐标和地图级别
+    map.setCurrentCity("沈阳");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.disableDoubleClickZoom();        //禁用双击放大
+    map.addControl( new BMap.NavigationControl());   //缩放按钮
+    let size = new BMap.Size(70, 20);
+    map.addControl(new BMap.CityListControl({
+	    anchor: BMAP_ANCHOR_TOP_LEFT,
+	    offset: size,
+	  }));
+    local = new BMap.LocalSearch(map, {
+			renderOptions:{map: map, panel: "r-result"},
+			onMarkersSet: handleMarkersSet,
+			onSearchComplete: handleSearchComplete
+		});
+
+		function handleSearchComplete() {
+			setTimeout(function(){
+				let liEles = document.querySelectorAll("#r-result li");
+				for(let i=0;i<liEles.length;i++) {
+					//给每个列表增加点击事件，获取坐标
+					liEles[i].addEventListener("click",
+          function() {showLocation(tempMarker_arr[i].point)})
+				}
+			},1000)
+
+		}
+
+		function handleMarkersSet(mks) {
+			tempMarker_arr = mks
+			mks.forEach((mk,i) => {
+				mk.marker.enableDragging()
+			})
+		}
+
+
+	}
+
+	function bindEvent() {
+		//监听父窗口的消息
+		window.addEventListener("message", function(event) {
+			if(event.data && event.data.title == "powerCloudCMS-message-location") {
+				winParent = event.source
+				key = event.data.key
+			}
+		}, false)
+
+		//地图点击，选中位置
+		map.addEventListener("click",
+    function(c) {
+        var b = c.point;
+        if (c.overlay && c.overlay instanceof BMap.Marker) {
+            b = c.overlay.point
+        }
+        showLocation(b)
+    });
+	}
+
+	function showLocation(location) {
+		currentLocation = location
+		document.querySelector("#locationText").innerHTML = "当前坐标：("+location.lng+","+location.lat+")"
+	}
+
+	function onSearch() {
+		let keyword = searchInputEle.value
+		if(keyword) {
+			document.querySelector("#r-result").style.display = "block"
+			document.querySelector("#tip").style.display = "none"
+			local.search(keyword);
+		}
+		else {
+			document.querySelector("#r-result").innerHTML = ""
+			document.querySelector("#tip").style.display = "block"
+			document.querySelector("#r-result").style.display = "none"
+		}
+
+
+	}
+	function onSubmit() {
+		if(currentLocation) {
+			let location = {
+				latitude: currentLocation.lat,
+				longitude: currentLocation.lng,
+			}
+			if(!winParent) return
+			winParent.postMessage({
+				title: "powerCloudCMS-message-location",
+				key: key,
+				str: JSON.stringify(location)
+			}, '*')
+		  window.close()
+		}
+		else {
+			alert("请选择一个坐标点！")
+		}
+	}
+</script>
+
+<style type="text/css">
+	header {
+		font-size: 20px;
+    line-height: 60px;
+    background: #304156;
+    color: #fff;
+    padding: 0 20px;
+	}
+	.wrapper {
+		display: relative;
+	}
+	#main {
+		width: 90%;
+		margin: 30px 5%;
+	}
+	input {
+		border-color: #67c23a;
+    height: 36px;
+    line-height: 36px;
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 15px;
+    width: 500px;
+	}
+	.btn {
+		color: #fff;
+    background-color: #409EFF;
+    border-color: #409EFF;
+    padding: 13px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    display: inline-block;
+	}
+	.btn:hover {
+		filter: brightness(1.2);
+	}
+	i {
+		margin-right: 10px;
+	}
+	.search-bar {
+		display: flex;
+	}
+	.search-bar .btn {
+		margin-left: 15px;
+	}
+
+	.map-wrapper {
+		width: 100%;
+		display: flex;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		height: 70vh;
+		justify-content: space-between;
+	}
+	#allmap {
+		width: 80%;
+	}
+	#search-result {
+		width: 18%;
+	}
+	#r-result {
+		height: 70vh;
+		overflow: scroll;
+		display: none;
+	}
+	#tip > p {
+		font-size: 18px;padding-left: 10px;line-height: 30px;font-weight: bold;
+		margin-bottom: 10px;
+	}
+	#tip ul{
+		font-size: 14px;padding-left: 10px;line-height: 30px;
+	}
+	#tip li {
+		margin-bottom: 5px;
+	}
+
+	.bottom-bar {
+		margin-top: 10px;
+		text-align: left;
+		position: relative;
+	}
+	.bottom-bar .btn {
+		position: absolute;
+		left: 50%;
+		margin-left: -30px;
+	}
+</style>
+</html>

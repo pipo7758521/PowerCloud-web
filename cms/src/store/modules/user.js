@@ -7,7 +7,7 @@ const user = {
     name: '',
     account: '',
     avatar: '',
-    roles: []
+    permissions: []
   },
 
   mutations: {
@@ -23,8 +23,8 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_PERMISSIONS: (state, permissions) => {
+      state.permissions = permissions
     }
   },
 
@@ -52,7 +52,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = JSON.parse(response.data)
-          // commit('SET_ROLES', data.roles)     //权限 TODO!
+          commit('SET_PERMISSIONS', data.permission)     //权限
           commit('SET_NAME', data.name)          //用户的名称
           commit('SET_ACCOUNT', data.account)    //用户的账号
           // commit('SET_AVATAR', data.avatar)

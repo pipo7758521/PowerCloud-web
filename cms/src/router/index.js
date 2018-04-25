@@ -304,6 +304,23 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/Staff/electrician/:userid/electrician_role',
+    component: Layout,
+    redirect: '/Staff/electrician',
+    name: 'Electrician_role',
+    meta: { title: '电工信息', icon: 'network' },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        meta: { title: '电工角色配置', icon: 'network' },
+        name: 'Electrician_role ',
+        component: () => import('@/views/electrician/electrician_role'),
+        hidden: true
+      }
+    ]
+  },
   //权限配置
   {
     path: '/Permission',
@@ -318,18 +335,18 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/Permission/role/:roleid/role_permission',
+    path: '/Permission/role/:roleid/role_function',
     component: Layout,
     redirect: '/Permission/role',
-    name: 'Role_permission',
+    name: 'Role_function',
     meta: { title: '权限配置', icon: 'lock' },
     hidden: true,
     children: [
       {
         path: '',
         meta: { title: '功能权限配置', icon: 'network' },
-        name: 'role_permission ',
-        component: () => import('@/views/permission/role_permission.vue'),
+        name: 'Role_function ',
+        component: () => import('@/views/permission/role_function.vue'),
         hidden: true
       }
     ]
